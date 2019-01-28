@@ -12,14 +12,14 @@
 		<title>Login</title>
 	</head>
 
-	<body>
+	<body align="center">
 		<h1>Login</h1>
 		
 		<!-- Form to capture user login input -->
 		<form action='loginHandler' method="POST">
 			<input type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
-			Username: <input type="text" name="uname"><br>
-			Password: <input type="password" name="pword"><br>
+			Username: <input type="text" name="username"><br><?php echo "<div style='color:red;'>".$errors->first('username')."</div><br>"?>
+			Password: <input type="password" name="password"><br><?php echo "<div style='color:red;'>".$errors->first('password')."</div><br>"?>
 			<button type="submit">Login</button>
 		</form>
 		

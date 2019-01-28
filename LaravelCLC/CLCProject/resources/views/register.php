@@ -12,7 +12,7 @@
 		<title>Register</title>
 	</head>
 	
-	<body>
+	<body align="center">
 		<h1>Register</h1>
 		<!-- form to capture user registration input -->
 		<form action="registrationHandler" method="post">
@@ -20,8 +20,8 @@
 			First Name: <input type="text" name="fname"/><br>
 			Last Name: <input type="text" name="lname"/><br>
 			Email: <input type="text" name="email"/><br>
-			Username: <input type="text" name="uname"/><br>
-			Password: <input type="text" name="pword"/><br>
+			Username: <input type="text" name="username"/><br>
+			Password: <input type="text" name="password"/><br>
 			<button type="submit">Register</button>
 		</form>
 	</body>

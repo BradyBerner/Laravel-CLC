@@ -16,10 +16,10 @@ class LoginController extends Controller
     //Function recieves user login input, then authenticates user input against database entries
     public function index(Request $request)
     {
-        //Get user form input from request
-        $user = new LoginModel($request->input('uname'), $request->input('pword'));
-        
         $this->validateForm($request);
+        
+        //Get user form input from request
+        $user = new LoginModel($request->input('username'), $request->input('password'));
         
         //Creates an instance of the security service class
         $securityService = new SecurityService();
@@ -36,7 +36,7 @@ class LoginController extends Controller
     }
     
     private function validateForm(Request $request){
-        $rules = ['uname' => 'Required | Between:4,10 | Alpha', 'pword' => 'Required | Between:4,10'];
+        $rules = ['username' => 'Required | Between:4,10 | Alpha', 'password' => 'Required | Between:4,10'];
         
         $this->validate($request, $rules);
     }
