@@ -9,6 +9,7 @@
 namespace App\Services\Business;
 
 use App\Models\UserModel;
+use App\Models\LoginModel;
 use App\Services\Data\securityDAO;
 
 class SecurityService{
@@ -21,8 +22,8 @@ class SecurityService{
     }
     
     //Function takes user as an argument and calls the database login service and returns the result
-    public function login($username, $password){
+    public function login(LoginModel $user){
         $DAO = new securityDAO();
-        return $DAO->authenticate($username, $password);
+        return $DAO->authenticate($user);
     }
 }

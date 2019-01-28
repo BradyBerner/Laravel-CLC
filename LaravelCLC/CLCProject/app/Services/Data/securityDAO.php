@@ -9,19 +9,29 @@
 namespace App\Services\Data;
 
 use App\Models\UserModel;
+use App\Models\LoginModel;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class securityDAO{
     
     //Returns a boolean denoting whether or not the passed username and password passed as arguments
     //are valid entries in the database
-    public function authenticate($username, $password){
-        return DB::select('SELECT * FROM Users WHERE Username = ? AND Password = ?', [$username, $password]);
+    public function authenticate(LoginModel $user){
+        try{
+            return DB::select('SELECT * FROM Users WHERE Username = ? AND Password = ?', [$user->getUsername(), $user->getPassword()]);
+        } catch (Exception $e){
+            
+        }
     }
     
     //Commits the usermodel object's information as a new entry in the users table and then returns
     //a boolean denoting whether or not the query succeded
     public function register(UserModel $user){
-        return DB::insert('INSERT INTO Users (idUsers, Username, Password, Email, FirstName, LastName) VALUES (NULL, ?, ?, ?, ?, ?)', [$user->getUsername(), $user->getPassword(), $user->getEmail(), $user->getFirstName(), $user->getLastName()]);
+        try{
+            return DB::insert('INSERT INTO Users (idUsers, Username, Password, Email, FirstName, LastName, Role) VALUES (NULL, ?, ?, ?, ?, ?, NULL)', [$user->getUsername(), $user->getPassword(), $user->getEmail(), $user->getFirstName(), $user->getLastName()]);
+        } catch (Exception $e){
+            
+        }
     }
 }

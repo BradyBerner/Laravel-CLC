@@ -15,6 +15,7 @@ class UserModel {
     private $Email;
     private $FirstName;
     private $LastName;
+    private $Role;
     
     function __construct($id, $Username, $Password, $Email, $FirstName, $LastName){
         $this->id = $id;
@@ -26,7 +27,7 @@ class UserModel {
     }
     
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -34,7 +35,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -42,7 +43,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPassword()
     {
@@ -50,7 +51,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail()
     {
@@ -58,7 +59,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFirstName()
     {
@@ -66,7 +67,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLastName()
     {
@@ -74,50 +75,9 @@ class UserModel {
     }
 
     /**
-     * @param mixed $id
+     * @return int
      */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @param mixed $Username
-     */
-    public function setUsername($Username)
-    {
-        $this->Username = $Username;
-    }
-
-    /**
-     * @param mixed $Password
-     */
-    public function setPassword($Password)
-    {
-        $this->Password = $Password;
-    }
-
-    /**
-     * @param mixed $Email
-     */
-    public function setEmail($Email)
-    {
-        $this->Email = $Email;
-    }
-
-    /**
-     * @param mixed $FirstName
-     */
-    public function setFirstName($FirstName)
-    {
-        $this->FirstName = $FirstName;
-    }
-
-    /**
-     * @param mixed $LastName
-     */
-    public function setLastName($LastName)
-    {
-        $this->LastName = $LastName;
+    public function getRole(){
+        return $this->Role;
     }
 }

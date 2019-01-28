@@ -19,7 +19,7 @@ class RegistrationController extends Controller
     public function index(Request $request)
     {
         //Takes user input from register form and uses it to make a new usermodel object with an id of 0
-        $user = new UserModel(0, $request->input('uname'), $request->input('pword'), $request->input('email'), $request->input('fname'), $request->input('lname'));
+        $user = new UserModel(0, $request->input('uname'), $request->input('pword'), $request->input('email'), $request->input('fname'), $request->input('lname'), 0);
         
         //Creates instance of security service
         $securityService = new SecurityService();
@@ -33,5 +33,17 @@ class RegistrationController extends Controller
         } else {
             return view('registerFail');
         }
+    }
+    
+    private function validateForm(Request $request){
+        $rules = [
+            'uname' => 'Required | Between:4,10 | Alpha',
+            'pword' => 'Required | Between:4,10',
+            'email' => 'Required',
+            'fname' => 'Required | Between:3,15 | Alpha',
+            'lname' => 'Required | Between:3,15 | Alpha'
+        ];
+        
+        $this->validate($request, $rules);
     }
 }

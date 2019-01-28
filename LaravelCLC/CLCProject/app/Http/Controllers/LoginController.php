@@ -7,6 +7,7 @@
  */
 namespace App\Http\Controllers;
 
+use App\Models\LoginModel;
 use Illuminate\Http\Request;
 use App\Services\Business\SecurityService;
 
@@ -16,14 +17,15 @@ class LoginController extends Controller
     public function index(Request $request)
     {
         //Get user form input from request
-        $username = $request->input('uname');
-        $password = $request->input('pword');
+        $user = new LoginModel($request->input('uname'), $request->input('pword'));
+        
+        $this->validateForm($request);
         
         //Creates an instance of the security service class
         $securityService = new SecurityService();
 
         //Stores result from attempted login
-        $result = $securityService->login($username, $password);
+        $result = $securityService->login($user);
         
         //Redirects the user to the appropriate page based on the result of their login attempt
         if($result){
@@ -31,5 +33,11 @@ class LoginController extends Controller
         } else {
             return view('loginFail');
         }
+    }
+    
+    private function validateForm(Request $request){
+        $rules = ['uname' => 'Required | Between:4,10 | Alpha', 'pword' => 'Required | Between:4,10'];
+        
+        $this->validate($request, $rules);
     }
 }
