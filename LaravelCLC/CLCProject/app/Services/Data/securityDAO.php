@@ -12,7 +12,6 @@ use App\Models\UserModel;
 use App\Models\LoginModel;
 use App\Services\Utility\DatabaseException;
 use Illuminate\Support\Facades\Log;
-use Exception;
 
 class securityDAO{
     
@@ -36,9 +35,12 @@ class securityDAO{
         Log::info("Entering SecurityDAO.authenticate()");
         
         try{
+            $username = $user->getUsername();
+            $password = $user->getPassword();
+            
             $statement = $this->conn->prepare("SELECT * FROM Users WHERE Username = :username AND Password = :password");
-            $statement->bindParam(':username', $user->getUsername());
-            $statement->bindParam(':password', $user->getPassword());
+            $statement->bindParam(':username', $username);
+            $statement->bindParam(':password', $password);
             $statement->execute();
         } catch (\PDOException $e){
             Log::error("Exception: ", array("message" => $e->getMessage()));
@@ -53,10 +55,18 @@ class securityDAO{
         Log::info("Entering SecurityDAO.register()");
         
         try{
+            $username = $user->getUsername();
+            $password = $user->getPassword();
+            $email = $user->getEmail();
+            $firstname = $user->getFirstName();
+            $lastname = $user->getLastName();
+            
             $statement = $this->conn->prepare("INSERT INTO Users (idUsers, Username, Password, Email, FirstName, LastName, Role) VALUES (NULL, :username, :password, :email, :firstname, :lastname, 0");
-            $statement->bindParam(':username', $user->getUsername());
-            $statement->bindParam(':password', $user->getPassword());
-            $statement->bindParam(':email', $user->getEmail());
+            $statement->bindParam(':username', $username);
+            $statement->bindParam(':password', $password);
+            $statement->bindParam(':email', $email);
+            $statement->bindParam(':firstname', $firstname);
+            $statement->bindParam(':lastname', $lastname);
             $statement->bindParam();
         } catch (\PDOException $e){
             Log::error("Exception: ", array("message" => $e->getMessage()));
