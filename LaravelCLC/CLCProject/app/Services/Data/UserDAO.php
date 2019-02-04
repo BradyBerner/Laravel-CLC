@@ -12,8 +12,9 @@ use App\Models\UserModel;
 use App\Models\LoginModel;
 use App\Services\Utility\DatabaseException;
 use Illuminate\Support\Facades\Log;
+use PDO;
 
-class securityDAO{
+class UserDAO{
     
     private $conn;
     
@@ -21,24 +22,14 @@ class securityDAO{
         $this->conn = $conn;
     }
     
-    //Returns a boolean denoting whether or not the passed username and password passed as arguments
-    //are valid entries in the database
-//     public function authenticate(LoginModel $user){
-//         try{
-//             return DB::select('SELECT * FROM Users WHERE Username = ? AND Password = ?', [$user->getUsername(), $user->getPassword()]);
-//         } catch (Exception $e){
-            
-//         }
-//     }
-    
-    public function authenticate(LoginModel $user){
+    public function findByLogin(LoginModel $user){
         Log::info("Entering SecurityDAO.authenticate()");
         
         try{
             $username = $user->getUsername();
             $password = $user->getPassword();
             
-            $statement = $this->conn->prepare("SELECT * FROM Users WHERE Username = :username AND Password = :password");
+            $statement = $this->conn->prepare("SELECT * FROM USERS WHERE USERNAME = :username AND PASSWORD = :password");
             $statement->bindParam(':username', $username);
             $statement->bindParam(':password', $password);
             $statement->execute();
@@ -48,10 +39,10 @@ class securityDAO{
         }
         
         Log::info("Exit SecurityDAO.authenticate()");
-        return $statement->rowCount();
+        return ['result' => $statement->rowCount(), 'user' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
-    public function register(UserModel $user){
+    public function create(UserModel $user){
         Log::info("Entering SecurityDAO.register()");
         
         try{
@@ -61,26 +52,19 @@ class securityDAO{
             $firstname = $user->getFirstName();
             $lastname = $user->getLastName();
             
-            $statement = $this->conn->prepare("INSERT INTO Users (idUsers, Username, Password, Email, FirstName, LastName, Role) VALUES (NULL, :username, :password, :email, :firstname, :lastname, 0");
+            $statement = $this->conn->prepare("INSERT INTO `USERS` (`IDUSERS`, `USERNAME`, `PASSWORD`, `EMAIL`, `FIRSTNAME`, `LASTNAME`, `ROLE`) VALUES (NULL, :username, :password, :email, :firstname, :lastname, '0')");
             $statement->bindParam(':username', $username);
             $statement->bindParam(':password', $password);
             $statement->bindParam(':email', $email);
             $statement->bindParam(':firstname', $firstname);
             $statement->bindParam(':lastname', $lastname);
-            $statement->bindParam();
+            $statement->execute();
         } catch (\PDOException $e){
             Log::error("Exception: ", array("message" => $e->getMessage()));
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
+        
+        Log::info("Exit SecurityDAO.register()");
+        return $statement->rowCount();
     }
-    
-    //Commits the usermodel object's information as a new entry in the users table and then returns
-    //a boolean denoting whether or not the query succeded
-//     public function register(UserModel $user){
-//         try{
-//             return DB::insert('INSERT INTO Users (idUsers, Username, Password, Email, FirstName, LastName, Role) VALUES (NULL, ?, ?, ?, ?, ?, NULL)', [$user->getUsername(), $user->getPassword(), $user->getEmail(), $user->getFirstName(), $user->getLastName()]);
-//         } catch (Exception $e){
-            
-//         }
-//     }
 }

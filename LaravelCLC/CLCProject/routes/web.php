@@ -20,7 +20,7 @@
 
 // Default Laravel home page
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 // Login form page

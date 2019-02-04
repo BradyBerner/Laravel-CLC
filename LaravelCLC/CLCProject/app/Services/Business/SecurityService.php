@@ -10,9 +10,9 @@ namespace App\Services\Business;
 
 use App\Models\UserModel;
 use App\Models\LoginModel;
-use App\Services\Data\securityDAO;
 use App\Services\Utility\Connection;
 use Illuminate\Support\Facades\Log;
+use App\Services\Data\UserDAO;
 
 class SecurityService{
     
@@ -24,17 +24,13 @@ class SecurityService{
         
         $connection = new Connection();
         
-        $DAO = new securityDAO($connection);
+        $DAO = new UserDAO($connection);
         
-        $result = $DAO->register($user);
+        $result = $DAO->create($user);
         
-        Log::info("Exiting SecurityService.register() with result: " . $result);
+        Log::info("Exiting SecurityService.register() with result: " . $result['result']);
         
-        if($result){
-            return true;
-        } else {
-            return false;
-        }
+        return $result;
     }
     
     //Function takes user as an argument and calls the database login service and returns the result
@@ -44,16 +40,19 @@ class SecurityService{
         
         $connection = new Connection();
         
-        $DAO = new securityDAO($connection);
+        $DAO = new UserDAO($connection);
         
-        $result = $DAO->authenticate($user);
+        $result = $DAO->findByLogin($user);
         
-        Log::info("Exiting SecurityService.login() with result: " . $result);
+        Log::info("Exiting SecurityService.login() with result: " . $result['result']);
         
-        if($result){
-            return true;
-        } else {
-            return false;
+        if($result['result']){
+            session(['principal' => TRUE]);
+            session(['ID' => $result['user']['IDUSERS']]);
+            session(['USERNAME' => $result['user']['USERNAME']]);
+            session(['FIRSTNAME' => $result['user']['FIRSTNAME']]);
         }
+        
+        return $result;
     }
 }
