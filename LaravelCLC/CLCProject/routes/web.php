@@ -38,3 +38,6 @@ Route::get('/Register', function () {
 
 // Submits form data from registration form to registration controller
 Route::post('/registrationHandler', 'RegistrationController@index');
+
+//TODO: create signout controller
+Route::get('/SignOut', 'SignOutController@index');

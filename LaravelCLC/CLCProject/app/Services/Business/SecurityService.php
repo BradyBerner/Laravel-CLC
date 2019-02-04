@@ -47,10 +47,10 @@ class SecurityService{
         Log::info("Exiting SecurityService.login() with result: " . $result['result']);
         
         if($result['result']){
-            session(['principal' => TRUE]);
             session(['ID' => $result['user']['IDUSERS']]);
             session(['USERNAME' => $result['user']['USERNAME']]);
-            session(['FIRSTNAME' => $result['user']['FIRSTNAME']]);
+            session(['NAME' => ['FIRSTNAME' => $result['user']['FIRSTNAME'], 'LASTNAME' => $result['user']['LASTNAME']]]);
+            session(['ROLE' => $result['user']['ROLE']]);
         }
         
         return $result;
