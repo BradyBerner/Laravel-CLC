@@ -1,9 +1,9 @@
-<html>
-	<head>
-		<title>Login Result</title>
-	</head>
+@extends('layouts.appmaster')
+@section('title','Login Results')
 
-	<body align="center">
+@section('content')
+<html>
+	<body>
 		@if($result)
 			<h3>You logged in successfully</h3>
 		@else
@@ -12,3 +12,4 @@
 		@endif
 	</body>
 </html>
+@endsection

@@ -1,14 +1,12 @@
-<html>
-	<head>
-		<title>
-			Home
-		</title>
-	</head>
+@extends('layouts.appmaster')
+@section('title','Home')
 
-	
-	<body align="center">
+@section('content')
+<html>
+	<body>
 		<h2>Home</h2><br>
 		<a href="Login">Log In</a><br>
 		<a href="Register">Register</a>
 	</body>
 </html>
+@endsection
