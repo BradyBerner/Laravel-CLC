@@ -22,6 +22,28 @@ class UserDAO{
         $this->conn = $conn;
     }
     
+    public function getAll(){
+        Log::info("Entering UserDAO.getAll()");
+        
+        try{
+            $statement = $this->conn->prepare("SELECT * FROM USERS");
+            $statement->execute();
+        } catch (\PDOException $e){
+            Log::error("Exception: ", ["message" => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        $users = [];
+        
+        while($user = $statement->fetch(PDO::FETCH_ASSOC)){
+            array_push($users, $user);
+        }
+        
+        Log::info("Exit UserDAO.getAll()");
+        
+        return $users;
+    }
+    
     public function findByLogin(LoginModel $user){
         Log::info("Entering UserDAO.authenticate()");
         
@@ -72,6 +94,7 @@ class UserDAO{
         Log::info("Entering UserDAO.update()");
         
         try{
+            $id = $user->getId();
             $username = $user->getUsername();
             $password = $user->getPassword();
             $email = $user->getEmail();
@@ -88,9 +111,10 @@ class UserDAO{
             $statement->bindParam(':lastname', $lastname);
             $statement->bindParam(':status', $status);
             $statement->bindParam(':role', $role);
+            $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            Log::error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -98,13 +122,11 @@ class UserDAO{
         return $statement->rowCount();
     }
     
-    public function remove(UserModel $user){
+    public function remove($id){
         Log::info("Entering UserDAO.remove()");
         
-        try{
-            $id = $user->getId();
-            
-            $statement = $this->conn->prepare("DELETE FROM `UESRS` WHERE `IDUSERS` = :id");
+        try{            
+            $statement = $this->conn->prepare("DELETE FROM `USERS` WHERE `IDUSERS` = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){

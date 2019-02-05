@@ -39,9 +39,11 @@ Route::get('/Register', function () {
 // Submits form data from registration form to registration controller
 Route::post('/registrationHandler', 'RegistrationController@index');
 
-Route::get('/userAdmin', function() {
-    return view('userAdmin');
-});
+Route::get('/userAdmin', 'UserAdminController@index');
+
+Route::post('/userEditHandler', 'UserAdminController@editUser');
+
+Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 
 //TODO: create signout controller
 Route::get('/SignOut', 'SignOutController@index');
