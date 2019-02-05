@@ -15,15 +15,18 @@ class UserModel {
     private $Email;
     private $FirstName;
     private $LastName;
+    private $Status;
     private $Role;
     
-    function __construct($id, $Username, $Password, $Email, $FirstName, $LastName){
+    function __construct($id, $Username, $Password, $Email, $FirstName, $LastName, $Status, $Role){
         $this->id = $id;
         $this->Username = $Username;
         $this->Password = $Password;
         $this->Email = $Email;
         $this->FirstName = $FirstName;
         $this->LastName = $LastName;
+        $this->Status = $Status;
+        $this->Role = $Role;
     }
     
     /**
@@ -72,6 +75,13 @@ class UserModel {
     public function getLastName()
     {
         return $this->LastName;
+    }
+    
+    /**
+     *  @return int
+     */
+    public function getStatus(){
+        return $this->Status;
     }
 
     /**

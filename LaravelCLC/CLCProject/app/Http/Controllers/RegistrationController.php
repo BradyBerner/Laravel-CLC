@@ -21,7 +21,7 @@ class RegistrationController extends Controller
         $this->validateForm($request);
 
         // Takes user input from register form and uses it to make a new usermodel object with an id of 0
-        $user = new UserModel(0, $request->input('username'), $request->input('password'), $request->input('email'), $request->input('firstname'), $request->input('lastname'), 0);
+        $user = new UserModel(0, $request->input('username'), $request->input('password'), $request->input('email'), $request->input('firstname'), $request->input('lastname'), 1, 0);
 
         // Creates instance of security service
         $securityService = new SecurityService();

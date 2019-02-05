@@ -28,7 +28,7 @@ class LoginController extends Controller
         $results = $securityService->login($user);
         
         // Stores result from attempted login
-        $data = ['result' => $results['result']];
+        $data = ['result' => $results['result'], 'status' => $results['user']['STATUS']];
 
         return view('loginResult')->with($data);
     }

@@ -23,7 +23,7 @@ class UserDAO{
     }
     
     public function findByLogin(LoginModel $user){
-        Log::info("Entering SecurityDAO.authenticate()");
+        Log::info("Entering UserDAO.authenticate()");
         
         try{
             $username = $user->getUsername();
@@ -38,12 +38,12 @@ class UserDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exit SecurityDAO.authenticate()");
+        Log::info("Exit UserDAO.authenticate()");
         return ['result' => $statement->rowCount(), 'user' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
     public function create(UserModel $user){
-        Log::info("Entering SecurityDAO.register()");
+        Log::info("Entering UserDAO.register()");
         
         try{
             $username = $user->getUsername();
@@ -52,7 +52,7 @@ class UserDAO{
             $firstname = $user->getFirstName();
             $lastname = $user->getLastName();
             
-            $statement = $this->conn->prepare("INSERT INTO `USERS` (`IDUSERS`, `USERNAME`, `PASSWORD`, `EMAIL`, `FIRSTNAME`, `LASTNAME`, `ROLE`) VALUES (NULL, :username, :password, :email, :firstname, :lastname, '0')");
+            $statement = $this->conn->prepare("INSERT INTO `USERS` (`IDUSERS`, `USERNAME`, `PASSWORD`, `EMAIL`, `FIRSTNAME`, `LASTNAME`, `STATUS`, `ROLE`) VALUES (NULL, :username, :password, :email, :firstname, :lastname, '1', '0')");
             $statement->bindParam(':username', $username);
             $statement->bindParam(':password', $password);
             $statement->bindParam(':email', $email);
@@ -64,7 +64,55 @@ class UserDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exit SecurityDAO.register()");
+        Log::info("Exit UserDAO.register()");
+        return $statement->rowCount();
+    }
+    
+    public function update(UserModel $user){
+        Log::info("Entering UserDAO.update()");
+        
+        try{
+            $username = $user->getUsername();
+            $password = $user->getPassword();
+            $email = $user->getEmail();
+            $firstname = $user->getFirstName();
+            $lastname = $user->getLastName();
+            $status = $user->getStatus();
+            $role = $user->getRole();
+            
+            $statement = $this->conn->prepare("UPDATE `USERS` SET `USERNAME` = :username, `PASSWORD` = :password, `EMAIL` = :email, `FIRSTNAME` = :firstname, `LASTNAME` = :lastname, `STATUS` = :status, `ROLE` = :role WHERE `IDUSERS` = :id");
+            $statement->bindParam(':username', $username);
+            $statement->bindParam(':password', $password);
+            $statement->bindParam(':email', $email);
+            $statement->bindParam(':firstname', $firstname);
+            $statement->bindParam(':lastname', $lastname);
+            $statement->bindParam(':status', $status);
+            $statement->bindParam(':role', $role);
+            $statement->execute();
+        } catch (\PDOException $e){
+            Log::error("Exception: ", array("message" => $e->getMessage()));
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        Log::info("Exit UserDAO.update()");
+        return $statement->rowCount();
+    }
+    
+    public function remove(UserModel $user){
+        Log::info("Entering UserDAO.remove()");
+        
+        try{
+            $id = $user->getId();
+            
+            $statement = $this->conn->prepare("DELETE FROM `UESRS` WHERE `IDUSERS` = :id");
+            $statement->bindParam(':id', $id);
+            $statement->execute();
+        } catch (\PDOException $e){
+            Log::error("Exception: ", ["message" => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        Log::info("Exit UserDAO.remove()");
         return $statement->rowCount();
     }
 }
