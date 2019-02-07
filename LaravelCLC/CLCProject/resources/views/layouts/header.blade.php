@@ -8,7 +8,7 @@
     <ul class="navbar-nav mr-auto">
       <?php if(Session::has('USERNAME')){?>
       <li class="nav-item active">
-        <a class="nav-link" href="#">{{session('USERNAME')}} <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="userProfile">{{session('USERNAME')}} <span class="sr-only">(current)</span></a>
       </li>
       <?php if(session('ROLE')){?>
       <li class="nav-item dropdown">
@@ -17,9 +17,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="userAdmin">User Admin</a>
-          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">PlaceHolder</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="#">PlaceHolder</a>
         </div>
       </li>
       <?php }?>

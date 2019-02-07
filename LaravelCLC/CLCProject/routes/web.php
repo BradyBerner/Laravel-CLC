@@ -45,5 +45,12 @@ Route::post('/userEditHandler', 'UserAdminController@editUser');
 
 Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 
-//TODO: create signout controller
+Route::get('/userProfile', function(){
+    return view('userProfile');
+});
+
+Route::get('/editUserProfile', function(){
+    return view('editUserProfile');
+});
+
 Route::get('/SignOut', 'SignOutController@index');

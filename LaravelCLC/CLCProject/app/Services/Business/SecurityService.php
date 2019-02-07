@@ -26,6 +26,8 @@ class SecurityService{
         
         $DAO = new UserDAO($connection);
         
+        $connection = null;
+        
         $result = $DAO->create($user);
         
         Log::info("Exiting SecurityService.register() with result: " . $result['result']);
@@ -41,6 +43,8 @@ class SecurityService{
         $connection = new Connection();
         
         $DAO = new UserDAO($connection);
+        
+        $connection = null;
         
         $result = $DAO->findByLogin($user);
         

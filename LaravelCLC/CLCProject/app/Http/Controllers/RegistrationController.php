@@ -39,7 +39,7 @@ class RegistrationController extends Controller
         $rules = [
             'username' => 'Required | Between:4,10 | Alpha',
             'password' => 'Required | Between:4,10',
-            'email' => 'Required',
+            'email' => 'Required | email',
             'firstname' => 'Required | Between:3,15 | Alpha',
             'lastname' => 'Required | Between:3,15 | Alpha'
         ];

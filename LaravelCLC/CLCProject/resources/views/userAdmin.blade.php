@@ -1,6 +1,6 @@
 @include('layouts.admin')
 @extends('layouts.appmaster')
-@section('title','UserAdmin')
+@section('title','User Admin')
 
 @section('imports')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
@@ -24,6 +24,12 @@
 @endsection
 
 @section('content')
+
+@if($errors->count() != 0)
+	@foreach($errors->all() as $error)
+		<div class="alert alert-danger" role="alert" style="width:20%;">{{$error}}</div><br>
+	@endforeach
+@endif
 
 <!-- Data table using jquery for managaing users -->
 <table id="users" class="table table-striped table-bordered" style="width:85%;">
@@ -78,13 +84,13 @@
 										<input form="edit{{$user['IDUSERS']}}" type="text" class="form-control" id="lname" value="{{$user['LASTNAME']}}" name="lastname"><br>
 										<label class="formLabel" for="status">Status: </label>
 										<select form="edit{{$user['IDUSERS']}}" class="form-control" id="status" name="status">
-											<option value="1">Active</option>
-											<option value="0">Suspended</option>
+											<option value="1" <?php if($user['STATUS']==1){echo "selected";}?>>Active</option>
+											<option value="0" <?php if($user['STATUS']==0){echo "selected";}?>>Suspended</option>
 										</select>
 										<label class="formLabel" for="role">Role: </label>
 										<select form="edit{{$user['IDUSERS']}}" class="form-control" id="role" name="role">
-											<option value="0">User</option>
-											<option value="1">Admin</option>
+											<option value="0" <?php if($user['ROLE']==0){echo "selected";}?>>User</option>
+											<option value="1" <?php if($user['ROLE']==1){echo "selected";}?>>Admin</option>
 										</select>
 									</div>
       						</div>
@@ -99,10 +105,37 @@
 				</div>
 <!-- 				Button to open user edit modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#editModal{{$user['IDUSERS']}}">Edit</button></td>
-				<form id="delete{{$user['IDUSERS']}}" action="userRemoveHandler" method="post"></form>
-				<input form="delete{{$user['IDUSERS']}}" type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
-				<input form="delete{{$user['IDUSERS']}}" type="hidden" name="id" value="{{$user['IDUSERS']}}"/> 
-				<td><button form="delete{{$user['IDUSERS']}}" type="submit" class="btn btn-primary">Delete</button></td>
+<!-- 				Button to open the delete confirmation modal -->
+				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#deleteModal{{$user['IDUSERS']}}">Delete</button></td>
+<!-- 				Delete confirmation modal -->
+				<div class="modal fade" id="deleteModal{{$user['IDUSERS']}}" tabindex="-1" role="dialog" aria-labelledby="{{$user['IDUSERS']}}dLabel" aria-hidden="true">
+  					<div class="modal-dialog" role="document">
+    					<div class="modal-content">
+      						<div class="modal-header">
+        						<h5 class="modal-title" id="ModalLabel">Warning!</h5>
+        						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          							<span aria-hidden="true">&times;</span>
+        						</button>
+      						</div>
+      						<div class="modal-body" id="ModalLabel">
+      							<p>
+      							Are you sure that you want to delete this user? This will be permanent and is not recommended.
+      							It's recommended that you edit and suspend a user instead.
+      							</p>
+<!--       							Form containing hidden inputs containing necessary information -->
+        						<form id="delete{{$user['IDUSERS']}}" action="userRemoveHandler" method="post"></form>
+								<input form="delete{{$user['IDUSERS']}}" type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
+								<input form="delete{{$user['IDUSERS']}}" type="hidden" name="id" value="{{$user['IDUSERS']}}"/>
+      						</div>
+      						<div class="modal-footer">
+<!--       							Button to close the modal -->
+        						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+<!--         						Button that submits delete form -->
+       	 						<button form="delete{{$user['IDUSERS']}}" type="submit" class="btn btn-primary">Delete</button>
+      						</div>
+    					</div>
+  					</div>
+				</div>
 			</tr>
 		@endforeach
 	</tbody>

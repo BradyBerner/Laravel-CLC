@@ -28,6 +28,8 @@ class UserAdminController extends Controller
         
         Log::info("Entering UserAdminController.editUser()");
         
+        $this->validateEdit($request);
+        
         $user = new UserModel($request->input('id'), $request->input('username'), $request->input('password'), $request->input('email'), $request->input('firstname'), $request->input('lastname'), $request->input('status'), $request->input('role'));
         
         $service = new UserService();
@@ -36,9 +38,22 @@ class UserAdminController extends Controller
         
         Log::info("Exiting UserAdminController.editUser()");
         
+        //TODO:: add redirect to error page
         if($results){
             return redirect('/userAdmin');
         }
+    }
+    
+    private function validateEdit(Request $request){
+        $rules = [
+            'username' => 'Required | Between:4,10', 
+            'password' => 'Required | Between:4,10',
+            'email' => 'Required | email',
+            'firstname' => 'Required | Between:4,10 | Alpha',
+            'lastname' => 'Required | Between:4,10 | Alpha'
+        ];
+        
+        $this->validate($request, $rules);
     }
     
     public function removeUser(Request $request){
@@ -53,6 +68,7 @@ class UserAdminController extends Controller
         
         Log::info("Exiting UserAdminController.removeUser()");
         
+        //TODO:: add redirect to error page
         if($results){
             return redirect('/userAdmin');
         }
