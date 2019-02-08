@@ -45,9 +45,7 @@ Route::post('/userEditHandler', 'UserAdminController@editUser');
 
 Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 
-Route::get('/userProfile', function(){
-    return view('userProfile');
-});
+Route::post('/userProfile', 'UserProfileController@index');
 
 Route::post('/editUserProfile', 'UserEditController@getLinkedInfo');
 

@@ -9,6 +9,21 @@ use App\Models\UserModel;
 
 class UserService{
     
+    public function findByID(int $id){
+        
+        Log::info("Entering UserService.getAllUsers()");
+        
+        $connection = new Connection();
+        
+        $DAO = new UserDAO($connection);
+        
+        $results = $DAO->findByID($id);
+        
+        Log::info("Exiting UserService.findByID()");
+        
+        return $results;
+    }
+    
     public function getAllUsers(){
         
         Log::info("Entering UserService.getAllUsers()");

@@ -1,3 +1,6 @@
+<form action="userProfile" id="userProfile" style="margin:0px;" method="post"></form>
+<input form="userProfile" type="hidden" name="_token" value="{{csrf_token()}}"></input>
+<input form="userProfile" type="hidden" name="ID" value="{{Session('ID')}}"></input>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(60, 63, 65); margin-bottom:20px;">
   <a class="navbar-brand" href="\CLC">CLC</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,7 +11,7 @@
     <ul class="navbar-nav mr-auto">
       <?php if(Session::has('USERNAME')){?>
       <li class="nav-item active">
-        <a class="nav-link" href="userProfile">{{session('USERNAME')}} <span class="sr-only">(current)</span></a>
+			<input type="submit" form="userProfile" class="nav-link" style="color:inherit; cursor:pointer; background:none; border:none; width:100% !important;" value="{{Session('USERNAME')}}">
       </li>
       <?php if(session('ROLE')){?>
       <li class="nav-item dropdown">

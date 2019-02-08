@@ -106,10 +106,10 @@
 				</div>
 <!-- 				Button to open user edit modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#editModal{{$user['IDUSERS']}}">Edit</button></td>
-				<form id="editProfile{{$user['IDUSERS']}}" action="editUserProfile" method="post"></form>
-				<input form="editProfile{{$user['IDUSERS']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
-				<input form="editProfile{{$user['IDUSERS']}}" type="hidden" name="ID" value="{{$user['IDUSERS']}}"/>
-				<td><button type="submit" class="btn btn-primary" form="editProfile{{$user['IDUSERS']}}">Edit Profile</button>
+				<form id="viewProfile{{$user['IDUSERS']}}" action="userProfile" method="post"></form>
+				<input form="viewProfile{{$user['IDUSERS']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
+				<input form="viewProfile{{$user['IDUSERS']}}" type="hidden" name="ID" value="{{$user['IDUSERS']}}"/>
+				<td><button type="submit" class="btn btn-primary" form="viewProfile{{$user['IDUSERS']}}">View Profile</button>
 <!-- 				Button to open the delete confirmation modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#deleteModal{{$user['IDUSERS']}}">Delete</button></td>
 <!-- 				Delete confirmation modal -->

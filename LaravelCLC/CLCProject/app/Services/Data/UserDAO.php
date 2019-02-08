@@ -44,6 +44,22 @@ class UserDAO{
         return $users;
     }
     
+    public function findByID(int $id){
+        Log::info("Entering UserDAO.findByID()");
+        
+        try{
+            $statement = $this->conn->prepare("SELECT * FROM USERS WHERE IDUSERS = :id");
+            $statement->bindParam(':id', $id);
+            $statement->execute();
+        } catch (\PDOException $e){
+            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        Log::info("Exiting UserDAo.findByID()");
+        return ['result' => $statement->rowCount(), 'user' => $statement->fetch(PDO::FETCH_ASSOC)];
+    }
+    
     public function findByLogin(LoginModel $user){
         Log::info("Entering UserDAO.authenticate()");
         
