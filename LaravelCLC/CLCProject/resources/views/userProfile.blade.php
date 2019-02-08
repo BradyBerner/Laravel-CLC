@@ -23,8 +23,11 @@
     <li id="card-item" class="list-group-item">Vestibulum at eros</li>
   </ul>
   <div class="card-body">
-  	<form action="editUserProfile" method="get" id="editProfile"></form>
-    <button form="editProfile" type="submit" class="btn btn-primary">Update Information</button>
+  	<form action="editUserProfile" method="get" id="editProfile">
+  		<input type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
+  		<input type="hidden" name="ID" value="{{Session::get('ID')}}"/>
+    	<button type="submit" class="btn btn-primary">Update Information</button>
+    </form>
   </div>
 </div>
 @endsection

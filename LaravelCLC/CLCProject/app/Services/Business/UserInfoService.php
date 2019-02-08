@@ -4,7 +4,7 @@ namespace App\Services\Business;
 
 use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
-use App\Models\UserInfoDAO;
+use App\Services\Data\UserInfoDAO;
 use App\Models\UserInfoModel;
 
 class UserInfoService{
@@ -19,12 +19,14 @@ class UserInfoService{
         
         $result = $DAO->findByUserID($userID);
         
+        $connection = null;
+        
         Log::info("Exiting UserInfoService.findByUserID()");
         
         return $result;
     }
     
-    public function editUserID(UserInfoModel $userInfo){
+    public function editUserInfo(UserInfoModel $userInfo){
         
         Log::info("Entering UserInfoService.editUserID()");
         
@@ -32,6 +34,29 @@ class UserInfoService{
         
         $DAO = new UserInfoDAO($connection);
         
-        $result;
+        $result = $DAO->editUserInfo($userInfo);
+        
+        $connection = null;
+        
+        Log::info("Exiting UserInfoService.editUserID()");
+        
+        return $result;
+    }
+    
+    public function createUserInfo(int $userID){
+        
+        Log::info("Entering UserInfoService.createUserInfo()");
+        
+        $connection = new Connection();
+        
+        $DAO = new UserInfoDAO($connection);
+        
+        $result = $DAO->createNewUserInfo($userID);
+        
+        $connection = null;
+        
+        Log::info("Exiting UserInfoService.createUserInfo()");
+        
+        return $result;
     }
 }

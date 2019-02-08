@@ -11,7 +11,7 @@ class AddressModel{
     private $zip;
     private $userID;
     
-    public function __construct(int $id, string $street, string $city, string $state, string $zip, int $userID){
+    public function __construct($id, $street, $city, $state, $zip, $userID){
         $this->id = $id;
         $this->street = $street;
         $this->city = $city;

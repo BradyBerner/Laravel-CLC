@@ -10,6 +10,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserModel;
 use App\Services\Business\SecurityService;
+use App\Services\Business\UserInfoService;
+use App\Services\Business\AddressService;
 
 class RegistrationController extends Controller
 {
@@ -25,11 +27,19 @@ class RegistrationController extends Controller
 
         // Creates instance of security service
         $securityService = new SecurityService();
+        
+        $result = $securityService->register($user);
+        
+        $userID = $result['insertID'];
+        
+        $infoService = new UserInfoService();
+        $addressService = new AddressService();
+        
+        $infoService->createUserInfo($userID);
+        $addressService->createAddress($userID);
 
         // Stores the result of the attempted registration
-        $data = [
-            'result' => $securityService->register($user)
-        ];
+        $data = ['result' => $result];
 
         return view('registrationResult')->with($data);
     }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\Business\UserInfoService;
 use App\Services\Business\AddressService;
 use App\Models\UserInfoModel;
+use App\Models\AddressModel;
 
 class UserEditController extends Controller
 {
@@ -26,7 +27,7 @@ class UserEditController extends Controller
         
         Log::info("Exiting UserEditController.getLinkedInfo()");
         
-        return view('userProfile')->with($data);
+        return view('editUserProfile')->with($data);
     }
     
     public function editUserInfo(Request $request){
@@ -39,15 +40,46 @@ class UserEditController extends Controller
         
         $service = new UserInfoService();
         
-        $results;
+        $results = $service->editUserInfo($info);
+        
+        Log::info("Exiting UserEditController.editUserInfo() with a result of " . $results);
+        
+        return view('userProfile');
     }
     
     private function validateInfoInput(Request $request){
-        
         $rules = [
-            'phone' => 'numeric',
-            'age' => 'integer',
-            'gender' => 'alpha'
+            'phone' => 'Numeric',
+            'age' => 'Numeric',
+            'gender' => 'Alpha'
+        ];
+        
+        $this->validate($request, $rules);
+    }
+    
+    public function editAddress(Request $request){
+        
+        Log::info("Entering UserEditController.editAddress()");
+        
+        $this->validateAddressInput($request);
+        
+        $address = new AddressModel(0, $request->input('street'), $request->input('city'), $request->input('state'), $request->input('zip'), $request->input('userID'));
+        
+        $service = new AddressService();
+        
+        $results = $service->editAddress($address);
+        
+        Log::info("Exiting UserEditController.editAddress() with a result of " . $results);
+        
+        return view('userProfile');
+    }
+    
+    private function validateAddressInput(Request $request){
+        $rules = [
+            'street' => 'Required',
+            'city' => 'Required | Alpha',
+            'state' => 'Required | Alpha',
+            'zip' => 'Required | Numeric'
         ];
         
         $this->validate($request, $rules);

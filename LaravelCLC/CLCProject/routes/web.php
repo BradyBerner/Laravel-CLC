@@ -49,8 +49,14 @@ Route::get('/userProfile', function(){
     return view('userProfile');
 });
 
-Route::get('/editUserProfile', function(){
-    return view('editUserProfile');
-});
+// Route::get('/editUserProfile1', function(){
+//     return view('editUserProfile');
+// });
+
+Route::get('/editUserProfile', 'UserEditController@getLinkedInfo');
+
+Route::post('/editUserInfo', 'UserEditController@editUserInfo');
+
+Route::post('/editUserAddress', 'UserEditController@editAddress');
 
 Route::get('/SignOut', 'SignOutController@index');

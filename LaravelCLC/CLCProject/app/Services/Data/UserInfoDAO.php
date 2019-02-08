@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Services\Data;
 
+use App\Models\UserInfoModel;
 use App\Services\Utility\Connection;
 use Illuminate\Support\Facades\Log;
 use PDO;
@@ -64,6 +65,7 @@ class UserInfoDAO{
             $statement->bindParam(':age', $age);
             $statement->bindParam(':gender', $gender);
             $statement->bindParam(':userid', $userID);
+            $statement->execute();
         } catch (\PDOException $e){
             Log::error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);

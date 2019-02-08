@@ -11,7 +11,7 @@ class UserInfoModel {
     private $gender;
     private $userID;
     
-    public function __construct(int $id, string $description, string $phone, int $age, string $gender, int $userID){
+    public function __construct($id, $description, $phone, $age, $gender, $userID){
         $this->id = $id;
         $this->description = $description;
         $this->phone = $phone;

@@ -87,7 +87,7 @@ class UserDAO{
         }
         
         Log::info("Exit UserDAO.register()");
-        return $statement->rowCount();
+        return ['result' => $statement->rowCount(), 'insertID' => $this->conn->lastInsertID()];
     }
     
     public function update(UserModel $user){
