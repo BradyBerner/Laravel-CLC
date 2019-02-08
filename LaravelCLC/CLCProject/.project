@@ -11,11 +11,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.wst.validation.validationbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.dltk.core.scriptbuilder</name>
 			<arguments>
 			</arguments>
@@ -30,7 +25,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/New_Builder (1).launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/ANT.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>

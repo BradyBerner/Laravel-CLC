@@ -15,18 +15,22 @@ class UserModel {
     private $Email;
     private $FirstName;
     private $LastName;
+    private $Status;
+    private $Role;
     
-    function __construct($id, $Username, $Password, $Email, $FirstName, $LastName){
+    function __construct($id, $Username, $Password, $Email, $FirstName, $LastName, $Status, $Role){
         $this->id = $id;
         $this->Username = $Username;
         $this->Password = $Password;
         $this->Email = $Email;
         $this->FirstName = $FirstName;
         $this->LastName = $LastName;
+        $this->Status = $Status;
+        $this->Role = $Role;
     }
     
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -34,7 +38,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -42,7 +46,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPassword()
     {
@@ -50,7 +54,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail()
     {
@@ -58,7 +62,7 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFirstName()
     {
@@ -66,58 +70,24 @@ class UserModel {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLastName()
     {
         return $this->LastName;
     }
-
+    
     /**
-     * @param mixed $id
+     *  @return int
      */
-    public function setId($id)
-    {
-        $this->id = $id;
+    public function getStatus(){
+        return $this->Status;
     }
 
     /**
-     * @param mixed $Username
+     * @return int
      */
-    public function setUsername($Username)
-    {
-        $this->Username = $Username;
-    }
-
-    /**
-     * @param mixed $Password
-     */
-    public function setPassword($Password)
-    {
-        $this->Password = $Password;
-    }
-
-    /**
-     * @param mixed $Email
-     */
-    public function setEmail($Email)
-    {
-        $this->Email = $Email;
-    }
-
-    /**
-     * @param mixed $FirstName
-     */
-    public function setFirstName($FirstName)
-    {
-        $this->FirstName = $FirstName;
-    }
-
-    /**
-     * @param mixed $LastName
-     */
-    public function setLastName($LastName)
-    {
-        $this->LastName = $LastName;
+    public function getRole(){
+        return $this->Role;
     }
 }
