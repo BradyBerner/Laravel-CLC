@@ -49,11 +49,7 @@ Route::get('/userProfile', function(){
     return view('userProfile');
 });
 
-// Route::get('/editUserProfile1', function(){
-//     return view('editUserProfile');
-// });
-
-Route::get('/editUserProfile', 'UserEditController@getLinkedInfo');
+Route::post('/editUserProfile', 'UserEditController@getLinkedInfo');
 
 Route::post('/editUserInfo', 'UserEditController@editUserInfo');
 

@@ -45,6 +45,7 @@
 			<th scope="col">Status</th>
 			<th scope="col">Role</th>
 			<th scope="col">Edit</th>
+			<th scope="col">Edit Profile</th>
 			<th scope="col">Delete</th>
 		</tr>
 	</thead>
@@ -105,6 +106,10 @@
 				</div>
 <!-- 				Button to open user edit modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#editModal{{$user['IDUSERS']}}">Edit</button></td>
+				<form id="editProfile{{$user['IDUSERS']}}" action="editUserProfile" method="post"></form>
+				<input form="editProfile{{$user['IDUSERS']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
+				<input form="editProfile{{$user['IDUSERS']}}" type="hidden" name="ID" value="{{$user['IDUSERS']}}"/>
+				<td><button type="submit" class="btn btn-primary" form="editProfile{{$user['IDUSERS']}}">Edit Profile</button>
 <!-- 				Button to open the delete confirmation modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#deleteModal{{$user['IDUSERS']}}">Delete</button></td>
 <!-- 				Delete confirmation modal -->

@@ -40,7 +40,7 @@
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     	<form action="editUserInfo" method="post">
     		<input type="hidden" name="_token" value="{{csrf_token()}}">
-    		<input type="hidden" name="userID" value="{{Session::get('ID')}}">
+    		<input type="hidden" name="userID" value="{{Request::post('ID')}}">
     		<div class="form-group">
     			<label for="phone">Phone: </label>
     			<input type="text" class="form-control" id="phone" name="phone" value="@if($info['PHONE'] != null){{$info['PHONE']}}@endif"/>
@@ -55,7 +55,7 @@
     		</div>
     		<div class="form-group">
 				<label for="description">Description: </label>
-				<textarea class="form-control" id="description" name="description" rows="5"  style="width:70%;" value="@if($info['DESCRIPTION'] != null){{$info['DESCRIPTION']}}@endif"></textarea>
+				<textarea class="form-control" id="description" name="description" rows="5"  style="width:70%;">@if($info['DESCRIPTION'] != null){{$info['DESCRIPTION']}}@endif</textarea>
 			</div>
     		<button type="submit" class="btn btn-primary">Update</button>
     	</form>

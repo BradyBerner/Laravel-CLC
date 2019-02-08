@@ -15,15 +15,15 @@
   <img src="..." class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">{{Session::get('NAME')['FIRSTNAME']}} {{Session::get('NAME')['LASTNAME']}}</h5>
-    <p class="card-text">User description.</p>
+    <p class="card-text">Placeholder Text.</p>
   </div>
   <ul class="list-group list-group-flush">
-    <li id="card-item" class="list-group-item">Cras justo odio</li>
-    <li id="card-item" class="list-group-item">Dapibus ac facilisis in</li>
-    <li id="card-item" class="list-group-item">Vestibulum at eros</li>
+    <li id="card-item" class="list-group-item">Placeholder Text 1</li>
+    <li id="card-item" class="list-group-item">Placeholder Text 2</li>
+    <li id="card-item" class="list-group-item">Placeholder Text 3</li>
   </ul>
   <div class="card-body">
-  	<form action="editUserProfile" method="get" id="editProfile">
+  	<form action="editUserProfile" method="post" id="editProfile">
   		<input type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
   		<input type="hidden" name="ID" value="{{Session::get('ID')}}"/>
     	<button type="submit" class="btn btn-primary">Update Information</button>

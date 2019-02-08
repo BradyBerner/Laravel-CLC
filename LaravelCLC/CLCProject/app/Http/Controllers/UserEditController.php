@@ -34,6 +34,7 @@ class UserEditController extends Controller
         
         Log::info("Entering UserEditController.editUserInfo()");
         
+        //TODO::ask Reha if there's a way to do custom validation redirects
         $this->validateInfoInput($request);
         
         $info = new UserInfoModel(0, $request->input('description'), $request->input('phone'), $request->input('age'), $request->input('gender'), $request->input('userID'));
@@ -44,7 +45,7 @@ class UserEditController extends Controller
         
         Log::info("Exiting UserEditController.editUserInfo() with a result of " . $results);
         
-        return view('userProfile');
+        return view('home');
     }
     
     private function validateInfoInput(Request $request){
@@ -61,6 +62,7 @@ class UserEditController extends Controller
         
         Log::info("Entering UserEditController.editAddress()");
         
+        //TODO::ask Reha if there's a way to do custom validation redirects
         $this->validateAddressInput($request);
         
         $address = new AddressModel(0, $request->input('street'), $request->input('city'), $request->input('state'), $request->input('zip'), $request->input('userID'));
@@ -71,7 +73,7 @@ class UserEditController extends Controller
         
         Log::info("Exiting UserEditController.editAddress() with a result of " . $results);
         
-        return view('userProfile');
+        return view('home');
     }
     
     private function validateAddressInput(Request $request){
