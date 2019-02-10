@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-10-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Data;
 
 use App\Models\UserInfoModel;
@@ -10,12 +17,15 @@ use App\Services\Utility\DatabaseException;
 
 class UserInfoDAO{
     
+    //Stores the connection to the database that will be used to execute the desired function
     private $connection;
     
+    //Takes in a PDO connection and sets the connection attribute equal to it
     public function __construct(Connection $conn){
         $this->connection = $conn;
     }
     
+    //Takes in a user ID and returns the database row for that user
     public function findByUserID(int $id){
         Log::info("Entering UserInfoDAO.findByUserID()");
         
@@ -29,9 +39,13 @@ class UserInfoDAO{
         }
         
         Log::info("Exiting UserInfoDAO.findByUserID()");
+        /*Returns an associative array containing the result of the database query as well as the userInfo in the form
+        of an associative array*/
         return ['result' => $statement->rowCount(), 'userInfo' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
+    /*Function takes in a user id and creates a new empty userInfo entry that only contains its own primary key and the 
+    user id that was passed as a foriegn key*/
     public function createNewUserInfo(int $userID){
         Log::info("Entering UserInfoDAO.createNewUserInfo()");
         
@@ -45,14 +59,18 @@ class UserInfoDAO{
         }
         
         Log::info("Exiting UserInfoDAO.createNewUserInfo()");
+        //Returns the result of the query
         return $statement->rowCount();
     }
     
+    /*Takes in a userInfoModel that contains all of the desired edited information and attempts to update the database entry
+    with that information*/
     public function editUserInfo(UserInfoModel $userInfo){
         
         Log::info("Entering UserInfoDAO.editUserInfo()");
         
         try{
+            //Gets the information contained within the userInfoModel
             $description = $userInfo->getDescription();
             $age = $userInfo->getAge();
             $gender = $userInfo->getGender();
@@ -60,6 +78,7 @@ class UserInfoDAO{
             $userID = $userInfo->getUserID();
             
             $statement = $this->connection->prepare("UPDATE USER_INFO SET DESCRIPTION = :description, PHONE = :phone, AGE = :age, GENDER = :gender WHERE USERS_IDUSERS = :userid");
+            //Binds the information from the model to the query tokens
             $statement->bindParam(':description', $description);
             $statement->bindParam(':phone', $phone);
             $statement->bindParam(':age', $age);
@@ -72,6 +91,7 @@ class UserInfoDAO{
         }
         
         Log::info("Exiting UserInfoDAO.editUserInfo()");
+        //Returns the result of the query
         return $statement->rowCount();
     }
 }

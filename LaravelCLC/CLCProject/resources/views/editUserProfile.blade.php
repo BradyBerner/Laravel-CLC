@@ -1,3 +1,10 @@
+<!--
+Brady Berner & Pengyu Yin
+CST-256
+2-10-19
+This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+-->
+
 @include('layouts.loggedIn')
 @extends('layouts.appmaster')
 @section('title','Edit Information')
@@ -16,14 +23,21 @@
 </style>
 @endsection
 
+<!-- If the user is trying to access an edit profile that is not their own then they are redirected to the home page -->
+@if(Session::get('ID') != Request::post('ID'))
+	<meta http-equiv="refresh" content="0; URL='/CLC'"/>
+@endif
+
 @section('content')
 
+<!-- Displays any errors with the user's input in the event that it doesn't meet data validation requirements -->
 @if($errors->count() != 0)
 	@foreach($errors->all() as $error)
 		<div class="alert alert-danger" role="alert" style="width:20%;">{{$error}}</div><br>
 	@endforeach
 @endif
 
+<!-- Card that contains both of the forms for editing user information -->
 <div class="card" style="width:60%;">
   <div class="card-header" id="darkStyle"> 
     <ul class="nav nav-tabs card-header-tabs pull-right"  id="myTab" role="tablist">
@@ -38,6 +52,7 @@
   <div class="card-body" id="darkStyle">
    <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    	<!-- Form for editing the user's userInfo -->
     	<form action="editUserInfo" method="post">
     		<input type="hidden" name="_token" value="{{csrf_token()}}">
     		<input type="hidden" name="userID" value="{{Request::post('ID')}}">
@@ -61,6 +76,7 @@
     	</form>
     </div>
  	 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+ 	 	<!-- Form for editing the user's address information -->
 		<form action="editUserAddress" method="post">
 			<input type="hidden" name="_token" value="{{csrf_token()}}"/>
 			<input type="hidden" name="userID" value="{{Session::get('ID')}}">

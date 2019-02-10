@@ -1,7 +1,16 @@
+<!--
+Brady Berner & Pengyu Yin
+CST-256
+2-10-19
+This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+-->
+
+<!-- Ensures that the one looking at the page is an administrator -->
 @include('layouts.admin')
 @extends('layouts.appmaster')
 @section('title','User Admin')
 
+<!-- Imports needed for the included Jquery table to work properly -->
 @section('imports')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 <link rel="stylesheet" type="text/css" href="public/css/table.css">
@@ -25,6 +34,7 @@
 
 @section('content')
 
+<!-- Prints out any errors if there are any after an admin has attempted to edit a user -->
 @if($errors->count() != 0)
 	@foreach($errors->all() as $error)
 		<div class="alert alert-danger" role="alert" style="width:20%;">{{$error}}</div><br>
