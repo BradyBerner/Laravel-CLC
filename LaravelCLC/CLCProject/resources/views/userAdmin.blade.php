@@ -1,7 +1,16 @@
+<!--
+Brady Berner & Pengyu Yin
+CST-256
+2-10-19
+This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+-->
+
+<!-- Ensures that the one looking at the page is an administrator -->
 @include('layouts.admin')
 @extends('layouts.appmaster')
 @section('title','User Admin')
 
+<!-- Imports needed for the included Jquery table to work properly -->
 @section('imports')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 <link rel="stylesheet" type="text/css" href="public/css/table.css">
@@ -25,6 +34,7 @@
 
 @section('content')
 
+<!-- Prints out any errors if there are any after an admin has attempted to edit a user -->
 @if($errors->count() != 0)
 	@foreach($errors->all() as $error)
 		<div class="alert alert-danger" role="alert" style="width:20%;">{{$error}}</div><br>
@@ -106,10 +116,10 @@
 				</div>
 <!-- 				Button to open user edit modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#editModal{{$user['IDUSERS']}}">Edit</button></td>
-				<form id="editProfile{{$user['IDUSERS']}}" action="editUserProfile" method="post"></form>
-				<input form="editProfile{{$user['IDUSERS']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
-				<input form="editProfile{{$user['IDUSERS']}}" type="hidden" name="ID" value="{{$user['IDUSERS']}}"/>
-				<td><button type="submit" class="btn btn-primary" form="editProfile{{$user['IDUSERS']}}">Edit Profile</button>
+				<form id="viewProfile{{$user['IDUSERS']}}" action="userProfile" method="post"></form>
+				<input form="viewProfile{{$user['IDUSERS']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
+				<input form="viewProfile{{$user['IDUSERS']}}" type="hidden" name="ID" value="{{$user['IDUSERS']}}"/>
+				<td><button type="submit" class="btn btn-primary" form="viewProfile{{$user['IDUSERS']}}">View Profile</button>
 <!-- 				Button to open the delete confirmation modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#deleteModal{{$user['IDUSERS']}}">Delete</button></td>
 <!-- 				Delete confirmation modal -->

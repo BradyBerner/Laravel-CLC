@@ -1,3 +1,10 @@
+<!--
+Brady Berner & Pengyu Yin
+CST-256
+2-10-19
+This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+-->
+
 <html lang="en">
 	<head>
 		<title>@yield('title')</title>
@@ -22,5 +29,6 @@
 		<div align="center">
 			@yield('content')
 		</div>
+		@include('layouts.footer')
 	</body>
 </html>

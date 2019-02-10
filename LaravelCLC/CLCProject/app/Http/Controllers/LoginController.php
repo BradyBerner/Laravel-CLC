@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 1-20-19
+ * 2-10-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 namespace App\Http\Controllers;
@@ -17,22 +17,30 @@ class LoginController extends Controller
     // Function recieves user login input, then authenticates user input against database entries
     public function index(Request $request)
     {
-        $this->validateForm($request);
+        try {
+            // Validates the user's input against pre-defined rules
+            $this->validateForm($request);
 
-        // Get user form input from request
-        $user = new LoginModel($request->input('username'), $request->input('password'));
+            // Get user form input from request
+            $user = new LoginModel($request->input('username'), $request->input('password'));
 
-        // Creates an instance of the security service class
-        $securityService = new SecurityService();
-        
-        $results = $securityService->login($user);
-        
-        // Stores result from attempted login
-        $data = ['result' => $results['result'], 'status' => $results['user']['STATUS']];
+            // Creates an instance of the security service class
+            $securityService = new SecurityService();
 
-        return view('loginResult')->with($data);
+            //Stores the results from the database query for logging in
+            $results = $securityService->login($user);
+
+            // Stores result from attempted login
+            $data = [
+                'result' => $results['result'],
+                'status' => $results['user']['STATUS']
+            ];
+
+            return view('loginResult')->with($data);
+        } catch (\Exception $e) {}
     }
 
+    //Contains the validation rules for the user's login input
     private function validateForm(Request $request)
     {
         $rules = [

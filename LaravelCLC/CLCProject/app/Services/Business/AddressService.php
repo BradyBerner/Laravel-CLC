@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-10-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Business;
 
 use Illuminate\Support\Facades\Log;
@@ -9,6 +16,7 @@ use App\Models\AddressModel;
 
 class AddressService{
     
+    //Takes in a user's ID and returns the address associated with that ID
     public function findByUserID(int $userID){
         
         Log::info("Entering AddressService.findByUserID()");
@@ -26,6 +34,7 @@ class AddressService{
         return $result;
     }
     
+    //Takes in an address model and updates the corresponding database entries information
     public function editAddress(AddressModel $address){
         
         Log::info("Entering AddressService.editAddress()");
@@ -43,6 +52,7 @@ class AddressService{
         return $result;
     }
     
+    //Takes in a user's ID and creates a new address in the database using that ID as the foreign key
     public function createAddress(int $userID){
         
         Log::info("Entering AddressService.createAddress()");

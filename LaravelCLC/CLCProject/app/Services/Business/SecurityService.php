@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 1-20-19
+ * 2-10-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -50,6 +50,7 @@ class SecurityService{
         
         Log::info("Exiting SecurityService.login() with result: " . $result['result']);
         
+        //Stores all of the necessary information from the login in the session in the event of a successful login
         if($result['result'] && $result['user']['STATUS']){
             session(['ID' => $result['user']['IDUSERS']]);
             session(['USERNAME' => $result['user']['USERNAME']]);

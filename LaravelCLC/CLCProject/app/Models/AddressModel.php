@@ -1,9 +1,15 @@
 <?php
-
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-10-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
 namespace App\Models;
 
 class AddressModel{
     
+    //Attrubutes corresponding to the database columns for the table representing the same object type
     private $id;
     private $street;
     private $city;
@@ -11,6 +17,7 @@ class AddressModel{
     private $zip;
     private $userID;
     
+    //Constructor that sets all of the attributes equal to the arguments passed
     public function __construct($id, $street, $city, $state, $zip, $userID){
         $this->id = $id;
         $this->street = $street;

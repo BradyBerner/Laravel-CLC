@@ -14,7 +14,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 1-20-19
+ * 2-10-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -39,20 +39,26 @@ Route::get('/Register', function () {
 // Submits form data from registration form to registration controller
 Route::post('/registrationHandler', 'RegistrationController@index');
 
+//Loads the user admin page after going through the admin controller and getting all user data
 Route::get('/userAdmin', 'UserAdminController@index');
 
+//Submits form data from editing a user to the controller
 Route::post('/userEditHandler', 'UserAdminController@editUser');
 
+//Submits form data from the user admin page to the controller so that a user can be deleted
 Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 
-Route::get('/userProfile', function(){
-    return view('userProfile');
-});
+//Submits form data to a controller so that it can then return back the proper information for the user's profile
+Route::post('/userProfile', 'UserProfileController@index');
 
-Route::post('/editUserProfile', 'UserEditController@getLinkedInfo');
+//Submits the user's id to a controller to get all of their current info and address and then return the edit view to the user
+Route::get('/editUserProfile', 'UserEditController@getLinkedInfo');
 
+//Submits form data from the edit user profile form to the controller to commit user edits to the database
 Route::post('/editUserInfo', 'UserEditController@editUserInfo');
 
+//Submits form data from the edut user address form to the controller to commit user edits to the database
 Route::post('/editUserAddress', 'UserEditController@editAddress');
 
+//Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');
