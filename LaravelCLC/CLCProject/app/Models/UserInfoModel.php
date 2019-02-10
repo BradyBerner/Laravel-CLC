@@ -1,9 +1,15 @@
 <?php
-
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-10-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
 namespace App\Models;
 
 class UserInfoModel {
     
+    //Attributes corresponding to all of the columns in the database for the table that represents the same thing
     private $id;
     private $description;
     private $phone;
@@ -11,6 +17,7 @@ class UserInfoModel {
     private $gender;
     private $userID;
     
+    //Sets all of the attributes to the corresponding argument passed
     public function __construct($id, $description, $phone, $age, $gender, $userID){
         $this->id = $id;
         $this->description = $description;

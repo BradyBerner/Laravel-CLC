@@ -2,13 +2,14 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 1-20-19
+ * 2-10-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 namespace App\Models;
 
 class UserModel {
     
+    //Attributes corresponding to the data stored in the database for all entries of the corresponding table
     private $id;
     private $Username;
     private $Password;
@@ -18,6 +19,7 @@ class UserModel {
     private $Status;
     private $Role;
     
+    //Sets all attributes equal to the corresponding value passed to the constructor
     function __construct($id, $Username, $Password, $Email, $FirstName, $LastName, $Status, $Role){
         $this->id = $id;
         $this->Username = $Username;

@@ -21,7 +21,7 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 			@endif
 		@else
 			<!-- Lets the user know that they entered invalid login credentials -->
-			<h3 class="alert alert-danger" role="alert" style="width:20%;">Invalid login credentials</h3><br>
-			<a href="Login">Try Again</a>
+			<div class="alert alert-danger" role="alert" style="width:20%;"><h3>Invalid login credentials</h3>
+			<a href="Login" class="alert-link">Try Again</a></div>
 		@endif
 @endsection
