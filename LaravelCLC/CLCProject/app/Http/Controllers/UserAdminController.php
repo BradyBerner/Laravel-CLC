@@ -43,9 +43,10 @@ class UserAdminController extends Controller
     {
         Log::info("Entering UserAdminController.editUser()");
 
+        // Validates form input against pre-defined rules
+        $this->validateEdit($request);
+        
         try {
-            // Validates form input against pre-defined rules
-            $this->validateEdit($request);
 
             // Creates a new user Model using the information gotten from the form input
             $user = new UserModel($request->input('id'), $request->input('username'), $request->input('password'), $request->input('email'), $request->input('firstname'), $request->input('lastname'), $request->input('status'), $request->input('role'));

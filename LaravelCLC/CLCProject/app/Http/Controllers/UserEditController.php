@@ -51,11 +51,12 @@ class UserEditController extends Controller
     // Takes user input from the previous form and passes it along so that a user can edit their info in the database
     public function editUserInfo(Request $request)
     {
-        try {
-            Log::info("Entering UserEditController.editUserInfo()");
+        Log::info("Entering UserEditController.editUserInfo()");
 
-            // Validates the user's input against pre-defined rules
-            $this->validateInfoInput($request);
+        // Validates the user's input against pre-defined rules
+        $this->validateInfoInput($request);
+
+        try {
 
             // Gets all of the input from the previous form and uses it to create a new user info object
             $info = new UserInfoModel(0, $request->input('description'), $request->input('phone'), $request->input('age'), $request->input('gender'), $request->input('userID'));
@@ -87,11 +88,12 @@ class UserEditController extends Controller
     // Takes user input from the previous form and passes it along so that a user can edit their address in the database
     public function editAddress(Request $request)
     {
-        try {
-            Log::info("Entering UserEditController.editAddress()");
+        Log::info("Entering UserEditController.editAddress()");
 
-            // Validates the user's input against pre-defined rules
-            $this->validateAddressInput($request);
+        // Validates the user's input against pre-defined rules
+        $this->validateAddressInput($request);
+        
+        try {
 
             // Gets all of the input from the previous form and uses it to create a new address object
             $address = new AddressModel(0, $request->input('street'), $request->input('city'), $request->input('state'), $request->input('zip'), $request->input('userID'));
