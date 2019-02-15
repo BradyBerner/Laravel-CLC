@@ -35,7 +35,11 @@ class UserAdminController extends Controller
             Log::info("Exiting UserAdminController.index()");
 
             return view('userAdmin')->with($data);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            Log::error("Exception occurred in UserAdminController.index(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 
     // Method takes form input from the previous form and attempts to update the database entry for the corresponding user
@@ -62,7 +66,11 @@ class UserAdminController extends Controller
             if ($results) {
                 return redirect('/userAdmin');
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            Log::error("Exception occurred in UserAdminController.editUser(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 
     // Contains the rules for validating form input for editing users
@@ -99,6 +107,10 @@ class UserAdminController extends Controller
             if ($results) {
                 return redirect('/userAdmin');
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            Log::error("Exception occurred in UserAdminController.removeUser(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 }

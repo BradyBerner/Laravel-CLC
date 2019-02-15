@@ -8,7 +8,6 @@
 namespace App\Services\Business;
 
 use App\Models\UserModel;
-use App\Models\LoginModel;
 use App\Services\Utility\Connection;
 use Illuminate\Support\Facades\Log;
 use PDO;
@@ -25,12 +24,14 @@ class SecurityService
 
         $connection = new Connection();
         $connection->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+        $connection->beginTransaction();
 
         $DAO = new UserDAO($connection);
 
         $result = $DAO->create($user);
 
         if ($result['result']) {
+            
             $userID = $result['insertID'];
 
             // Creates instances of the business services having to do with user information
@@ -38,8 +39,8 @@ class SecurityService
             $addressService = new AddressService();
 
             // Creates new entries in information tables corresponding to the user with the new user's ID
-            $infoResult = $infoService->createUserInfo($userID);
-            $addressResult = $addressService->createAddress($userID);
+            $infoResult = $infoService->createUserInfo($userID, $connection);
+            $addressResult = $addressService->createAddress($userID, $connection);
             
             if($infoResult && $addressResult){
                 $connection->commit();
@@ -56,7 +57,7 @@ class SecurityService
     }
 
     // Function takes user as an argument and calls the database login service and returns the result
-    public function login(LoginModel $user)
+    public function login(UserModel $user)
     {
         Log::info("Entering SecurityService.login()");
 
@@ -69,21 +70,6 @@ class SecurityService
         $result = $DAO->findByLogin($user);
 
         Log::info("Exiting SecurityService.login() with result: " . $result['result']);
-
-        // Stores all of the necessary information from the login in the session in the event of a successful login
-        if ($result['result'] && $result['user']['STATUS']) {
-            session([
-                'ID' => $result['user']['IDUSERS']
-            ]);
-            session([
-                'USERNAME' => $result['user']['USERNAME']
-            ]);
-            session([
-                'NAME' => [
-                    'FIRSTNAME' => $result['user']['FIRSTNAME'],
-                    'LASTNAME' => $result['user']['LASTNAME']]]);
-            session(['ROLE' => $result['user']['ROLE']]);
-        }
         
         return $result;
     }

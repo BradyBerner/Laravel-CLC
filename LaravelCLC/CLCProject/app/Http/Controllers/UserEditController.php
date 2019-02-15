@@ -17,41 +17,48 @@ use App\Models\AddressModel;
 class UserEditController extends Controller
 {
 
+    //Method Depreciated
     // This method takes the ID passed through the form and returns the user's address and info to a view for editing
-    public function getLinkedInfo(Request $request)
-    {
-        try {
-            Log::info("Entering UserEditController.getLinkedInfo()");
+//     public function getLinkedInfo(Request $request)
+//     {
+//         try {
+//             Log::info("Entering UserEditController.getLinkedInfo()");
 
-            // Get's ID from previous form
-            $userID = $request->input('ID');
+//             // Get's ID from previous form
+//             $userID = $request->input('ID');
 
-            // Creates instances of the necessary services
-            $infoService = new UserInfoService();
-            $addressService = new AddressService();
+//             // Creates instances of the necessary services
+//             $infoService = new UserInfoService();
+//             $addressService = new AddressService();
 
-            // Gets the user's address and info rows from the corresponding tables
-            $infoResults = $infoService->findByUserID($userID);
-            $addressResults = $addressService->findByUserID($userID);
+//             // Gets the user's address and info rows from the corresponding tables
+//             $infoResults = $infoService->findByUserID($userID);
+//             $addressResults = $addressService->findByUserID($userID);
 
-            // Stores the retrieved info in an associative array to be passed on to the editing view
-            $data = [
-                'infoResult' => $infoResults['result'],
-                'addressResult' => $addressResults['result'],
-                'info' => $infoResults['userInfo'],
-                'address' => $addressResults['address']
-            ];
+//             // Stores the retrieved info in an associative array to be passed on to the editing view
+//             $data = [
+//                 'infoResult' => $infoResults['result'],
+//                 'addressResult' => $addressResults['result'],
+//                 'info' => $infoResults['userInfo'],
+//                 'address' => $addressResults['address']
+//             ];
 
-            Log::info("Exiting UserEditController.getLinkedInfo()");
+//             Log::info("Exiting UserEditController.getLinkedInfo()");
 
-            return view('editUserProfile')->with($data);
-        } catch (\Exception $e) {}
-    }
+//             return view('editUserProfile')->with($data);
+//         } catch (\Exception $e) {
+//             Log::error("Exception occurred in UserEditController.getLinkedInfo(): " . $e->getMessage());
+//             $data = ['error_message' => $e->getMessage()];
+//             return view('error')->with($data);
+//         }
+//     }
 
     // Takes user input from the previous form and passes it along so that a user can edit their info in the database
     public function editUserInfo(Request $request)
     {
         Log::info("Entering UserEditController.editUserInfo()");
+        
+        $request->session()->flash('modal', $request->input('modalName'));
 
         // Validates the user's input against pre-defined rules
         $this->validateInfoInput($request);
@@ -70,7 +77,11 @@ class UserEditController extends Controller
             Log::info("Exiting UserEditController.editUserInfo() with a result of " . $results);
 
             return view('home');
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            Log::error("Exception occurred in UserEditController.editUserInfo(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 
     // Method contains rules for validating user info input before submitting it to the database
@@ -89,6 +100,8 @@ class UserEditController extends Controller
     public function editAddress(Request $request)
     {
         Log::info("Entering UserEditController.editAddress()");
+        
+        $request->session()->flash('modal', $request->input('modalName'));
 
         // Validates the user's input against pre-defined rules
         $this->validateAddressInput($request);
@@ -107,7 +120,11 @@ class UserEditController extends Controller
             Log::info("Exiting UserEditController.editAddress() with a result of " . $results);
 
             return view('home');
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            Log::error("Exception occurred in UserEditController.editAddress(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 
     // Method contains rules for validating address input before submitting it to the database

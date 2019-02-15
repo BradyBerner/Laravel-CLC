@@ -53,11 +53,9 @@ class AddressService{
     }
     
     //Takes in a user's ID and creates a new address in the database using that ID as the foreign key
-    public function createAddress(int $userID){
+    public function createAddress(int $userID, $connection){
         
         Log::info("Entering AddressService.createAddress()");
-        
-        $connection = new Connection();
         
         $DAO = new AddressDAO($connection);
         

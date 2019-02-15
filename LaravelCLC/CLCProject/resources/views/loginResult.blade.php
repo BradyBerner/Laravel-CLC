@@ -16,7 +16,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 				<h3 class="alert alert-success" role="alert" style="width:20%;">You logged in successfully</h3>
 			@else
 				<!-- If the user's account has been suspended flushes the session and gives a message to the user -->
-				<?php Session::flush()?>
 				<div class="alert alert-danger" role="alert" style="width:20%;">Your account has been disabled please contact an administrator</div>
 			@endif
 		@else

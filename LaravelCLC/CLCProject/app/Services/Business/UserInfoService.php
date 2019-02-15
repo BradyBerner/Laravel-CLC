@@ -63,12 +63,9 @@ class UserInfoService{
     }
     
     //Creates a new userInfo entry in the database with a foreign key corresponding to the ID passed as an argumnet
-    public function createUserInfo(int $userID){
+    public function createUserInfo(int $userID, $connection){
         
         Log::info("Entering UserInfoService.createUserInfo()");
-        
-        //Creates connection to the database
-        $connection = new Connection();
         
         //Creates an instance of the data access object
         $DAO = new UserInfoDAO($connection);

@@ -47,7 +47,9 @@ class UserProfileController extends Controller
         
         return view('userProfile')->with($data);
         } catch (\Exception $e){
-            
+            Log::error("Exception occurred in UserProfileController.index(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
         }
     }
 }

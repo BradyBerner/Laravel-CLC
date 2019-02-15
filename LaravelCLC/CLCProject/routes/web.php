@@ -49,10 +49,7 @@ Route::post('/userEditHandler', 'UserAdminController@editUser');
 Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 
 //Submits form data to a controller so that it can then return back the proper information for the user's profile
-Route::post('/userProfile', 'UserProfileController@index');
-
-//Submits the user's id to a controller to get all of their current info and address and then return the edit view to the user
-Route::get('/editUserProfile', 'UserEditController@getLinkedInfo');
+Route::get('/userProfile', 'UserProfileController@index');
 
 //Submits form data from the edit user profile form to the controller to commit user edits to the database
 Route::post('/editUserInfo', 'UserEditController@editUserInfo');
