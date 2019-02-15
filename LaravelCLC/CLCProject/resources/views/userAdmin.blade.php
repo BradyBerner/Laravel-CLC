@@ -116,7 +116,7 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 				</div>
 <!-- 				Button to open user edit modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#editModal{{$user['IDUSERS']}}">Edit</button></td>
-				<form id="viewProfile{{$user['IDUSERS']}}" action="userProfile" method="post"></form>
+				<form id="viewProfile{{$user['IDUSERS']}}" action="userProfile" method="get"></form>
 				<input form="viewProfile{{$user['IDUSERS']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
 				<input form="viewProfile{{$user['IDUSERS']}}" type="hidden" name="ID" value="{{$user['IDUSERS']}}"/>
 				<td><button type="submit" class="btn btn-primary" form="viewProfile{{$user['IDUSERS']}}">View Profile</button>

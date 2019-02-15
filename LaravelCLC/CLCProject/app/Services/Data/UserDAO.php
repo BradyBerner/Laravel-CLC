@@ -9,7 +9,6 @@
 namespace App\Services\Data;
 
 use App\Models\UserModel;
-use App\Models\LoginModel;
 use App\Services\Utility\DatabaseException;
 use Illuminate\Support\Facades\Log;
 use PDO;
@@ -71,7 +70,7 @@ class UserDAO{
     
     /*Takes a Login model as an argument and checks the database for an entry with both the appropriate username and password
     this method is to be used for the purpose of authenticating a user during login or for any other security check*/
-    public function findByLogin(LoginModel $user){
+    public function findByLogin(UserModel $user){
         Log::info("Entering UserDAO.authenticate()");
         
         try{
