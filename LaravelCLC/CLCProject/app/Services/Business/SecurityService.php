@@ -12,6 +12,7 @@ use App\Services\Utility\Connection;
 use Illuminate\Support\Facades\Log;
 use PDO;
 use App\Services\Data\UserDAO;
+use App\Services\Utility\DatabaseException;
 
 class SecurityService
 {
@@ -22,6 +23,7 @@ class SecurityService
     {
         Log::info("Entering SecurityService.register()");
 
+        try{
         $connection = new Connection();
         $connection->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
         $connection->beginTransaction();
@@ -50,6 +52,12 @@ class SecurityService
         }
 
         $connection = null;
+        
+        } catch (\Exception $e){
+            Log::error("Database exception: ", $e->getMessage());
+            $connection->rollBack();
+            throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
+        }
 
         Log::info("Exiting SecurityService.register() with result: " . $result['result']);
 

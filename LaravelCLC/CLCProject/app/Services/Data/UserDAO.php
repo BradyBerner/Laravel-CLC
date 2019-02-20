@@ -28,7 +28,7 @@ class UserDAO{
         Log::info("Entering UserDAO.getAll()");
         
         try{
-            $statement = $this->conn->prepare("SELECT * FROM USERS");
+            $statement = $this->conn->prepare("SELECT * FROM USERS WHERE ROLE != 1");
             $statement->execute();
         } catch (\PDOException $e){
             Log::error("Exception: ", ["message" => $e->getMessage()]);
