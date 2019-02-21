@@ -19,7 +19,7 @@ class ExperienceDAO{
         Log::info("Entering ExperienceDAO.getByID()");
         
         try{
-            $statement = $this->conn->prepare("SELECT * FROM EXPERIENCE WHERE IDEXPERIENCE = :id");
+            $statement = $this->conn->prepare("SELECT * FROM EXPERIENCE WHERE USERS_IDUSERS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){

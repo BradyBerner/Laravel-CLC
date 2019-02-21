@@ -162,20 +162,139 @@ input {
 	<div class="card-body" id="darkStyle">
 		<div class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="education" role="tabpanel" aria-labelledby="home-tab">
-				<!-- Education -->
-				<div class="card-deck">
-					<div class="card" id="darkerStyle" style="width:20px !important;">
-						<div class="card-body">
-							<h3 class="card-title">Example School Name</h3>
+				<div class="card-deck" style="overflow-x: scroll; overflow-y: hidden;">
+				@if(count($educations) > 0)
+					@foreach($educations as $education)
+						<div class="card" id="darkerStyle">
+							<div class="card-body">
+								<h3 class="card-title">School: {{$education['SCHOOL']}}</h3>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li id="card-item" class="list-group-item">Field: {{$education['FIELD']}}</li>
+								<li id="card-item" class="list-group-item">Degree: {{$education['DEGREE']}}</li>
+								<li id="card-item" class="list-group-item">GPA: {{$education['GPA']}}</li>
+								<li id="card-item" class="list-group-item">{{$education['STARTYEAR']}}-{{$education['ENDYEAR']}}</li>
+							</ul>
+							<div class="card-body">
+								@if(Session::get('ID') == $ID)
+								<button type="button" class="btn btn-primary" data-toggle="modal" href="#editEducationModal{{$education['IDEDUCATION']}}">Edit</button>
+								
+								<div class="modal fade" id="editEducationModal{{$education['IDEDUCATION']}}" tabindex="-1" role="dialog" aira-labelledby="{{$education['IDEDUCATION']}}dLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header" id="darkStyle">
+												<h5 class="modal-title" id="ModalLabel">Edit Education</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body" id="darkStyle">
+												@if($errors->count() != 0)
+													@foreach($errors->all() as $error)
+                            							<div class="alert alert-danger" role="alert" style="width:50%;">{{$error}}</div><br>
+                            						@endforeach
+                            					@endif
+												<form id="editEducation{{$education['IDEDUCATION']}}" action="editEducation" method="post"></form>
+                    							<div class="form-group">
+                    								<input type="hidden" form="editEducation{{$education['IDEDUCATION']}}" name="_token" value="{{csrf_token()}}">
+                    								<input type="hidden" form="editEducation{{$education['IDEDUCATION']}}" name="id" value="{{$education['IDEDUCATION']}}">
+                    								<input type="hidden" form="editEducation{{$education['IDEDUCATION']}}" name="modalName" value="editEducationModal{{$education['IDEDUCATION']}}">
+                    								<label class="formLabel" for="school">School:</label>
+                    								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="school" value="{{$education['SCHOOL']}}" name="school">
+                    								<label class="formLabel" for="degree">Degree:</label>
+                    								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="degree" value="{{$education['DEGREE']}}" name="degree">
+                    								<label class="formLabel" for="field">Field:</label>
+                    								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="field" value="{{$education['FIELD']}}" name="field">
+                    								<label class="formLabel" for="gpa">GPA:</label>
+                    								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="gpa" value="{{$education['GPA']}}" name="gpa">
+                    								<label class="formLabel" for="startyear">Start Year:</label>
+                    								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="startyear" value="{{$education['STARTYEAR']}}" name="startyear">
+                    								<label class="formLabel" for="endyear">End Year:</label>
+                    								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="endyear" value="{{$education['ENDYEAR']}}" name="endyear">
+            									</div>
+											</div>
+											<div class="modal-footer" id="darkStyle">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        										<button form="editEducation{{$education['IDEDUCATION']}}" type="submit" class="btn btn-primary">Save changes</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- edit modal -->
+								<button type="button" class="btn btn-primary" data-toggle="modal" href="#removeModal{{$education['IDEDUCATION']}}">Delete</button>
+<!-- 				Delete confirmation modal -->
+                				<div class="modal fade" id="removeModal{{$education['IDEDUCATION']}}" tabindex="-1" role="dialog" aria-labelledby="{{$education['IDEDUCATION']}}dLabel" aria-hidden="true">
+                  					<div class="modal-dialog" role="document">
+                    					<div class="modal-content">
+                      						<div class="modal-header" id="darkStyle">
+                        						<h5 class="modal-title" id="ModalLabel">Warning!</h5>
+                        						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+                          							<span aria-hidden="true">&times;</span>
+                        						</button>
+                      						</div>
+                      						<div class="modal-body" id="darkStyle">
+                      							<p>
+                      							Are you sure that you want to delete this education record? This is a permanent action.
+                      							</p>
+                        						<form id="remove{{$education['IDEDUCATION']}}" action="removeEducation" method="post"></form>
+                									<input form="remove{{$education['IDEDUCATION']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
+                									<input form="remove{{$education['IDEDUCATION']}}" type="hidden" name="ID" value="{{$education['IDEDUCATION']}}"/>
+                      						</div>
+                      						<div class="modal-footer" id="darkStyle">
+                <!--       							Button to close the modal -->
+                        						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <!--         						Button that submits delete form -->
+                       	 						<button form="remove{{$education['IDEDUCATION']}}" type="submit" class="btn btn-primary">Remove</button>
+                      						</div>
+                    					</div>
+                  					</div>
+                				</div>
+                				@endif
+							</div>
 						</div>
-						<ul class="list-group list-group-flush">
-							<li id="card-item" class="list-group-item">Education Focus</li>
-							<li id="card-item" class="list-group-item">Years Attended</li>
-						</ul>
-					</div>
+					@endforeach
+				@endif
 				</div>
 				<!-- Button to add education card -->
-				<button class="btn btn-primary">Add Education Card</button>
+				@if(Session::get('ID') == $ID)
+				<button type="button" class="btn btn-primary" data-toggle="modal" href="#addEducation" style="margin-top:10px;">Add Education Card</button>			
+					<div class="modal fade" id="addEducation" tabindex="-1" role="dialog" aira-labelledby="addEducationdLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header" id="darkStyle">
+									<h5 class="modal-title" id="ModalLabel">Add Education</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body" id="darkStyle">
+									<form id="addEducationForm" action="addEducation" method="post"></form>
+                    				<div class="form-group">
+                   						<input type="hidden" form="addEducationForm" name="_token" value="{{csrf_token()}}">
+                 						<input type="hidden" form="addEducationForm" name="userID" value="{{Session::get('ID')}}">
+                    					<input type="hidden" form="addEducationForm" name="modalName" value="addEducation">
+                    					<label class="formLabel" for="school">School:</label>
+                    					<input form="addEducationForm" type="text" class="form-control" id="school" name="school">
+                    					<label class="formLabel" for="degree">Degree:</label>
+                    					<input form="addEducationForm" type="text" class="form-control" id="degree" name="degree">
+                   						<label class="formLabel" for="field">Field:</label>
+                    					<input form="addEducationForm" type="text" class="form-control" id="field" name="field">
+                    					<label class="formLabel" for="gpa">GPA:</label>
+                    					<input form="addEducationForm" type="text" class="form-control" id="gpa" name="gpa">
+                    					<label class="formLabel" for="startyear">Start Year:</label>
+                    					<input form="addEducationForm" type="text" class="form-control" id="startyear" name="startyear">
+                    					<label class="formLabel" for="endyear">End Year:</label>
+                    					<input form="addEducationForm" type="text" class="form-control" id="endyear" name="endyear">
+            						</div>
+								</div>
+								<div class="modal-footer" id="darkStyle">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        							<button form="addEducationForm" type="submit" class="btn btn-primary">Create Education Card</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				@endif
 			</div>
 			<div class="tab-pane fade" id="workExperience" role="tabpanel" aria-labelledby="profile-tab">
 				<!-- Work Experience -->

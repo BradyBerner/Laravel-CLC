@@ -5,6 +5,7 @@ namespace App\Models;
 class EducationModel{
     
     private $id;
+    private $school;
     private $degree;
     private $field;
     private $gpa;
@@ -12,8 +13,9 @@ class EducationModel{
     private $endyear;
     private $userID;
     
-    public function __construct($id, $degree, $field, $gpa, $startyear, $endyear, $userID){
+    public function __construct($id, $school, $degree, $field, $gpa, $startyear, $endyear, $userID){
         $this->id = $id;
+        $this->school = $school;
         $this->degree = $degree;
         $this->field = $field;
         $this->gpa = $gpa;
@@ -28,6 +30,13 @@ class EducationModel{
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function getSchool(){
+        return $this->school;
     }
 
     /**

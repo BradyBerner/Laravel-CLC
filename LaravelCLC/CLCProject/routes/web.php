@@ -57,5 +57,11 @@ Route::post('/editUserInfo', 'UserEditController@editUserInfo');
 //Submits form data from the edut user address form to the controller to commit user edits to the database
 Route::post('/editUserAddress', 'UserEditController@editAddress');
 
+Route::post('/removeEducation', 'UserEditController@removeEducation');
+
+Route::post('/editEducation', 'UserEditController@editEducation');
+
+Route::post('/addEducation', 'UserEditController@addEducation');
+
 //Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');

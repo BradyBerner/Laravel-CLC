@@ -13,6 +13,8 @@ use App\Services\Business\UserInfoService;
 use App\Services\Business\AddressService;
 use App\Models\UserInfoModel;
 use App\Models\AddressModel;
+use App\Services\Business\EducationService;
+use App\Models\EducationModel;
 
 class UserEditController extends Controller
 {
@@ -135,6 +137,88 @@ class UserEditController extends Controller
             'city' => 'Required | Alpha',
             'state' => 'Required | Alpha',
             'zip' => 'Required | Numeric'
+        ];
+        
+        $this->validate($request, $rules);
+    }
+    
+    public function removeEducation(Request $request){
+        
+        Log::info("Entering UserEditController.removeEducation()");
+        
+        try{
+            $id = $request->input('ID');
+            
+            $service = new EducationService();
+            
+            $results = $service->remove($id);
+            
+            Log::info("Exiting UserEditController.removeEducation() with a result of " . $results);
+            
+            return view('home');
+        } catch (\Exception $e){
+            Log::error("Exception occured in UserEditController.removeEducation(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    public function addEducation(Request $request){
+        Log::info("Entering UserEditController.addEducation()");
+        
+        $request->session()->flash('modal', $request->input('modalName'));
+        
+        $this->validateEducationInput($request);
+        
+        try{
+            $education = new EducationModel(-1, $request->input('school'), $request->input('degree'), $request->input('field'), $request->input('gpa'), $request->input('startyear'), $request->input('endyear'), $request->input('userID'));
+            
+            $service = new EducationService();
+            
+            $results = $service->create($education);
+            
+            Log::info("Exiting UserEditController.addEducation() with a result of " . $results);
+            
+            return view('home');
+        } catch (\Exception $e){
+            Log::error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    public function editEducation(Request $request){
+        Log::info("Entering UserEditController.editEducation()");
+        
+        $request->session()->flash('modal', $request->input('modalName'));
+        
+        $this->validateEducationInput($request);
+        
+        try{
+            $education = new EducationModel($request->input('id'), $request->input('school'), $request->input('degree'), $request->input('field'), $request->input('gpa'), $request->input('startyear'), $request->input('endyear'), -1);
+            
+            $service = new EducationService();
+            
+            $results = $service->update($education);
+            
+            Log::info("Exiting UserEditController.editEducation() with a result of " . $results);
+            
+            return view('home');
+        } catch (\Exception $e){
+            Log::error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    private function validateEducationInput(Request $request){
+        $rules = [
+            'school' => 'Required',
+            'degree' => 'Required',
+            'field' => 'Required',
+            'gpa' => 'Required | Numeric',
+            'startyear' => 'Required | Numeric',
+            'endyear' => 'Required | Numeric'
         ];
         
         $this->validate($request, $rules);

@@ -11,7 +11,7 @@ class EducationDAO{
     
     private $conn;
     
-    public function __construct($connection){
+    public function __construct(\PDO $connection){
         $this->conn = $connection;
     }
     
@@ -19,7 +19,7 @@ class EducationDAO{
         Log::info("Entering EducationDAO.getByID()");
         
         try{
-            $statement = $this->conn->prepare("SELECT * FROM EDUCATION WHERE IDEDUCATION = :id");
+            $statement = $this->conn->prepare("SELECT * FROM EDUCATION WHERE USERS_IDUSERS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
@@ -27,15 +27,15 @@ class EducationDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        $results = [];
+        $educations = [];
         
-        while($result = $statement->fetch(PDO::FETCH_ASSOC)){
-            array_push($results, $result);
+        while($education = $statement->fetch(PDO::FETCH_ASSOC)){
+            array_push($educations, $education);
         }
         
         Log::info("Exit EducationDAO.getByID()");
         
-        return ['result' => $statement->rowCount(), 'education' => $statement->fetch(PDO::FETCH_ASSOC)];
+        return ['result' => $statement->rowCount(), 'education' => $educations];
     }
     
     public function getAll(){
@@ -49,21 +49,22 @@ class EducationDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        $results = [];
+        $educations = [];
         
-        while($result = $statement->fetch(PDO::FETCH_ASSOC)){
-            array_push($results, $result);
+        while($education = $statement->fetch(PDO::FETCH_ASSOC)){
+            array_push($educations, $education);
         }
         
         Log::info("Exit EducationDAO.getAll()");
         
-        return $results;
+        return $educations;
     }
     
     public function create(EducationModel $education){
         
         Log::info("Entering EducationDAO.create()");
         
+        $school = $education->getSchool();
         $degree = $education->getDegree();
         $field = $education->getField();
         $gpa = $education->getGpa();
@@ -72,7 +73,8 @@ class EducationDAO{
         $userID = $education->getUserID();
         
         try{
-            $statement = $this->conn->prepare("INSERT INTO EDUCATION (IDEDUCATION, DEGREE, FIELD, GPA, STARTYEAR, ENDYEAR, USERS_IDUSERS) VALUE (NULL, :degree, :field, :gpa, :startyear, :endyear, :userID)");
+            $statement = $this->conn->prepare("INSERT INTO EDUCATION (IDEDUCATION, SCHOOL, DEGREE, FIELD, GPA, STARTYEAR, ENDYEAR, USERS_IDUSERS) VALUE (NULL, :school, :degree, :field, :gpa, :startyear, :endyear, :userID)");
+            $statement->bindParam(':school', $school);
             $statement->bindParam(':degree', $degree);
             $statement->bindParam(':field', $field);
             $statement->bindParam(':gpa', $gpa);
@@ -94,22 +96,22 @@ class EducationDAO{
         Log::info("Entering EducationDAO.update()");
         
         $id = $education->getId();
+        $school = $education->getSchool();
         $degree = $education->getDegree();
         $field = $education->getField();
         $gpa = $education->getGpa();
         $startyear = $education->getStartyear();
         $endyear = $education->getEndyear();
-        $userID = $education->getUserID();
         
         try{
-            $statement = $this->conn->prepare("UPDATE EDUCATION SET DEGREE = :degree, FIELD = :field, GPA = :gpa, STARTYEAR = :startyear, ENDYEAR = :endyear WHERE IDEDUCATION = :id");
+            $statement = $this->conn->prepare("UPDATE EDUCATION SET SCHOOL = :school, DEGREE = :degree, FIELD = :field, GPA = :gpa, STARTYEAR = :startyear, ENDYEAR = :endyear WHERE IDEDUCATION = :id");
             $statement->bindParam(':id', $id);
+            $statement->bindParam(':school', $school);
             $statement->bindParam(':degree', $degree);
             $statement->bindParam(':field', $field);
             $statement->bindParam(':gpa', $gpa);
             $statement->bindParam(':startyear', $startyear);
             $statement->bindParam(':endyear', $endyear);
-            $statement->bindParam(':userID', $userID);
             $statement->execute();
         } catch (\PDOException $e){
             Log::error("Exception: ", ['message', $e->getMessage()]);
