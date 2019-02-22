@@ -35,7 +35,7 @@ class ExperienceDAO{
         
         Log::info("Exit ExperienceDAO.getByID()");
         
-        return ['result' => $statement->rowCount(), 'experience' => $statement->fetch(PDO::FETCH_ASSOC)];
+        return ['result' => $statement->rowCount(), 'experience' => $results];
     }
     
     public function getAll(){
@@ -64,7 +64,6 @@ class ExperienceDAO{
         
         Log::info("Entering ExperienceDAO.create()");
         
-        $id = $experience->getId();
         $title = $experience->getTitle();
         $company = $experience->getCompany();
         $current = $experience->getCurrent();
@@ -74,8 +73,7 @@ class ExperienceDAO{
         $userID = $experience->getUserID();
         
         try{
-            $statement = $this->conn->prepare("INSERT INTO EXPERIENCE (IDEXPERIENCE, TITLE, COMPANY, CURRENT, STARTYEAR, ENDYEAR, DESCRIPTION, USERS_IDUSERS) VALUES (:id, :title, :company, :current, :startyear, :endyear, :description, :userID)");
-            $statement->bindParam(':id', $id);
+            $statement = $this->conn->prepare("INSERT INTO EXPERIENCE (IDEXPERIENCE, TITLE, COMPANY, CURRENT, STARTYEAR, ENDYEAR, DESCRIPTION, USERS_IDUSERS) VALUES (NULL, :title, :company, :current, :startyear, :endyear, :description, :userID)");
             $statement->bindParam(':title', $title);
             $statement->bindParam(':company', $company);
             $statement->bindParam(':current', $current);

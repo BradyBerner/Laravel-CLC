@@ -15,6 +15,8 @@ use App\Models\UserInfoModel;
 use App\Models\AddressModel;
 use App\Services\Business\EducationService;
 use App\Models\EducationModel;
+use App\Services\Business\ExperienceService;
+use App\Models\ExperienceModel;
 
 class UserEditController extends Controller
 {
@@ -59,8 +61,6 @@ class UserEditController extends Controller
     public function editUserInfo(Request $request)
     {
         Log::info("Entering UserEditController.editUserInfo()");
-        
-        $request->session()->flash('modal', $request->input('modalName'));
 
         // Validates the user's input against pre-defined rules
         $this->validateInfoInput($request);
@@ -78,7 +78,7 @@ class UserEditController extends Controller
 
             Log::info("Exiting UserEditController.editUserInfo() with a result of " . $results);
 
-            return view('home');
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e) {
             Log::error("Exception occurred in UserEditController.editUserInfo(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -102,8 +102,6 @@ class UserEditController extends Controller
     public function editAddress(Request $request)
     {
         Log::info("Entering UserEditController.editAddress()");
-        
-        $request->session()->flash('modal', $request->input('modalName'));
 
         // Validates the user's input against pre-defined rules
         $this->validateAddressInput($request);
@@ -121,7 +119,7 @@ class UserEditController extends Controller
 
             Log::info("Exiting UserEditController.editAddress() with a result of " . $results);
 
-            return view('home');
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e) {
             Log::error("Exception occurred in UserEditController.editAddress(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -155,7 +153,7 @@ class UserEditController extends Controller
             
             Log::info("Exiting UserEditController.removeEducation() with a result of " . $results);
             
-            return view('home');
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.removeEducation(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -165,8 +163,6 @@ class UserEditController extends Controller
     
     public function addEducation(Request $request){
         Log::info("Entering UserEditController.addEducation()");
-        
-        $request->session()->flash('modal', $request->input('modalName'));
         
         $this->validateEducationInput($request);
         
@@ -179,7 +175,7 @@ class UserEditController extends Controller
             
             Log::info("Exiting UserEditController.addEducation() with a result of " . $results);
             
-            return view('home');
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -189,8 +185,6 @@ class UserEditController extends Controller
     
     public function editEducation(Request $request){
         Log::info("Entering UserEditController.editEducation()");
-        
-        $request->session()->flash('modal', $request->input('modalName'));
         
         $this->validateEducationInput($request);
         
@@ -203,7 +197,7 @@ class UserEditController extends Controller
             
             Log::info("Exiting UserEditController.editEducation() with a result of " . $results);
             
-            return view('home');
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -219,6 +213,85 @@ class UserEditController extends Controller
             'gpa' => 'Required | Numeric',
             'startyear' => 'Required | Numeric',
             'endyear' => 'Required | Numeric'
+        ];
+        
+        $this->validate($request, $rules);
+    }
+    
+    public function removeExperience(Request $request){
+        
+        Log::info("Entering UserEditController.removeExperience()");
+        
+        try{
+            $id = $request->input('ID');
+            
+            $service = new ExperienceService();
+            
+            $results = $service->remove($id);
+            
+            Log::info("Exiting UserEditController.removeExperience() with a result of " . $results);
+            
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
+        } catch (\Exception $e){
+            Log::error("Exception occured in UserEditController.removeExperience(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    public function addExperience(Request $request){
+        
+        Log::info("Entering UserEditController.addExperience()");
+        
+        $this->validateExperienceInput($request);
+        
+        try{
+            $experience = new ExperienceModel(-1, $request->input('title'), $request->input('company'), $request->input('current'), $request->input('startyear'), $request->input('endyear'), $request->input('description'), $request->input('userID'));
+            
+            $service = new ExperienceService();
+            
+            $results = $service->create($experience);
+            
+            Log::info("Exiting UserEditController.addExperience() with a result of " . $results);
+            
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
+        } catch (\Exception $e){
+            Log::error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    public function editExperience (Request $request){
+        
+        Log::info("Entering UserEditController.editExperience()");
+        
+        $this->validateExperienceInput($request);
+        
+        try{
+            $experience = new ExperienceModel($request->input('id'), $request->input('title'), $request->input('company'), $request->input('current'), $request->input('startyear'), $request->input('endyear'), $request->input('description'), -1);
+            
+            $service = new ExperienceService();
+            
+            $results = $service->update($experience);
+            
+            Log::info("Exiting UserEditController.editExperience() with a result of " . $results);
+            
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
+        } catch (\Exception $e){
+            Log::error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    private function validateExperienceInput(Request $request){
+        $rules = [
+            'title' => 'Required',
+            'company' => 'Required',
+            'current' => 'Required | Numeric',
+            'startyear' => 'Required | Numeric',
+            'endyear' => $request->input('endyear') != null ? 'Numeric' : ''
         ];
         
         $this->validate($request, $rules);

@@ -13,6 +13,7 @@ use App\Services\Business\AddressService;
 use App\Services\Business\UserInfoService;
 use App\Services\Business\UserService;
 use App\Services\Business\EducationService;
+use App\Services\Business\ExperienceService;
 
 class UserProfileController extends Controller
 {
@@ -31,12 +32,14 @@ class UserProfileController extends Controller
             $addressService = new AddressService();
             $infoService = new UserInfoService();
             $educationService = new EducationService();
+            $experienceService = new ExperienceService();
 
             // Stores the results for the user from all of the tables accessed
             $user = $userService->findByID($userID);
             $infoResults = $infoService->findByUserID($userID);
             $addressResults = $addressService->findByUserID($userID);
             $educationResults = $educationService->findByID($userID);
+            $experienceResults = $experienceService->findByID($userID);
 
             // Stores all of the needed retrieved data in an associative array to be passed to the user profile view for display
             $data = [
@@ -44,7 +47,8 @@ class UserProfileController extends Controller
                 'user' => $user['user'],
                 'info' => $infoResults['userInfo'],
                 'address' => $addressResults['address'],
-                'educations' => $educationResults['education']
+                'educations' => $educationResults['education'],
+                'experiences' => $experienceResults['experience']
             ];
 
             Log::info("Exiting UserProfileController.index()");

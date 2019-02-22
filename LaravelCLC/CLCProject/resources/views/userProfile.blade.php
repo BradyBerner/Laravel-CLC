@@ -32,14 +32,10 @@ input {
 
 @section('content') 
 
-@if($errors->count() != 0) 
-	@if(Session::has('modal'))
-	<script>
-		$(document).ready(function(){
-			$('#{{Session::get('modal')}}').modal('show')
-		});
-	</script>
-	@endif
+@if($errors->count() != 0)
+	@foreach($errors->all() as $error)
+		<div class="alert alert-danger" role="alert" style="width:30%;">{{$error}}</div>
+	@endforeach
 @endif
 
 <!-- The card div holds the user's overall profile information -->
@@ -92,7 +88,6 @@ input {
 									<form action="editUserInfo" method="post">
 										<input type="hidden" name="_token" value="{{csrf_token()}}"> 
 										<input type="hidden" name="userID" value="{{Request::get('ID')}}">
-										<input type="hidden" name="modalName" value="editProfileModal"/>
 										<div class="form-group">
 											<label for="phone">Phone: </label> <input type="text" class="form-control" id="phone" name="phone"
 												value="@if($info['PHONE'] != null){{$info['PHONE']}}@endif" />
@@ -189,16 +184,10 @@ input {
 												</button>
 											</div>
 											<div class="modal-body" id="darkStyle">
-												@if($errors->count() != 0)
-													@foreach($errors->all() as $error)
-                            							<div class="alert alert-danger" role="alert" style="width:50%;">{{$error}}</div><br>
-                            						@endforeach
-                            					@endif
 												<form id="editEducation{{$education['IDEDUCATION']}}" action="editEducation" method="post"></form>
                     							<div class="form-group">
                     								<input type="hidden" form="editEducation{{$education['IDEDUCATION']}}" name="_token" value="{{csrf_token()}}">
                     								<input type="hidden" form="editEducation{{$education['IDEDUCATION']}}" name="id" value="{{$education['IDEDUCATION']}}">
-                    								<input type="hidden" form="editEducation{{$education['IDEDUCATION']}}" name="modalName" value="editEducationModal{{$education['IDEDUCATION']}}">
                     								<label class="formLabel" for="school">School:</label>
                     								<input form="editEducation{{$education['IDEDUCATION']}}" type="text" class="form-control" id="school" value="{{$education['SCHOOL']}}" name="school">
                     								<label class="formLabel" for="degree">Degree:</label>
@@ -272,7 +261,6 @@ input {
                     				<div class="form-group">
                    						<input type="hidden" form="addEducationForm" name="_token" value="{{csrf_token()}}">
                  						<input type="hidden" form="addEducationForm" name="userID" value="{{Session::get('ID')}}">
-                    					<input type="hidden" form="addEducationForm" name="modalName" value="addEducation">
                     					<label class="formLabel" for="school">School:</label>
                     					<input form="addEducationForm" type="text" class="form-control" id="school" name="school">
                     					<label class="formLabel" for="degree">Degree:</label>
@@ -297,8 +285,144 @@ input {
 				@endif
 			</div>
 			<div class="tab-pane fade" id="workExperience" role="tabpanel" aria-labelledby="profile-tab">
-				<!-- Work Experience -->
-				Work Experience Placeholder
+				<div class="card-deck" style="overflow-x: scroll; overflow-y: hidden;">
+					@if(count($experiences) > 0)
+    					@foreach($experiences as $experience)
+    						<div class="card" id="darkerStyle">
+    							<div class="card-body">
+    								<h3 class="card-title">Job Title: {{$experience['TITLE']}}</h3>
+    							</div>
+    							<ul class="list-group list-group-flush">
+    								<li id="card-item" class="list-group-item">Company: {{$experience['COMPANY']}}</li>
+    								@if($experience['CURRENT'])
+    									<li id="card-item" class="list-group-item">Current job since {{$experience['STARTYEAR']}}</li>
+    								@else
+    									<li id="card-item" class="list-group-item">Employed: {{$experience['STARTYEAR']}}-{{$experience['ENDYEAR']}}</li>
+    								@endif
+    								<li id="card-item" class="list-group-item">{{$experience['DESCRIPTION']}}</li>
+    							</ul>
+    							<div class="card-body">
+    								@if(Session::get('ID') == $ID)
+    								<button type="button" class="btn btn-primary" data-toggle="modal" href="#editExperienceModal{{$experience['IDEXPERIENCE']}}">Edit</button>
+    								
+    								<div class="modal fade" id="editExperienceModal{{$experience['IDEXPERIENCE']}}" tabindex="-1" role="dialog" aira-labelledby="{{$experience['IDEXPERIENCE']}}dLabel" aria-hidden="true">
+    									<div class="modal-dialog" role="document">
+    										<div class="modal-content">
+    											<div class="modal-header" id="darkStyle">
+    												<h5 class="modal-title" id="ModalLabel">Edit Experience</h5>
+    												<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+    													<span aria-hidden="true">&times;</span>
+    												</button>
+    											</div>
+    											<div class="modal-body" id="darkStyle">
+    												<form id="editExperience{{$experience['IDEXPERIENCE']}}" action="editExperience" method="post"></form>
+                        							<div class="form-group">
+                        								<input type="hidden" form="editExperience{{$experience['IDEXPERIENCE']}}" name="_token" value="{{csrf_token()}}">
+                        								<input type="hidden" form="editExperience{{$experience['IDEXPERIENCE']}}" name="id" value="{{$experience['IDEXPERIENCE']}}">
+                        								<label class="formLabel" for="title">Job Title:</label>
+                        								<input form="editExperience{{$experience['IDEXPERIENCE']}}" type="text" class="form-control" id="title" value="{{$experience['TITLE']}}" name="title">
+                        								<label class="formLabel" for="company">Company:</label>
+                        								<input form="editExperience{{$experience['IDEXPERIENCE']}}" type="text" class="form-control" id="company" value="{{$experience['COMPANY']}}" name="company">
+                        								<label class="formLabel" for="startyear">Start Year:</label>
+                        								<input form="editExperience{{$experience['IDEXPERIENCE']}}" type="text" class="form-control" id="startyear" value="{{$experience['STARTYEAR']}}" name="startyear">
+                        								<label class="formLabel" for="endyear">End Year:</label>
+                        								<input form="editExperience{{$experience['IDEXPERIENCE']}}" type="text" class="form-control" id="endyear" value="{{$experience['ENDYEAR']}}" name="endyear">
+                        								<label class="formLabel" for="current">Status: </label>
+                										<select form="editExperience{{$experience['IDEXPERIENCE']}}" class="form-control" id="current" name="current" style="width:40%;">
+                											<option value="1" <?php if($experience['CURRENT']==1){echo "selected";}?>>Current</option>
+                											<option value="0" <?php if($experience['CURRENT']==0){echo "selected";}?>>Not Current</option>
+                										</select>
+                        								<label class="formLabel" for="description">Job Description:</label>
+														<textarea form="editExperience{{$experience['IDEXPERIENCE']}}" class="form-control" id="description" name="description" rows="5" style="width: 70%;">@if($experience['DESCRIPTION'] != null){{$experience['DESCRIPTION']}}@endif</textarea>
+                									</div>
+    											</div>
+    											<div class="modal-footer" id="darkStyle">
+    												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            										<button form="editExperience{{$experience['IDEXPERIENCE']}}" type="submit" class="btn btn-primary">Save changes</button>
+    											</div>
+    										</div>
+    									</div>
+    								</div>
+    								<!-- edit modal -->
+    								<button type="button" class="btn btn-primary" data-toggle="modal" href="#removeExperienceModal{{$experience['IDEXPERIENCE']}}">Delete</button>
+    <!-- 				Delete confirmation modal -->
+                    				<div class="modal fade" id="removeExperienceModal{{$experience['IDEXPERIENCE']}}" tabindex="-1" role="dialog" aria-labelledby="{{$experience['IDEXPERIENCE']}}dLabel" aria-hidden="true">
+                      					<div class="modal-dialog" role="document">
+                        					<div class="modal-content">
+                          						<div class="modal-header" id="darkStyle">
+                            						<h5 class="modal-title" id="ModalLabel">Warning!</h5>
+                            						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+                              							<span aria-hidden="true">&times;</span>
+                            						</button>
+                          						</div>
+                          						<div class="modal-body" id="darkStyle">
+                          							<p>
+                          							Are you sure that you want to delete this experience record? This is a permanent action.
+                          							</p>
+                            						<form id="removeExperience{{$experience['IDEXPERIENCE']}}" action="removeExperience" method="post"></form>
+                    									<input form="removeExperience{{$experience['IDEXPERIENCE']}}" type="hidden" name="_token" value="{{csrf_token()}}"/>
+                    									<input form="removeExperience{{$experience['IDEXPERIENCE']}}" type="hidden" name="ID" value="{{$experience['IDEXPERIENCE']}}"/>
+                          						</div>
+                          						<div class="modal-footer" id="darkStyle">
+                    <!--       							Button to close the modal -->
+                            						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <!--         						Button that submits delete form -->
+                           	 						<button form="removeExperience{{$experience['IDEXPERIENCE']}}" type="submit" class="btn btn-primary">Remove</button>
+                          						</div>
+                        					</div>
+                      					</div>
+                    				</div>
+                    				@endif
+    							</div>
+    						</div>
+    					@endforeach
+					@endif
+				</div>
+				<!-- Button to add education card -->
+				@if(Session::get('ID') == $ID)
+				<button type="button" class="btn btn-primary" data-toggle="modal" href="#addExperience" style="margin-top:10px;">Add Experience Card</button>			
+					<div class="modal fade" id="addExperience" tabindex="-1" role="dialog" aira-labelledby="addEducationdLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header" id="darkStyle">
+									<h5 class="modal-title" id="ModalLabel">Add Job Experience</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body" id="darkStyle">
+									<form id="addExperienceForm" action="addExperience" method="post"></form>
+                    				<div class="form-group">
+                       					<div class="form-group">
+                       					<input type="hidden" form="addExperienceForm" name="_token" value="{{csrf_token()}}">
+                       					<input type="hidden" form="addExperienceForm" name="userID" value="{{Session::get('ID')}}">
+                     					<label class="formLabel" for="title">Job Title:</label>
+                        				<input form="addExperienceForm" type="text" class="form-control" id="title" name="title">
+                        				<label class="formLabel" for="company">Company:</label>
+                        				<input form="addExperienceForm" type="text" class="form-control" id="company" name="company">
+                        				<label class="formLabel" for="startyear">Start Year:</label>
+                        				<input form="addExperienceForm" type="text" class="form-control" id="startyear" name="startyear">
+                        				<label class="formLabel" for="endyear">End Year:</label>
+                        				<input form="addExperienceForm" type="text" class="form-control" id="endyear" name="endyear">
+                        				<label class="formLabel" for="current">Status: </label>
+                						<select form=addExperienceForm class="form-control" id="current" name="current" style="width:40%;">
+                							<option value="1" selected>Current</option>
+                							<option value="0">Not Current</option>
+                						</select>
+                        				<label class="formLabel" for="description">Job Description:</label>
+                        				<label for="description">Description: </label>
+										<textarea form="addExperienceForm" class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea>
+            						</div>
+								</div>
+								<div class="modal-footer" id="darkStyle">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        							<button form="addExperienceForm" type="submit" class="btn btn-primary">Create Education Card</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				@endif
+				</div>
 			</div>
 		</div>
 	</div>
