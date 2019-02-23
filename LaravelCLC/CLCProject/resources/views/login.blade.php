@@ -6,21 +6,20 @@ CST-256
 2-10-19
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
-<?php //::TODO remove deafult values from login?>
 @section('content')
 		<!-- Form to capture user login input -->
 		<form action='loginHandler' id="testingLogin" method="POST">
 			<input type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
 			<div class="form-group">
 				<label for="uname">Username: </label>
-				<input type="text" class="form-control" id="uname" style="width:20%;" name="username" value="tester"><br>
+				<input type="text" class="form-control" id="uname" style="width:20%;" name="username"><br>
 				@if($errors->first('username') != null)
 					<div class="alert alert-danger" role="alert" style="width:20%;">{{$errors->first('username')}}</div>
 				@endif
 			</div>
 			<div class="form-group">
 				<label for="pword">Password: </label>
-				<input type="password" class="form-control" id="pword" style="width:20%;" name="password" value="testing"><br>
+				<input type="password" class="form-control" id="pword" style="width:20%;" name="password"><br>
 				@if($errors->first('password') != null)
 					<div class="alert alert-danger" role="alert" style="width:20%;">{{$errors->first('password')}}</div>
 				@endif

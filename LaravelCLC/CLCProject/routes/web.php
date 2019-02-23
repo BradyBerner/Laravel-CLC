@@ -69,5 +69,9 @@ Route::post('/editExperience', 'UserEditController@editExperience');
 
 Route::post('/addExperience', 'UserEditController@addExperience');
 
+Route::post('/addSkill', 'UserEditController@addSkill');
+
+Route::post('/removeSkill', 'UserEditController@removeSkill');
+
 //Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');

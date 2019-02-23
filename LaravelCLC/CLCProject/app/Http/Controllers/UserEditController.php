@@ -17,46 +17,11 @@ use App\Services\Business\EducationService;
 use App\Models\EducationModel;
 use App\Services\Business\ExperienceService;
 use App\Models\ExperienceModel;
+use App\Models\SkillModel;
+use App\Services\Business\SkillService;
 
 class UserEditController extends Controller
 {
-
-    //Method Depreciated
-    // This method takes the ID passed through the form and returns the user's address and info to a view for editing
-//     public function getLinkedInfo(Request $request)
-//     {
-//         try {
-//             Log::info("Entering UserEditController.getLinkedInfo()");
-
-//             // Get's ID from previous form
-//             $userID = $request->input('ID');
-
-//             // Creates instances of the necessary services
-//             $infoService = new UserInfoService();
-//             $addressService = new AddressService();
-
-//             // Gets the user's address and info rows from the corresponding tables
-//             $infoResults = $infoService->findByUserID($userID);
-//             $addressResults = $addressService->findByUserID($userID);
-
-//             // Stores the retrieved info in an associative array to be passed on to the editing view
-//             $data = [
-//                 'infoResult' => $infoResults['result'],
-//                 'addressResult' => $addressResults['result'],
-//                 'info' => $infoResults['userInfo'],
-//                 'address' => $addressResults['address']
-//             ];
-
-//             Log::info("Exiting UserEditController.getLinkedInfo()");
-
-//             return view('editUserProfile')->with($data);
-//         } catch (\Exception $e) {
-//             Log::error("Exception occurred in UserEditController.getLinkedInfo(): " . $e->getMessage());
-//             $data = ['error_message' => $e->getMessage()];
-//             return view('error')->with($data);
-//         }
-//     }
-
     // Takes user input from the previous form and passes it along so that a user can edit their info in the database
     public function editUserInfo(Request $request)
     {
@@ -295,5 +260,57 @@ class UserEditController extends Controller
         ];
         
         $this->validate($request, $rules);
+    }
+    
+    public function addSkill(Request $request){
+        
+        Log::info("Entering UserEditController.addSkill()");
+        
+        $this->validateSkillInput($request);
+        
+        try{
+            $skill = new SkillModel(-1, $request->input('skill'), $request->input('description'), $request->input('userID'));
+            
+            $service = new SkillService();
+            
+            $results = $service->create($skill);
+            
+            Log::info("Exiting UserEditController.addSkill() with a result of " . $results);
+            
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
+        } catch (\Exception $e){
+            Log::error("Exception occured in UserEditController.addSkill(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    private function validateSkillInput(Request $request){
+        $rules = [
+            
+        ];
+        
+        $this->validate($request, $rules);
+    }
+    
+    public function removeSkill(Request $request){
+        
+        Log::info("Entering UserEditController.removeSkill()");
+        
+        try{
+            $id = $request->input('ID');
+            
+            $service = new SkillService();
+            
+            $results = $service->remove($id);
+            
+            Log::info("Exiting UserEditController.removeSkill() with a result of " . $results);
+            
+            return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
+        } catch (\Exception $e){
+            Log::error("Exception occured in UserEditController.removeSkill(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 }

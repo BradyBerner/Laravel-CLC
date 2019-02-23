@@ -152,6 +152,8 @@ input {
 				id="home-tab" data-toggle="tab" href="#education" role="tab" aria-controls="home" aria-selected="true">Education</a></li>
 			<li class="nav-item" id="darkerStyle" style="border-top-left-radius: 5px; border-top-right-radius: 5px;"><a class="nav-link" id="profile-tab"
 				data-toggle="tab" href="#workExperience" role="tab" aria-controls="profile" aria-selected="false">Work Experience</a></li>
+			<li class="nav-item" id="darkerStyle" style="border-top-left-radius:5px; border-top-right-radius:5px;"><a class="nav-link"
+				id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skill" aria-selected="false">Skills</a>
 		</ul>
 	</div>
 	<div class="card-body" id="darkStyle">
@@ -393,7 +395,6 @@ input {
 								<div class="modal-body" id="darkStyle">
 									<form id="addExperienceForm" action="addExperience" method="post"></form>
                     				<div class="form-group">
-                       					<div class="form-group">
                        					<input type="hidden" form="addExperienceForm" name="_token" value="{{csrf_token()}}">
                        					<input type="hidden" form="addExperienceForm" name="userID" value="{{Session::get('ID')}}">
                      					<label class="formLabel" for="title">Job Title:</label>
@@ -412,8 +413,7 @@ input {
                         				<label class="formLabel" for="description">Job Description:</label>
                         				<label for="description">Description: </label>
 										<textarea form="addExperienceForm" class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea>
-            						</div>
-								</div>
+									</div>
 								<div class="modal-footer" id="darkStyle">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         							<button form="addExperienceForm" type="submit" class="btn btn-primary">Create Education Card</button>
@@ -423,6 +423,72 @@ input {
 					</div>
 				@endif
 				</div>
+			</div>
+			<div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+				<div class="row">
+					<div class="col-4">
+						<div class="list-group" id="list-tab" role="tablist">
+    						@foreach($skills as $skill)
+    							@if($skill == $skills[0])
+    								<a class="list-group-item list-group-item-action active list-group-item-primary" id="list-{{$skill['SKILL']}}-list>" data-toggle="list" href="#list-{{$skill['SKILL']}}" role="tab" aria-controls="{{$skill['SKILL']}}">{{$skill['SKILL']}}
+    							@else
+    								<a class="list-group-item list-group-item-action list-group-item-primary" id="list-{{$skill['SKILL']}}-list>" data-toggle="list" href="#list-{{$skill['SKILL']}}" role="tab" aria-controls="{{$skill['SKILL']}}">{{$skill['SKILL']}}	
+    							@endif
+								</a>
+    						@endforeach
+						</div>
+					</div>
+					<div class="col-8">
+						<div class="tab-content" id="nav-tabContent">
+							@foreach($skills as $skill)
+								@if($skill == $skills[0])
+									<div class="tab-pane fade show active" id="list-{{$skill['SKILL']}}" role="tabpanel">{{$skill['DESCRIPTION']}}
+								@else
+									<div class="tab-pane fade" id="list-{{$skill['SKILL']}}" role="tabpanel">{{$skill['DESCRIPTION']}}
+								@endif
+									@if(Session::get('ID') == $ID)
+										<br><br>
+    									<form id="removeSkill{{$skill['IDSKILLS']}}" action="removeSkill" method="post" style="display:none;"></form>
+  										<input form="removeSkill{{$skill['IDSKILLS']}}" type="hidden" name="_token" value="{{csrf_token()}}">
+   										<input form="removeSkill{{$skill['IDSKILLS']}}" type="hidden" name="ID" value="{{$skill['IDSKILLS']}}">
+										<button form="removeSkill{{$skill['IDSKILLS']}}" type="submit" class="btn btn-primary">Remove</button>
+									@endif
+								</div>
+							@endforeach
+						</div>
+					</div>
+				</div>
+				@if(Session::get('ID') == $ID)
+					<button type="button" class="btn btn-primary" data-toggle="modal" href="#addSkill" style="margin-top:10px;">Add Skill</button>			
+					<div class="modal fade" id="addSkill" tabindex="-1" role="dialog" aira-labelledby="addSkillLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header" id="darkStyle">
+									<h5 class="modal-title" id="ModalLabel">Add Skill</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body" id="darkStyle">
+									<form id="addSkillForm" action="addSkill" method="post">
+										<div class="form-group">
+											<input type="hidden" name="_token" value="{{csrf_token()}}">
+											<input type="hidden" name="userID" value="{{Session::get('ID')}}">
+											<label class="formLabel" for="skill">Skill:</label>
+											<input type="text" class="form-control" id="skill" name="skill">
+											<label class="formLabel" for="description">Description:</label>
+											<textarea class="form-control" id="description" name="description" row="5" style="width:70%;"></textarea>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer" id="darkStyle">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        							<button form="addSkillForm" type="submit" class="btn btn-primary">Add Skill</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				@endif
 			</div>
 		</div>
 	</div>

@@ -14,6 +14,7 @@ use App\Services\Business\UserInfoService;
 use App\Services\Business\UserService;
 use App\Services\Business\EducationService;
 use App\Services\Business\ExperienceService;
+use App\Services\Business\SkillService;
 
 class UserProfileController extends Controller
 {
@@ -33,6 +34,7 @@ class UserProfileController extends Controller
             $infoService = new UserInfoService();
             $educationService = new EducationService();
             $experienceService = new ExperienceService();
+            $skillService = new SkillService();
 
             // Stores the results for the user from all of the tables accessed
             $user = $userService->findByID($userID);
@@ -40,6 +42,7 @@ class UserProfileController extends Controller
             $addressResults = $addressService->findByUserID($userID);
             $educationResults = $educationService->findByID($userID);
             $experienceResults = $experienceService->findByID($userID);
+            $skillResults = $skillService->findByID($userID);
 
             // Stores all of the needed retrieved data in an associative array to be passed to the user profile view for display
             $data = [
@@ -48,7 +51,8 @@ class UserProfileController extends Controller
                 'info' => $infoResults['userInfo'],
                 'address' => $addressResults['address'],
                 'educations' => $educationResults['education'],
-                'experiences' => $experienceResults['experience']
+                'experiences' => $experienceResults['experience'],
+                'skills' => $skillResults['skills']
             ];
 
             Log::info("Exiting UserProfileController.index()");
