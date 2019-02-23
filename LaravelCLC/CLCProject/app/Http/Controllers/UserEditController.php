@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 use App\Services\Business\UserInfoService;
 use App\Services\Business\AddressService;
 use App\Models\UserInfoModel;
@@ -287,7 +289,10 @@ class UserEditController extends Controller
     
     private function validateSkillInput(Request $request){
         $rules = [
-            
+            'skill' => ['Required', Rule::unique('SKILLS', 'SKILL')->where(function ($query){ 
+                return $query->where('USERS_IDUSERS', Session::get('ID'));
+            })],
+            'description' => 'Required | Alpha_Dash'
         ];
         
         $this->validate($request, $rules);
