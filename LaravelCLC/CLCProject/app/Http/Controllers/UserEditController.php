@@ -292,7 +292,7 @@ class UserEditController extends Controller
             'skill' => ['Required', Rule::unique('SKILLS', 'SKILL')->where(function ($query){ 
                 return $query->where('USERS_IDUSERS', Session::get('ID'));
             })],
-            'description' => 'Required | Alpha_Dash'
+            'description' => 'Required'
         ];
         
         $this->validate($request, $rules);
