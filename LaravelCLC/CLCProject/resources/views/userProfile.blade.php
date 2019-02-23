@@ -414,15 +414,15 @@ input {
                         				<label for="description">Description: </label>
 										<textarea form="addExperienceForm" class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea>
 									</div>
-								<div class="modal-footer" id="darkStyle">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        							<button form="addExperienceForm" type="submit" class="btn btn-primary">Create Education Card</button>
+									<div class="modal-footer" id="darkStyle">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        								<button form="addExperienceForm" type="submit" class="btn btn-primary">Create Education Card</button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				@endif
-				</div>
 			</div>
 			<div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
 				<div class="row">
@@ -430,11 +430,10 @@ input {
 						<div class="list-group" id="list-tab" role="tablist">
     						@foreach($skills as $skill)
     							@if($skill == $skills[0])
-    								<a class="list-group-item list-group-item-action active list-group-item-primary" id="list-{{$skill['SKILL']}}-list>" data-toggle="list" href="#list-{{$skill['SKILL']}}" role="tab" aria-controls="{{$skill['SKILL']}}">{{$skill['SKILL']}}
+    								<a class="list-group-item list-group-item-action active list-group-item-primary" id="list-{{$skill['SKILL']}}-list>" data-toggle="list" href="#list-{{$skill['SKILL']}}" role="tab" aria-controls="{{$skill['SKILL']}}">{{$skill['SKILL']}}</a>
     							@else
-    								<a class="list-group-item list-group-item-action list-group-item-primary" id="list-{{$skill['SKILL']}}-list>" data-toggle="list" href="#list-{{$skill['SKILL']}}" role="tab" aria-controls="{{$skill['SKILL']}}">{{$skill['SKILL']}}	
+    								<a class="list-group-item list-group-item-action list-group-item-primary" id="list-{{$skill['SKILL']}}-list>" data-toggle="list" href="#list-{{$skill['SKILL']}}" role="tab" aria-controls="{{$skill['SKILL']}}">{{$skill['SKILL']}}</a>	
     							@endif
-								</a>
     						@endforeach
 						</div>
 					</div>
@@ -459,35 +458,35 @@ input {
 					</div>
 				</div>
 				@if(Session::get('ID') == $ID)
-					<button type="button" class="btn btn-primary" data-toggle="modal" href="#addSkill" style="margin-top:10px;">Add Skill</button>			
-					<div class="modal fade" id="addSkill" tabindex="-1" role="dialog" aira-labelledby="addSkillLabel" aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header" id="darkStyle">
-									<h5 class="modal-title" id="ModalLabel">Add Skill</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body" id="darkStyle">
-									<form id="addSkillForm" action="addSkill" method="post">
-										<div class="form-group">
-											<input type="hidden" name="_token" value="{{csrf_token()}}">
-											<input type="hidden" name="userID" value="{{Session::get('ID')}}">
-											<label class="formLabel" for="skill">Skill:</label>
-											<input type="text" class="form-control" id="skill" name="skill">
-											<label class="formLabel" for="description">Description:</label>
-											<textarea class="form-control" id="description" name="description" row="5" style="width:70%;"></textarea>
-										</div>
-									</form>
-								</div>
-								<div class="modal-footer" id="darkStyle">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        							<button form="addSkillForm" type="submit" class="btn btn-primary">Add Skill</button>
-								</div>
-							</div>
-						</div>
-					</div>
+    				<button type="button" class="btn btn-primary" data-toggle="modal" href="#addSkill" style="margin-top:10px;">Add Skill</button>			
+    				<div class="modal fade" id="addSkill" tabindex="-1" role="dialog" aira-labelledby="addSkillLabel" aria-hidden="true">
+    					<div class="modal-dialog" role="document">
+    						<div class="modal-content">
+    							<div class="modal-header" id="darkStyle">
+    								<h5 class="modal-title" id="ModalLabel">Add Skill</h5>
+    								<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+    									<span aria-hidden="true">&times;</span>
+    								</button>
+    							</div>
+    							<div class="modal-body" id="darkStyle">
+    								<form id="addSkillForm" action="addSkill" method="post">
+    									<div class="form-group">
+    										<input type="hidden" name="_token" value="{{csrf_token()}}">
+    										<input type="hidden" name="userID" value="{{Session::get('ID')}}">
+    										<label class="formLabel" for="skill">Skill:</label>
+    										<input type="text" class="form-control" id="skill" name="skill">
+    										<label class="formLabel" for="description">Description:</label>
+    										<textarea class="form-control" id="description" name="description" row="5" style="width:70%;"></textarea>
+    									</div>
+    								</form>
+    							</div>
+    							<div class="modal-footer" id="darkStyle">
+    								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           							<button form="addSkillForm" type="submit" class="btn btn-primary">Add Skill</button>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
 				@endif
 			</div>
 		</div>
