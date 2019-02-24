@@ -9,7 +9,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
 @section('content')
-
 		<div class="alert alert-warning" role="alert" style="width:30%;">All fields are required!</div>
 		<!-- form to capture user registration input and send it ot the propoer route to lead to the controller -->
 		<form action="newJobHandler" method="post">
@@ -49,6 +48,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 					<div class="alert alert-danger" role="alert" style="width:20%;">{{$errors->first('description')}}</div>
 				@endif
 			</div>
-			<button type="submit" class="btn btn-primary">Post</button>
+			<button type="submit" class="btn btn-primary">Post New Job</button>
 		</form>
 @endsection

@@ -29,6 +29,13 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
     #ModalLabel{
         color:black;
     }
+    #jobs_info{
+        color:white !important;
+        margin-left:7.5%;
+    }
+    #jobs_paginate{
+        margin-right:7.5%;
+    }
 </style>
 @endsection
 
@@ -90,7 +97,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 										<input form="edit{{$job['IDJOBS']}}" type="text" class="form-control" id="city" value="{{$job['CITY']}}" name="city"><br>
 										<label class="formLabel" for="description">Description: </label>
 										<input form="edit{{$job['IDJOBS']}}" type="text" class="form-control" id="description" value="{{$job['DESCRIPTION']}}" name="description"><br>
-										
 									</div>
       						</div>
       						<div class="modal-footer">
@@ -119,7 +125,7 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
       						</div>
       						<div class="modal-body" id="ModalLabel">
       							<p>
-      							Are you sure that you want to delete this user? This will be permanent and is not recommended.
+      							Are you sure that you want to delete this job? This will be permanent and is not recommended.
       							It's recommended that you edit and suspend a user instead.
       							</p>
 <!--       							Form containing hidden inputs containing necessary information -->
