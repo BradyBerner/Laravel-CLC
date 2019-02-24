@@ -16,38 +16,43 @@ use App\Http\Controllers\NewJobController;
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 2-10-19
+ * 2-24-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
-// Default Laravel home page
+//Default Laravel home page
 Route::get('/', function () {
     return view('home');
 });
 
-// Login form page
+//Login form page
 Route::get('/Login', function () {
     return view('login');
 });
 
-// Submits form data from login form to login controller
+//Submits form data from login form to login controller
 Route::post('/loginHandler', 'LoginController@index');
 
-// Registration form page
+//Registration form page
 Route::get('/Register', function () {
     return view('register');
 });
 
-Route::get('/newJob', function() {
-    return view('newJobView');
+//Form for creating a new job posting
+Route::get('/createJob', function() {
+    return view('createJob');
 });
 
-Route::post('/newJobHandler', 'NewJobController@index');
+//Submits form data to job controller to create new job entry
+Route::post('/newJobHandler', 'JobController@createJob');
 
+//Gets job data from the database and sends it to the job view
 Route::get('/jobAdmin', 'JobAdminController@index');
 
+//Submits form data from edit form to the controller
 Route::post('/jobEditHandler', 'JobAdminController@editJob');
 
+//Submits the id of the job to be removed to the controller
 Route::post('/jobRemoveHandler', 'JobAdminController@removeJob');
 
 // Submits form data from registration form to registration controller
@@ -71,20 +76,28 @@ Route::post('/editUserInfo', 'UserEditController@editUserInfo');
 //Submits form data from the edut user address form to the controller to commit user edits to the database
 Route::post('/editUserAddress', 'UserEditController@editAddress');
 
+//Submits the id of the education record to remove to the controller
 Route::post('/removeEducation', 'UserEditController@removeEducation');
 
+//Submits form data from the education edit form to the controller
 Route::post('/editEducation', 'UserEditController@editEducation');
 
+//Submits form data to create a new education record to the controller
 Route::post('/addEducation', 'UserEditController@addEducation');
 
+//Submits the id of the experience record to remove to the controller
 Route::post('/removeExperience', 'UserEditController@removeExperience');
 
+//Submits form data from the experience edit form to the controller
 Route::post('/editExperience', 'UserEditController@editExperience');
 
+//Submits form data to create a new experience record to the controller
 Route::post('/addExperience', 'UserEditController@addExperience');
 
+//Submits form data to create a new skill to the controller
 Route::post('/addSkill', 'UserEditController@addSkill');
 
+//Submits id of the skill to be deleted from the database
 Route::post('/removeSkill', 'UserEditController@removeSkill');
 
 //Goes to the signout controller method to flush the current session data so that the user is signed out

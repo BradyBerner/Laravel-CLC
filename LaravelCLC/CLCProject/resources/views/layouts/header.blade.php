@@ -35,10 +35,10 @@ rest of the navbar -->
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <!-- Link to take the user to the user admin page -->
           <a class="dropdown-item" href="userAdmin">User Admin</a>
-          <a class="dropdown-item" href="jobAdmin">Job Admin</a>
-          <a class="dropdown-item" href="newJob">New Job</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">PlaceHolder</a>
+          <a class="dropdown-item" href="jobAdmin">Job Admin</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="createJob">New Job</a>
         </div>
       </li>
       <?php }?>

@@ -1,7 +1,7 @@
 <!--
 Brady Berner & Pengyu Yin
 CST-256
-2-10-19
+2-24-19
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
@@ -41,14 +41,14 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 
 @section('content')
 
-<!-- Prints out any errors if there are any after an admin has attempted to edit a user -->
+<!-- Prints out any errors if there are any after an admin has attempted to edit a job -->
 @if($errors->count() != 0)
 	@foreach($errors->all() as $error)
 		<div class="alert alert-danger" role="alert" style="width:20%;">{{$error}}</div><br>
 	@endforeach
 @endif
 
-<!-- Data table using jquery for managaing users -->
+<!-- Data table using jquery for managaing job -->
 <table id="jobs" class="table table-striped table-bordered" style="width:85%;">
 	<thead>
 		<tr>
@@ -67,11 +67,11 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 <!-- 		Iterates over each user returned with this page -->
 		@foreach($results as $job)
 			<tr>
-<!-- 				Iterates over each value for that specific user to allow administrators to view all of a user's information -->
+<!-- 				Iterates over each value for that specific user to allow administrators to view all of a job's information -->
 				@foreach($job as $value)
 					<td>{{$value}}</td>
 				@endforeach
-<!-- 				Bootstrap modal for editing users -->
+<!-- 				Bootstrap modal for editing jobs -->
 				<div class="modal fade" id="editModal{{$job['IDJOBS']}}" tabindex="-1" role="dialog" aria-labelledby="{{$job['IDJOBS']}}eLabel" aria-hidden="true">
   					<div class="modal-dialog" role="document">
   						<div class="modal-content">
@@ -82,7 +82,7 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
         						</button>
       						</div>
       						<div class="modal-body">
-<!--       							Form contained within the modal for the actual editing of the users -->
+<!--       							Form contained within the modal for the actual editing of the jobs -->
         						<form id="edit{{$job['IDJOBS']}}" action="jobEditHandler" method="post"></form>
         							<div class="form-group">
         								<input form="edit{{$job['IDJOBS']}}" type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
@@ -102,13 +102,13 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
       						<div class="modal-footer">
 <!--       							Button to close job edit modal -->
         						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-<!--         						Button to submit changes made to user to the admin controller -->
+<!--         						Button to submit changes made to job to the admin controller -->
         						<button form="edit{{$job['IDJOBS']}}" type="submit" class="btn btn-primary">Save changes</button>
       						</div>
     					</div>
   					</div>
 				</div>
-<!-- 				Button to open user edit modal -->
+<!-- 				Button to open job edit modal -->
 				<td><button type="button" class="btn btn-primary" data-toggle="modal" href="#editModal{{$job['IDJOBS']}}">Edit</button></td>
 			
 <!-- 				Button to open the delete confirmation modal -->

@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 2-10-19
+ * 2-24-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 namespace App\Http\Controllers;
@@ -15,7 +15,7 @@ use App\Models\JobModel;
 class JobAdminController extends Controller
 {
 
-    // Method gets the all the user data in the database and returns it to the admin page so administrators can manage users
+    // Method gets the all the job data in the database and returns it to the admin page so administrators can manage jobs
     public function index()
     {
         try {
@@ -42,7 +42,7 @@ class JobAdminController extends Controller
         }
     }
 
-    // Method takes form input from the previous form and attempts to update the database entry for the corresponding user
+    // Method takes form input from the previous form and attempts to update the database entry for the corresponding job
     public function editJob(Request $request)
     {
         Log::info("Entering JobAdminController.editJob()");
@@ -52,7 +52,7 @@ class JobAdminController extends Controller
         
         try {
 
-            // Creates a new user Model using the information gotten from the form input
+            // Creates a new job Model using the information gotten from the form input
             $job = new JobModel($request->input('id'), $request->input('title'), $request->input('company'), $request->input('state'), $request->input('city'), $request->input('description'));
 
             // Creates a new instance of the appropriate business service
@@ -73,7 +73,7 @@ class JobAdminController extends Controller
         }
     }
 
-    // Contains the rules for validating form input for editing users
+    // Contains the rules for validating form input for editing jobs
     private function validateEdit(Request $request)
     {
         $rules = [
@@ -87,19 +87,19 @@ class JobAdminController extends Controller
         $this->validate($request, $rules);
     }
 
-    // Method takes an ID from the form that submitted the request and attempts to delete the user of the corresponding ID
+    // Method takes an ID from the form that submitted the request and attempts to delete the job of the corresponding ID
     public function removeJob(Request $request)
     {
         try {
             Log::info("Entering JobAdminController.removeJob()");
 
-            // Get's the user's ID from the previous form
+            // Get's the job's ID from the previous form
             $id = $request->input('id');
 
             // Creates an instance of the appropriate business service
             $service = new JobService();
 
-            // Stores the result of the attempted removal of the user
+            // Stores the result of the attempted removal of the job
             $results = $service->removeJob($id);
 
             Log::info("Exiting JobAdminController.removeJob()");

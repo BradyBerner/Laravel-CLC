@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 2-10-19
+ * 2-24-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -24,7 +24,7 @@ class JobDAO{
         $this->conn = $conn;
     }
     
-    //Returns an array of all the users in the database in the form of associative arrays
+    //Returns an array of all the jobs in the database in the form of associative arrays
     public function getAll(){
         Log::info("Entering JobDAO.getAll()");
         
@@ -36,22 +36,22 @@ class JobDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        //Temporary array to hold all user data
+        //Temporary array to hold all job data
         $jobs = [];
         
-        //Iterates over each user gotten back from the database query
+        //Iterates over each job gotten back from the database query
         while($job = $statement->fetch(PDO::FETCH_ASSOC)){
-            //Adds the associative array representing the currently iterated user to the users array
+            //Adds the associative array representing the currently iterated job to the jobs array
             array_push($jobs, $job);
         }
         
         Log::info("Exit JobDAO.getAll()");
         
-        //Returns the completed users array containing all of the user associative arrays
+        //Returns the completed jobs array containing all of the job associative arrays
         return $jobs;
     }
     
-    //Takes in a userID and returns an associative array containing that user's infromation from the database
+    //Takes in a userID and returns an associative array containing all the jobs associated with that user
     public function findByID(int $id){
         Log::info("Entering JobDAO.findByID()");
         
@@ -69,37 +69,12 @@ class JobDAO{
         return ['result' => $statement->rowCount(), 'job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
-    /*Takes a Login model as an argument and checks the database for an entry with both the appropriate username and password
-    this method is to be used for the purpose of authenticating a user during login or for any other security check*/
-    public function findByLogin(JobModel $job){
-        Log::info("Entering UserDAO.authenticate()");
-        
-        try{
-            //Gets username and password from the login model
-            $username = $user->getUsername();
-            $password = $user->getPassword();
-            
-            $statement = $this->conn->prepare("SELECT * FROM USERS WHERE USERNAME = :username AND PASSWORD = :password");
-            //Binds the username and password to the respective query tokens
-            $statement->bindParam(':username', $username);
-            $statement->bindParam(':password', $password);
-            $statement->execute();
-        } catch (\PDOException $e){
-            Log::error("Exception: ", array("message" => $e->getMessage()));
-            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
-        }
-        
-        Log::info("Exit UserDAO.authenticate()");
-        //Returns the result of the query and an associative array representing the user
-        return ['result' => $statement->rowCount(), 'user' => $statement->fetch(PDO::FETCH_ASSOC)];
-    }
-    
-    //Takes in a usermodel and uses it to create a new user in the database
+    //Takes in a jobModel and uses it to create a new job in the database
     public function create(JobModel $job){
         Log::info("Entering JobDAO.newJob()");
         
         try{
-            //Gets all of the information from the usermodel passed as an argument
+            //Gets all of the information from the jobModel passed as an argument
             $title = $job->getTitle();
             $company = $job->getCompany();
             $state = $job->getState();
@@ -125,12 +100,12 @@ class JobDAO{
         return ['result' => $statement->rowCount(), 'insertID' => $this->conn->lastInsertID()];
     }
     
-    //Takes a usermodel as an argument and updates the user's database entry with the information passed
+    //Takes a jobModel as an argument and updates the job's database entry with the information passed
     public function update(JobModel $job){
         Log::info("Entering JobDAO.update()");
         
         try{
-            //Gets all of the information from the usermodel
+            //Gets all of the information from the jobModel
             $id = $job->getId();
             $title = $job->getTitle();
             $company = $job->getCompany();
@@ -140,7 +115,7 @@ class JobDAO{
            
             
             $statement = $this->conn->prepare("UPDATE `JOBS` SET `TITLE` = :title, `COMPANY` = :company, `STATE` = :state, `CITY` = :city, `DESCRIPTION` = :description WHERE `IDJOBS` = :id");
-            //Binds all of the information from the usermodel to their respective query tokens
+            //Binds all of the information from the jobModel to their respective query tokens
             $statement->bindParam(':title', $title);
             $statement->bindParam(':company', $company);
             $statement->bindParam(':state', $state);
@@ -159,7 +134,7 @@ class JobDAO{
         return $statement->rowCount();
     }
     
-    //Takes in an ID as an argument and attempts to delete the user
+    //Takes in an ID as an argument and attempts to delete the job
     public function remove($id){
         Log::info("Entering JobDAO.remove()");
         

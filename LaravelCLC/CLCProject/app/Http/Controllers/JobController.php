@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 2-10-19
+ * 2-24-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 namespace App\Http\Controllers;
@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Log;
 use App\Models\JobModel;
 use App\Services\Business\JobService;
 
-class NewJobController extends Controller
+class JobController extends Controller
 {
 
-    // Function recives user registration input, uses it to create a user object and then uses that object
+    // Function recives user registration input, uses it to create a job object and then uses that object
     // to attempt to create a new database entry
-    public function index(Request $request)
+    public function createJob(Request $request)
     {
         Log::info("Entering NewJobController.index()");
         
@@ -26,23 +26,23 @@ class NewJobController extends Controller
         
         try {
 
-            // Takes user input from register form and uses it to make a new usermodel object with an id of 0
+            // Takes user input from register form and uses it to make a new jobmodel object with an id of 0
             $job = new JobModel(0, $request->input('title'), $request->input('company'), $request->input('state'), $request->input('city'), $request->input('description'));
 
-            // Creates instance of security service
+            // Creates instance of job service
             $jobService = new JobService();
 
-            // Stores the result of the attempted registration
+            // Stores the result of the function call
             $result = $jobService->newJob($job);
 
-            // Stores the result of the attempted registration
             $data = [
                 'result' => $result['result']
             ];
             
             Log::info("Exiting NewJobController.index() with a result of " . $result['result']);
 
-            return view('newJobResult')->with($data);
+            //Returns the user to the job admin page
+            return redirect('/jobAdmin');
         } catch (\Exception $e) {
             Log::error("Exception occurred in NewJobController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -50,7 +50,7 @@ class NewJobController extends Controller
         }
     }
 
-    // Contains the rules for validating the user's registration information
+    // Contains the rules for validating the job creation
     private function validateForm(Request $request)
     {
         $rules = [

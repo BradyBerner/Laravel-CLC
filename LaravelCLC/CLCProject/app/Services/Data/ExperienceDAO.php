@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-24-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Log;
@@ -9,12 +16,15 @@ use App\Models\ExperienceModel;
 
 class ExperienceDAO{
     
+    //Stores the database connection used by all the functions in the class
     private $conn;
     
+    //Sets the connection
     public function __construct($connection){
         $this->conn = $connection;
     }
     
+    //Get's all of the experience entries associated with a certain user
     public function getByID(int $id){
         Log::info("Entering ExperienceDAO.getByID()");
         
@@ -27,17 +37,21 @@ class ExperienceDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
+        //Temporary array to store all the results from the query
         $results = [];
         
+        //Iterates over all of the results retrieved from the database query and adds them to the temporary array  
         while($result = $statement->fetch(PDO::FETCH_ASSOC)){
             array_push($results, $result);
         }
         
         Log::info("Exit ExperienceDAO.getByID()");
         
+        //Returns the result of the query as well as the array with all the results
         return ['result' => $statement->rowCount(), 'experience' => $results];
     }
     
+    //Gets all of the experience entries from the database
     public function getAll(){
         Log::info("Entering ExperienceDAO.getAll()");
         
@@ -49,21 +63,26 @@ class ExperienceDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
+        //Temporary array to store all of the experiences retrieved from the database
         $results = [];
         
+        //Iterates over all of the results returned from the query and adds it to the array
         while($result = $statement->fetch(PDO::FETCH_ASSOC)){
             array_push($results, $result);
         }
         
         Log::info("Exit ExperienceDAO.getAll()");
 
+        //Returns the array full of results
         return $results;
     }
     
+    //Takes in an experience model and attempts to make a new database entry with the information contained within the experience model
     public function create(ExperienceModel $experience){
         
         Log::info("Entering ExperienceDAO.create()");
         
+        //Gets all of the information from the experience model
         $title = $experience->getTitle();
         $company = $experience->getCompany();
         $current = $experience->getCurrent();
@@ -74,6 +93,7 @@ class ExperienceDAO{
         
         try{
             $statement = $this->conn->prepare("INSERT INTO EXPERIENCE (IDEXPERIENCE, TITLE, COMPANY, CURRENT, STARTYEAR, ENDYEAR, DESCRIPTION, USERS_IDUSERS) VALUES (NULL, :title, :company, :current, :startyear, :endyear, :description, :userID)");
+            //Binds all of the information from the experience model to the query
             $statement->bindParam(':title', $title);
             $statement->bindParam(':company', $company);
             $statement->bindParam(':current', $current);
@@ -88,13 +108,17 @@ class ExperienceDAO{
         }
         
         Log::info("Exiting ExperienceDAO.create()");
+        
+        //Returns the result of the query
         return $statement->rowCount();
     }
     
+    //Takes in an experience model and attempts to update the database entry with the information in the model
     public function update(ExperienceModel $experience){
         
         Log::info("Entering ExperienceDAO.update()");
         
+        //Gets all of the information from the model
         $id = $experience->getId();
         $title = $experience->getTitle();
         $company = $experience->getCompany();
@@ -105,6 +129,7 @@ class ExperienceDAO{
         
         try{
             $statement = $this->conn->prepare("UPDATE EXPERIENCE SET TITLE = :title, COMPANY = :company, CURRENT = :current, STARTYEAR = :startyear, ENDYEAR = :endyear, DESCRIPTION = :description WHERE IDEXPERIENCE = :id");
+            //Binds all of the information from the model to the query
             $statement->bindParam(':id', $id);
             $statement->bindParam(':title', $title);
             $statement->bindParam(':company', $company);
@@ -119,9 +144,12 @@ class ExperienceDAO{
         }
         
         Log::info("Exiting ExperienceDAO.update()");
+        
+        //Returns the result of the query
         return $statement->rowCount();
     }
     
+    //Takes in the id of an experience entry and attempts to remove it from the database
     public function remove(int $id){
         
         Log::info("Entering ExperienceDAO.remove()");
@@ -136,6 +164,8 @@ class ExperienceDAO{
         }
         
         Log::info("Exiting ExperienceDAO.remove()");
+        
+        //Returns the result of the query
         return $statement->rowCount();
     }
 }

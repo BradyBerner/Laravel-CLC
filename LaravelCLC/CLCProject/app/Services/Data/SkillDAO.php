@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-24-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Data;
 
 use App\Models\SkillModel;
@@ -9,24 +16,27 @@ use App\Services\Utility\DatabaseException;
 
 class SkillDAO{
     
+    //Field to store the PDO connection to the database
     private $connection;
     
+    //Sets the connection field
     public function __construct(\PDO $connection){
         $this->connection = $connection;
     }
     
+    //Gets all of the skills connected to a certain user
     public function findByID(int $id){
         
         Log::info("Entering SkillDAO.findByID()");
         
         try{
-            
             $statement = $this->connection->prepare("SELECT * FROM SKILLS WHERE USERS_IDUSERS = :userID");
             $statement->bindParam('userID', $id);
             $statement->execute();
             
             $results = [];
             
+            //Adds all of the results from the database query to the results array
             while($result = $statement->fetch(PDO::FETCH_ASSOC)){
                 array_push($results, $result);
             }
@@ -41,11 +51,13 @@ class SkillDAO{
         return ['result' => $statement->rowCount(), 'skills' => $results];
     }
     
+    //Takes a skill model as an argument and creates a new skill entry in the database
     public function create(SkillModel $skill){
         
         Log::info("Entering SkillDAO.create()");
         
         try{
+            //Gets the information needed from the skill object
             $skillName = $skill->getSkill();
             $description = $skill->getDescription();
             $userID = $skill->getUserID();
@@ -65,6 +77,7 @@ class SkillDAO{
         return $statement->rowCount();
     }
     
+    //Takes in the ID of the skill and then removes the associated skill from the database
     public function remove($id){
         
         Log::info("Entering SkillDAO.remove()");

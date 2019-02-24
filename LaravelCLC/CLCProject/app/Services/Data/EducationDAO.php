@@ -9,12 +9,15 @@ use App\Models\EducationModel;
 
 class EducationDAO{
     
+    //Stores the database connection used by all of the functions in this class
     private $conn;
     
+    //Takes in a connection object and assigns it to the connection field
     public function __construct(\PDO $connection){
         $this->conn = $connection;
     }
     
+    //Gets all of the education records associated with the user id passed as an argument
     public function getByID(int $id){
         Log::info("Entering EducationDAO.getByID()");
         
@@ -29,15 +32,18 @@ class EducationDAO{
         
         $educations = [];
         
+        //Iterates over all the results of the query and adds them to a temporary array
         while($education = $statement->fetch(PDO::FETCH_ASSOC)){
             array_push($educations, $education);
         }
         
         Log::info("Exit EducationDAO.getByID()");
         
+        //Returns the result of the query as well as all the database entries gotten from the query
         return ['result' => $statement->rowCount(), 'education' => $educations];
     }
     
+    //Gets all of the education records from the database
     public function getAll(){
         Log::info("Entering EducationDAO.getAll()");
         
@@ -51,19 +57,23 @@ class EducationDAO{
         
         $educations = [];
         
+        //Iterates over all of the results obtained from the query and adds them to an array
         while($education = $statement->fetch(PDO::FETCH_ASSOC)){
             array_push($educations, $education);
         }
         
         Log::info("Exit EducationDAO.getAll()");
         
+        //Returns the array of education records gotten back from the database query
         return $educations;
     }
     
+    //Takes in an education model and attempts to create a new database entry with the information contained
     public function create(EducationModel $education){
         
         Log::info("Entering EducationDAO.create()");
         
+        //Gets all of the information from the education model
         $school = $education->getSchool();
         $degree = $education->getDegree();
         $field = $education->getField();
@@ -74,6 +84,7 @@ class EducationDAO{
         
         try{
             $statement = $this->conn->prepare("INSERT INTO EDUCATION (IDEDUCATION, SCHOOL, DEGREE, FIELD, GPA, STARTYEAR, ENDYEAR, USERS_IDUSERS) VALUE (NULL, :school, :degree, :field, :gpa, :startyear, :endyear, :userID)");
+            //Binds information from the education model to the database query
             $statement->bindParam(':school', $school);
             $statement->bindParam(':degree', $degree);
             $statement->bindParam(':field', $field);
@@ -88,13 +99,17 @@ class EducationDAO{
         }
         
         Log::info("Exiting EducationDAO.create()");
+        
+        //Returns the results of the database query
         return $statement->rowCount();
     }
     
+    //Takes in an education model and attempts to update the associated database entry with the information contained in the model
     public function update(EducationModel $education){
         
         Log::info("Entering EducationDAO.update()");
         
+        //Gets the information from the education model
         $id = $education->getId();
         $school = $education->getSchool();
         $degree = $education->getDegree();
@@ -105,6 +120,7 @@ class EducationDAO{
         
         try{
             $statement = $this->conn->prepare("UPDATE EDUCATION SET SCHOOL = :school, DEGREE = :degree, FIELD = :field, GPA = :gpa, STARTYEAR = :startyear, ENDYEAR = :endyear WHERE IDEDUCATION = :id");
+            //Binds the information from the model to the database query
             $statement->bindParam(':id', $id);
             $statement->bindParam(':school', $school);
             $statement->bindParam(':degree', $degree);
@@ -119,9 +135,12 @@ class EducationDAO{
         }
         
         Log::info("Exiting EducationDAO.update()");
+        
+        //Returns the result of the query
         return $statement->rowCount();
     }
     
+    //Takes in an education id and attempts to remove the associated database entry
     public function remove(int $id){
         
         Log::info("Entering EducationDAO.remove()");
@@ -136,6 +155,8 @@ class EducationDAO{
         }
         
         Log::info("Exiting EducationDAO.remove()");
+        
+        //Returns the results of the database query
         return $statement->rowCount();
     }
 }

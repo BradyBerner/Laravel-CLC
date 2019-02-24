@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 2-24-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Business;
 
 use Illuminate\Support\Facades\Log;
@@ -13,12 +20,16 @@ class EducationService{
         
         Log::info("Entering EducationService.findByID()");
         
+        //Gets a connection to the database
         $connection = new Connection();
         
+        //Creates an instance of the data access object
         $DAO = new EducationDAO($connection);
         
+        //Calls the associated dao function and stores the results
         $results = $DAO->getByID($id);
         
+        //Destroys the connection to the database 
         $connection = null;
         
         Log::info("Exiting EducationService.findByID()");
@@ -30,12 +41,16 @@ class EducationService{
         
         Log::info("Entering EducationService.getAll()");
         
+        //Gets a connection to the database
         $connection = new Connection();
         
+        //Creates an instance of the data access object
         $DAO = new EducationDAO($connection);
         
+        //Calls the associated dao function and stores the results
         $results = $DAO->getAll();
         
+        //Destroys the connection to the database
         $connection = null;
         
         Log::info("Exiting EducationService.getAll()");
@@ -47,12 +62,16 @@ class EducationService{
         
         Log::info("Entering EducationService.create()");
         
+        //Gets a connection to the database
         $connection = new Connection();
         
+        //Creates an instance of the data access object
         $DAO = new EducationDAO($connection);
         
+        //Calls the associated dao function and stores the results
         $results = $DAO->create($education);
         
+        //Destroys the connection to the database
         $connection = null;
         
         Log::info("Exiting EducationService.create()");
@@ -64,12 +83,16 @@ class EducationService{
         
         Log::info("Entering EducationService.update()");
         
+        //Gets a connection to the database
         $connection = new Connection();
         
+        //Creates an instance of the data access object
         $DAO = new EducationDAO($connection);
         
+        //Calls the associated dao functino and stores the results
         $results = $DAO->update($education);
         
+        //Destroys the connection to the database
         $connection = null;
         
         Log::info("Exiting EducationService.update()");
@@ -81,12 +104,16 @@ class EducationService{
         
         Log::info("Entering EducationService.remove()");
         
+        //Gets a connection to the database
         $connection = new Connection();
         
+        //Creates an instance of the data access object
         $DAO = new EducationDAO($connection);
         
+        //Calls the associated dao functino and stores the results
         $results = $DAO->remove($id);
         
+        //Destroys the connection to the database
         $connection = null;
         
         Log::info("Exiting EducationService.remove()");

@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 2-10-19
+ * 2-24-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 namespace App\Http\Controllers;
@@ -114,12 +114,15 @@ class UserEditController extends Controller
         try{
             $id = $request->input('ID');
             
+            //Creates instance of the appropriate service
             $service = new EducationService();
             
+            //Calls associated function and stores the results of the function call
             $results = $service->remove($id);
             
             Log::info("Exiting UserEditController.removeEducation() with a result of " . $results);
             
+            //Redirects the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.removeEducation(): " . $e->getMessage());
@@ -131,17 +134,22 @@ class UserEditController extends Controller
     public function addEducation(Request $request){
         Log::info("Entering UserEditController.addEducation()");
         
+        //Validates form input against pre-defined rules
         $this->validateEducationInput($request);
         
         try{
+            //Creates an education model based on the information submitted to the form
             $education = new EducationModel(-1, $request->input('school'), $request->input('degree'), $request->input('field'), $request->input('gpa'), $request->input('startyear'), $request->input('endyear'), $request->input('userID'));
             
+            //Creates instance of the appropriate service
             $service = new EducationService();
             
+            //Calls associated function and stores the results of the function call
             $results = $service->create($education);
             
             Log::info("Exiting UserEditController.addEducation() with a result of " . $results);
             
+            //Redirects the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
@@ -153,17 +161,22 @@ class UserEditController extends Controller
     public function editEducation(Request $request){
         Log::info("Entering UserEditController.editEducation()");
         
+        //Validates the form input against pre-defined rules
         $this->validateEducationInput($request);
         
         try{
+            //Creates an education model based on the information submitted to the form
             $education = new EducationModel($request->input('id'), $request->input('school'), $request->input('degree'), $request->input('field'), $request->input('gpa'), $request->input('startyear'), $request->input('endyear'), -1);
             
+            //Creates instance of the appropriate service
             $service = new EducationService();
             
+            //Calls associated function and stores the result of the function call
             $results = $service->update($education);
             
             Log::info("Exiting UserEditController.editEducation() with a result of " . $results);
             
+            //Redirects the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
@@ -192,12 +205,15 @@ class UserEditController extends Controller
         try{
             $id = $request->input('ID');
             
+            //Creates an instance of the appropriate service
             $service = new ExperienceService();
             
+            //Calls the associated function and stores the results of the function call
             $results = $service->remove($id);
             
             Log::info("Exiting UserEditController.removeExperience() with a result of " . $results);
             
+            //Redirects the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.removeExperience(): " . $e->getMessage());
@@ -210,17 +226,22 @@ class UserEditController extends Controller
         
         Log::info("Entering UserEditController.addExperience()");
         
+        //Validates form input against pre-defined rules
         $this->validateExperienceInput($request);
         
         try{
+            //Takes input from the form and creates a new experience model object from it
             $experience = new ExperienceModel(-1, $request->input('title'), $request->input('company'), $request->input('current'), $request->input('startyear'), $request->input('endyear'), $request->input('description'), $request->input('userID'));
             
+            //Creates an instance of the appropriate service
             $service = new ExperienceService();
             
+            //Calls the associated function and stores the results of the function call
             $results = $service->create($experience);
             
             Log::info("Exiting UserEditController.addExperience() with a result of " . $results);
             
+            //Redirect the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
@@ -233,17 +254,22 @@ class UserEditController extends Controller
         
         Log::info("Entering UserEditController.editExperience()");
         
+        //Validates the form input against pre-defined rules
         $this->validateExperienceInput($request);
         
         try{
+            //Takes input from the form and uses it to create a new experience model object
             $experience = new ExperienceModel($request->input('id'), $request->input('title'), $request->input('company'), $request->input('current'), $request->input('startyear'), $request->input('endyear'), $request->input('description'), -1);
             
+            //Creates instance of the appropriate service
             $service = new ExperienceService();
             
+            //Calls teh associated function and stores the results of the function call
             $results = $service->update($experience);
             
             Log::info("Exiting UserEditController.editExperience() with a result of " . $results);
             
+            //Redirect the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
@@ -268,17 +294,22 @@ class UserEditController extends Controller
         
         Log::info("Entering UserEditController.addSkill()");
         
+        //Validates the form input against pre-defined rules
         $this->validateSkillInput($request);
         
         try{
+            //Takes form input and uses it to create a new skill model object
             $skill = new SkillModel(-1, $request->input('skill'), $request->input('description'), $request->input('userID'));
             
+            //Creates an instance of the appropriate service
             $service = new SkillService();
             
+            //Calls the associated function and stores the results of the function call
             $results = $service->create($skill);
             
             Log::info("Exiting UserEditController.addSkill() with a result of " . $results);
             
+            //Redirects the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.addSkill(): " . $e->getMessage());
@@ -305,12 +336,15 @@ class UserEditController extends Controller
         try{
             $id = $request->input('ID');
             
+            //Creates an instance of the appropriate service
             $service = new SkillService();
             
+            //Calls the associated function and stores the results of the function call
             $results = $service->remove($id);
             
             Log::info("Exiting UserEditController.removeSkill() with a result of " . $results);
             
+            //Redirects the user back to their profile page
             return redirect()->action('UserProfileController@index', ['ID' => $request->session()->get('ID')]);
         } catch (\Exception $e){
             Log::error("Exception occured in UserEditController.removeSkill(): " . $e->getMessage());

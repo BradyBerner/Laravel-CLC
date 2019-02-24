@@ -2,7 +2,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 2-10-19
+ * 2-24-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 namespace App\Services\Business;
@@ -15,18 +15,22 @@ use App\Services\Data\JobDAO;
 class JobService
 {
 
-    // Function takes user as an argument and calls the database registration service with that user then returns
+    // Function takes a job as an argument and calls the database registration service with that user then returns
     // the result it gets
     public function newJob(JobModel $job)
     {
         Log::info("Entering JobService.newJob()");
 
+        //Creates connection with the database
         $connection = new Connection();
 
+        //Creates data access object instance
         $DAO = new JobDAO($connection);
 
+        //Stores the results of the data access object's new job method
         $result = $DAO->create($job);
 
+        //Closes the connection to the database
         $connection = null;
 
         Log::info("Exiting JobService.newJob() with result: " . $result['result']);

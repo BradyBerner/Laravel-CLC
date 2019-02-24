@@ -4,13 +4,13 @@
 <!--
 Brady Berner & Pengyu Yin
 CST-256
-2-10-19
+2-24-19
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
 @section('content')
 		<div class="alert alert-warning" role="alert" style="width:30%;">All fields are required!</div>
-		<!-- form to capture user registration input and send it ot the propoer route to lead to the controller -->
+		<!-- form to capture user registration input and send it to the propoer route to lead to the controller -->
 		<form action="newJobHandler" method="post">
 			<input type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
 			<div class="form-group">

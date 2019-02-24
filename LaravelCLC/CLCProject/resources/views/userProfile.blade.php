@@ -1,7 +1,7 @@
 <!--
 Brady Berner & Pengyu Yin
 CST-256
-2-10-19
+2-24-19
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
@@ -57,6 +57,7 @@ input {
 	</ul>
 	<!-- If statement to ensure that only the profile's owner can click the button to be able to edit their profile -->
 	@if(Session::get('ID') == $ID)
+	<!-- Modal for editing the user's address and info -->
 	<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
@@ -67,11 +68,6 @@ input {
 					</button>
 				</div>
 				<div class="modal-body" id="darkerStyle">
-					@if($errors->count() != 0)
-						@foreach($errors->all() as $error)
-							<div class="alert alert-danger" role="alert" style="width:50%;">{{$error}}</div><br>
-						@endforeach
-					@endif
 					<div class="card">
 						<div class="card-header" id="darkStyle">
 							<ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
@@ -145,6 +141,7 @@ input {
 	@endif
 </div>
 
+<!-- Tabbed card for displaying all of a user's e-portfolio information -->
 <div class="card" style="width:73%; float: left !important; margin-left: 20px;">
 	<div class="card-header" id="darkStyle">
 		<ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
