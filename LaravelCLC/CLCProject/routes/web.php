@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\NewJobController;
+
 /*
  * |--------------------------------------------------------------------------
  * | Web Routes
@@ -35,6 +37,18 @@ Route::post('/loginHandler', 'LoginController@index');
 Route::get('/Register', function () {
     return view('register');
 });
+
+Route::get('/newJob', function() {
+    return view('newJobView');
+});
+
+Route::post('/newJobHandler', 'NewJobController@index');
+
+Route::get('/jobAdmin', 'JobAdminController@index');
+
+Route::post('/jobEditHandler', 'JobAdminController@editJob');
+
+Route::post('/jobRemoveHandler', 'JobAdminController@removeJob');
 
 // Submits form data from registration form to registration controller
 Route::post('/registrationHandler', 'RegistrationController@index');
