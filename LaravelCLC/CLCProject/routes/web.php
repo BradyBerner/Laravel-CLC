@@ -77,28 +77,28 @@ Route::post('/editUserInfo', 'UserEditController@editUserInfo');
 Route::post('/editUserAddress', 'UserEditController@editAddress');
 
 //Submits the id of the education record to remove to the controller
-Route::post('/removeEducation', 'UserEditController@removeEducation');
+Route::post('/removeEducation', 'PortfolioController@removeEducation');
 
 //Submits form data from the education edit form to the controller
-Route::post('/editEducation', 'UserEditController@editEducation');
+Route::post('/editEducation', 'PortfolioController@editEducation');
 
 //Submits form data to create a new education record to the controller
-Route::post('/addEducation', 'UserEditController@addEducation');
+Route::post('/addEducation', 'PortfolioController@addEducation');
 
 //Submits the id of the experience record to remove to the controller
-Route::post('/removeExperience', 'UserEditController@removeExperience');
+Route::post('/removeExperience', 'PortfolioController@removeExperience');
 
 //Submits form data from the experience edit form to the controller
-Route::post('/editExperience', 'UserEditController@editExperience');
+Route::post('/editExperience', 'PortfolioController@editExperience');
 
 //Submits form data to create a new experience record to the controller
-Route::post('/addExperience', 'UserEditController@addExperience');
+Route::post('/addExperience', 'PortfolioController@addExperience');
 
 //Submits form data to create a new skill to the controller
-Route::post('/addSkill', 'UserEditController@addSkill');
+Route::post('/addSkill', 'PortfolioController@addSkill');
 
 //Submits id of the skill to be deleted from the database
-Route::post('/removeSkill', 'UserEditController@removeSkill');
+Route::post('/removeSkill', 'PortfolioController@removeSkill');
 
 //Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');

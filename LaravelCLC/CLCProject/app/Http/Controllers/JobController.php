@@ -43,6 +43,7 @@ class JobController extends Controller
 
             //Returns the user to the job admin page
             return redirect('/jobAdmin');
+            return view('jobAdmin')->with(['results' => $jobService->getAllJobs()]);
         } catch (\Exception $e) {
             Log::error("Exception occurred in NewJobController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];

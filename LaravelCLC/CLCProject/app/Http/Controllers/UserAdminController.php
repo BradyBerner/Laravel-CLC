@@ -64,7 +64,7 @@ class UserAdminController extends Controller
             Log::info("Exiting UserAdminController.editUser()");
 
             if ($results) {
-                return redirect('/userAdmin');
+                return view('userAdmin')->with(['results' => $service->getAllUsers()]);
             }
         } catch (\Exception $e) {
             Log::error("Exception occurred in UserAdminController.editUser(): " . $e->getMessage());
@@ -105,7 +105,7 @@ class UserAdminController extends Controller
             Log::info("Exiting UserAdminController.removeUser()");
 
             if ($results) {
-                return redirect('/userAdmin');
+                return view('userAdmin')->with(['results' => $service->getAllUsers()]);
             }
         } catch (\Exception $e) {
             Log::error("Exception occurred in UserAdminController.removeUser(): " . $e->getMessage());

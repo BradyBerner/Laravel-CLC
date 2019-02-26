@@ -64,7 +64,7 @@ class JobAdminController extends Controller
             Log::info("Exiting JobAdminController.editJob()");
 
             if ($results) {
-                return redirect('/jobAdmin');
+                return view('jobAdmin')->with(['results' => $service->getAllJobs()]);
             }
         } catch (\Exception $e) {
             Log::error("Exception occurred in JobAdminController.editJob(): " . $e->getMessage());
@@ -105,7 +105,7 @@ class JobAdminController extends Controller
             Log::info("Exiting JobAdminController.removeJob()");
 
             if ($results) {
-                return redirect('/jobAdmin');
+                return view('jobAdmin')->with(['results' => $service->getAllJobs()]);
             }
         } catch (\Exception $e) {
             Log::error("Exception occurred in JobAdminController.removeJob(): " . $e->getMessage());
