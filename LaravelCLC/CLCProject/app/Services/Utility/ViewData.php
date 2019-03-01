@@ -8,6 +8,8 @@ use App\Services\Business\UserInfoService;
 use App\Services\Business\EducationService;
 use App\Services\Business\ExperienceService;
 use App\Services\Business\SkillService;
+use App\Services\Business\AffinityGroupService;
+use App\Services\Business\AffinityMemberService;
 
 class ViewData{
     
@@ -38,6 +40,24 @@ class ViewData{
             'educations' => $educationResults['education'],
             'experiences' => $experienceResults['experience'],
             'skills' => $skillResults['skills']
+        ];
+        
+        return $data;
+    }
+    
+    public static function getAffinityData(int $userID){
+        
+        $groupsService = new AffinityGroupService();
+        $membersService = new AffinityMemberService();
+        
+        $owned = $groupsService->getAllOwned($userID);
+        $joined = $membersService->getAllJoined($userID);
+        $suggested = $groupsService->getAllSuggested($userID);
+        
+        $data = [
+            'owned' => $owned,
+            'joined' => $joined,
+            'suggested' => $suggested
         ];
         
         return $data;

@@ -26,6 +26,9 @@ rest of the navbar -->
       <li class="nav-item active">
 			<input type="submit" form="userProfile" class="nav-link" style="color:inherit; cursor:pointer; background:none; border:none; width:100% !important;" value="{{Session('USERNAME')}}">
       </li>
+      <li class="nav-item">
+      		<a class="nav-link" href="groups">Affinity Groups</a>
+      </li>
       <!-- If the currently logged in user is an admin then the admin menu is linked after the user profile -->
       <?php if(session('ROLE')){?>
       <li class="nav-item dropdown">
@@ -35,7 +38,6 @@ rest of the navbar -->
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <!-- Link to take the user to the user admin page -->
           <a class="dropdown-item" href="userAdmin">User Admin</a>
-          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="jobAdmin">Job Admin</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="createJob">New Job</a>

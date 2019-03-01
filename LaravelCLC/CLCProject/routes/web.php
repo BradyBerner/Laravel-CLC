@@ -43,6 +43,10 @@ Route::get('/createJob', function() {
     return view('createJob');
 });
 
+Route::get('/groups', function() {
+    return view('groups');
+});
+
 //Submits form data to job controller to create new job entry
 Route::post('/newJobHandler', 'JobController@createJob');
 
