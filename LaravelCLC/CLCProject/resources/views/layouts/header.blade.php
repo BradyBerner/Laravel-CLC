@@ -12,6 +12,9 @@ rest of the navbar -->
 <form action="userProfile" id="userProfile" style="margin:0px;" method="get"></form>
 <input form="userProfile" type="hidden" name="_token" value="{{csrf_token()}}"></input>
 <input form="userProfile" type="hidden" name="ID" value="{{Session('ID')}}"></input>
+<form action="groups" id="groups" style="margin:0px;" method="get"></form>
+<input form="groups" type="hidden" name="_token" value="{{csrf_token()}}"></input>
+<input form="groups" type="hidden" name="ID" value="{{Session('ID')}}"></input>
 <!-- Bootstrap navbar that will be included at the top of all pages for the purpose of navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(60, 63, 65); margin-bottom:20px;">
   <a class="navbar-brand" href="\CLC">CLC</a>
@@ -27,7 +30,7 @@ rest of the navbar -->
 			<input type="submit" form="userProfile" class="nav-link" style="color:inherit; cursor:pointer; background:none; border:none; width:100% !important;" value="{{Session('USERNAME')}}">
       </li>
       <li class="nav-item">
-      		<a class="nav-link" href="groups">Affinity Groups</a>
+      		<input type="submit" form="groups" class="nav-link" style="color:inherit; cursor:pointer; background:none; border:none; width:100% !important;" value="Affinity Groups">
       </li>
       <!-- If the currently logged in user is an admin then the admin menu is linked after the user profile -->
       <?php if(session('ROLE')){?>

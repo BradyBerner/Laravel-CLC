@@ -43,9 +43,7 @@ Route::get('/createJob', function() {
     return view('createJob');
 });
 
-Route::get('/groups', function() {
-    return view('groups');
-});
+Route::get('/groups', 'AffinityGroupController@index');
 
 //Submits form data to job controller to create new job entry
 Route::post('/newJobHandler', 'JobController@createJob');
@@ -103,6 +101,16 @@ Route::post('/addSkill', 'PortfolioController@addSkill');
 
 //Submits id of the skill to be deleted from the database
 Route::post('/removeSkill', 'PortfolioController@removeSkill');
+
+Route::post('/createGroup', 'AffinityGroupController@newGroup');
+
+Route::post('/editGroup', 'AffinityGroupController@editGroup');
+
+Route::post('/deleteGroup', 'AffinityGroupController@deleteGroup');
+
+Route::post('/joinGroup', 'AffinityMemberController@joinGroup');
+
+Route::post('/leaveGroup', 'AffinityMemberController@leaveGroup');
 
 //Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');

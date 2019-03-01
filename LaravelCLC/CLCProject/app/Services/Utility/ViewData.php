@@ -49,17 +49,70 @@ class ViewData{
         
         $groupsService = new AffinityGroupService();
         $membersService = new AffinityMemberService();
+        $skillService = new SkillService();
         
         $owned = $groupsService->getAllOwned($userID);
         $joined = $membersService->getAllJoined($userID);
-        $suggested = $groupsService->getAllSuggested($userID);
+        $all = $groupsService->getAll($userID);
+        $skills = $skillService->findByID($userID);
+        $notJoined = [];
+        
+        for($i = 0; $i < count($all); $i++){
+            $valid = true;
+            $id = $all[$i]['IDAFFINITYGROUPS'];
+            
+            foreach($owned as $group){
+                if($group['IDAFFINITYGROUPS'] == $id){
+                    $valid = false;
+                }
+            }
+            
+            foreach($joined as $group){
+                if($group['IDAFFINITYGROUPS'] == $id){
+                    $valid = false;
+                }
+            }
+            
+            if($valid){
+                array_push($notJoined, $all[$i]);
+            }
+        }
+            
+        $suggested = [];
+        
+        foreach($skills['skills'] as $skill){
+            foreach($notJoined as $group){
+                if($group['FOCUS'] == $skill['SKILL'] && $group['USERS_IDUSERS'] != $userID){
+                    array_push($suggested, $group);
+                }
+            }
+        }
         
         $data = [
-            'owned' => $owned,
-            'joined' => $joined,
-            'suggested' => $suggested
+            'owned' => ViewData::addMembersToGroupData($owned),
+            'joined' => ViewData::addMembersToGroupData($joined),
+            'suggested' => ViewData::addMembersToGroupData($suggested),
+            'skills' => $skills['skills']
         ];
         
         return $data;
+    }
+    
+    private static function addMembersToGroupData($group){
+        
+        $membersService = new AffinityMemberService();
+        $userService = new UserService();
+        
+        for($i = 0; $i < count($group); $i++){
+            $members = [];
+            $users = $membersService->getAllMembers($group[$i]['IDAFFINITYGROUPS']);
+            foreach($users as $user){
+                $userResults = $userService->findByID($user['USERS_IDUSERS'])['user'];
+                array_push($members, ['ID' => $userResults['IDUSERS'], 'USERNAME' => $userResults['USERNAME']]);
+            }
+            $group[$i]['members'] = $members;
+        }
+        
+        return $group;
     }
 }
