@@ -2,6 +2,13 @@
 @extends('layouts.appmaster')
 @section('title','Affinity Groups')
 
+<!--
+Brady Berner & Pengyu Yin
+CST-256
+3-3-19
+This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+-->
+
 @section('style')
 <style>
 #darkerStyle {
@@ -24,6 +31,7 @@
 
 @section('content')
 
+<!-- Echos out any validation errors -->
 @if($errors->count() != 0)
 	@foreach($errors->all() as $error)
 		<div class="alert alert-danger" role="alert" style="width:30%;">{{$error}}</div>
@@ -32,6 +40,7 @@
 
 	<h2>Affinity Groups</h2>
 	
+	<!-- Bootstrap Accordion that contains all affinity group information -->
 	<div class="accordion" id="affinityGroups" style="width:85%;">
       <div class="card" id="darkStyle">
         <div class="card-header" id="headingOne">
@@ -43,6 +52,8 @@
         </div>
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#affinityGroups">
           <div class="card-body" id="darkerStyle">
+          <!-- Table to display all owned affinity groups if the user owns any -->
+          	@if(count($owned) != 0)
           		<h3>Owned Groups: </h3>
               	<table class="table text-center" align="center">
               	<thead>
@@ -83,6 +94,7 @@
                         				</div>
                         				<div class="modal-body" id="darkerStyle">
                         					<div class="card" id="darkerStyle" align="center">
+                        						<!-- Form for editing owned affinity groups -->
                         						<form action="editGroup" method="post" style="width:70%; text-align:center !important;">
                         							<input type="hidden" name="_token" value="{{csrf_token()}}">
                         							<input type="hidden" name="ID" value="{{$group['IDAFFINITYGROUPS']}}">
@@ -105,6 +117,7 @@
             				</div>
               			</td>
               			<td>
+              				<!-- Form for deleting owned affinity groups -->
               				<form action="deleteGroup" method="post">
               					<input type="hidden" name="_token" value="{{csrf_token()}}">
               					<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
@@ -114,6 +127,7 @@
               		</tr>
               		<div class="collapse" id="collapse{{$group['IDAFFINITYGROUPS']}}">
               			<div class="card card-body" id="darkerStyle">
+              				<!-- Prints out all members of an affinity group with buttons linking to the user's profile -->
               				Users in This Group:
               				@if(count($group['members']) != 0)
               					@foreach($group['members'] as $member)
@@ -129,7 +143,9 @@
               	@endforeach
               	</tbody>
 			</table>
+			@endif
 				
+				<!-- Displays all joined affinity groups -->
 				@if(count($joined) != 0)
 				<h3>Joined Groups:</h3>
 				<table class="table text-center">
@@ -145,31 +161,33 @@
 					<tbody>
 						<?php $n = 0;?>
 						@foreach($joined as $group)
-						<?php $n++;?>
-						
-						<tr>
-							<th scope="row">{{$n}}</th>
-							<td>
-								<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseJoined{{$group['IDAFFINITYGROUPS']}}" aria-expanded="false" aria-controls="collapseExample">
-									{{$group['NAME']}}
-  								</button>
-							</td>
-							<td>{{$group['DESCRIPTION']}}</td>
-							<td>{{$group['FOCUS']}}</td>
-							<td>
-								<form action="leaveGroup" method="post">
-									<input type="hidden" name="_token" value="{{csrf_token()}}">
-									<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
-									<input type="hidden" name="userID" value="{{Session::get('ID')}}">
-									<button type="submit" class="btn btn-primary">Leave Group</button>
-								</form>
-							</td>
-						</tr>
+    						<?php $n++;?>
+    						
+    						<tr>
+    							<th scope="row">{{$n}}</th>
+    							<td>
+    								<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseJoined{{$group['IDAFFINITYGROUPS']}}" aria-expanded="false" aria-controls="collapseExample">
+    									{{$group['NAME']}}
+      								</button>
+    							</td>
+    							<td>{{$group['DESCRIPTION']}}</td>
+    							<td>{{$group['FOCUS']}}</td>
+    							<td>
+    								<!-- Form/button for leaving a joined affinity group -->
+    								<form action="leaveGroup" method="post">
+    									<input type="hidden" name="_token" value="{{csrf_token()}}">
+    									<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
+    									<input type="hidden" name="userID" value="{{Session::get('ID')}}">
+    									<button type="submit" class="btn btn-primary">Leave Group</button>
+    								</form>
+    							</td>
+    						</tr>
 						@endforeach
 					</tbody>
 					<div class="collapse" id="collapseJoined{{$group['IDAFFINITYGROUPS']}}">
               		<div class="card card-body" id="darkerStyle">
               			Users in This Group:
+              			<!-- Lists all the users in a group -->
            				@if(count($group['members']) != 0)
               				@foreach($group['members'] as $member)
 								<form action="userProfile" method="get">
@@ -185,6 +203,7 @@
 			@endif
 				
           
+          	<!-- Allows people to create a new affinity group as long as they have skills on their profile -->
             @if(count($skills) != 0)
             <button type="button" class="btn btn-primary" data-toggle="modal" href="#createGroup">New Group</button>
             
@@ -199,6 +218,7 @@
         				</div>
         				<div class="modal-body" id="darkerStyle">
         					<div class="card" id="darkerStyle">
+        						<!-- Form for creating affinity group -->
         						<form action="createGroup" method="post" style="width:70%;">
         							<input type="hidden" name="_token" value="{{csrf_token()}}">
         							<input type="hidden" name="ID" value="{{Session::get('ID')}}">
@@ -233,6 +253,7 @@
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#affinityGroups">
           <div class="card-body" id="darkerStyle">
+          <!-- Displays suggested affinity groups if the user has any suggested affinity groups -->
           @if(count($suggested) != 0)
           	<h3>Suggested Groups:</h3>
           	<table class="table text-center">
@@ -247,40 +268,43 @@
           		</thead>
           		<tbody>
           			<?php $x = 0;?>
+          			<!-- Displays all suggested affinity groups -->
           			@foreach($suggested as $group)
-          			<?php $x++;?>
-          			<tr>
-          				<th scope="row">{{$x}}</th>
-          				<td>
-          					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSuggested{{$group['IDAFFINITYGROUPS']}}" aria-expanded="false" aria-controls="collapseExample">
-								{{$group['NAME']}}
-  							</button>
-          				</td>
-          				<td>{{$group['DESCRIPTION']}}</td>
-          				<td>{{$group['FOCUS']}}</td>
-          				<td>
-          					<form action="joinGroup" method="post">
-								<input type="hidden" name="_token" value="{{csrf_token()}}">
-								<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
-								<input type="hidden" name="userID" value="{{Session::get('ID')}}">
-								<button type="submit" class="btn btn-primary">Join Group</button>
-							</form>
-          				</td>
-          			</tr>
-          			<div class="collapse" id="collapseSuggested{{$group['IDAFFINITYGROUPS']}}">
-                  		<div class="card card-body" id="darkerStyle">
-                  		Users in This Group:
-                  			@if(count($group['members']) != 0)
-                 				@foreach($group['members'] as $member)
-                      				<form action="userProfile" method="get">
-                      					<input type="hidden" name="_token" value="{{csrf_token()}}">
-                      					<input type="hidden" name="ID" value="{{$member['ID']}}">
-                      					<button type="submit" class="btn btn-primary" style="width:20%;">{{$member['USERNAME']}}</button>
-                      				</form>
-                  				@endforeach
-                  			@endif
-              			</div>
-            		</div>
+              			<?php $x++;?>
+              			<tr>
+              				<th scope="row">{{$x}}</th>
+              				<td>
+              					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSuggested{{$group['IDAFFINITYGROUPS']}}" aria-expanded="false" aria-controls="collapseExample">
+    								{{$group['NAME']}}
+      							</button>
+              				</td>
+              				<td>{{$group['DESCRIPTION']}}</td>
+              				<td>{{$group['FOCUS']}}</td>
+              				<td>
+              					<!-- Form/button for joining an affinity group -->
+              					<form action="joinGroup" method="post">
+    								<input type="hidden" name="_token" value="{{csrf_token()}}">
+    								<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
+    								<input type="hidden" name="userID" value="{{Session::get('ID')}}">
+    								<button type="submit" class="btn btn-primary">Join Group</button>
+    							</form>
+              				</td>
+              			</tr>
+              			<div class="collapse" id="collapseSuggested{{$group['IDAFFINITYGROUPS']}}">
+                      		<div class="card card-body" id="darkerStyle">
+                      		Users in This Group:
+                      			@if(count($group['members']) != 0)
+                      				<!-- Displays all members in a group along with links to their profiles -->
+                     				@foreach($group['members'] as $member)
+                          				<form action="userProfile" method="get">
+                          					<input type="hidden" name="_token" value="{{csrf_token()}}">
+                          					<input type="hidden" name="ID" value="{{$member['ID']}}">
+                          					<button type="submit" class="btn btn-primary" style="width:20%;">{{$member['USERNAME']}}</button>
+                          				</form>
+                      				@endforeach
+                      			@endif
+                  			</div>
+                		</div>
           			@endforeach
           		</tbody>
           	</table>

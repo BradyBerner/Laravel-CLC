@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 3-3-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Utility;
 
 use App\Services\Business\UserService;
@@ -45,18 +52,22 @@ class ViewData{
         return $data;
     }
     
+    //Gets all of the affinity group data for a particular user when viewing the affinity group page
     public static function getAffinityData(int $userID){
         
+        //Creates instances of all the necessary services
         $groupsService = new AffinityGroupService();
         $membersService = new AffinityMemberService();
         $skillService = new SkillService();
         
+        //Gets neccessary results from all services
         $owned = $groupsService->getAllOwned($userID);
         $joined = $membersService->getAllJoined($userID);
         $all = $groupsService->getAll($userID);
         $skills = $skillService->findByID($userID);
         $notJoined = [];
         
+        //Fills notJoined array with all groups that the user is not a part of or owns
         for($i = 0; $i < count($all); $i++){
             $valid = true;
             $id = $all[$i]['IDAFFINITYGROUPS'];
@@ -80,6 +91,7 @@ class ViewData{
             
         $suggested = [];
         
+        //Fills the suggested array with all groups that are valid suggestions from the notJoined array
         foreach($skills['skills'] as $skill){
             foreach($notJoined as $group){
                 if($group['FOCUS'] == $skill['SKILL'] && $group['USERS_IDUSERS'] != $userID){
@@ -88,6 +100,7 @@ class ViewData{
             }
         }
         
+        //Data array to be returned to the view
         $data = [
             'owned' => ViewData::addMembersToGroupData($owned),
             'joined' => ViewData::addMembersToGroupData($joined),
@@ -98,21 +111,27 @@ class ViewData{
         return $data;
     }
     
-    private static function addMembersToGroupData($group){
+    /*
+     * Method for getting all the members in a group and adding them to the existing affinity group array
+     * to be returned to the view
+     */
+    private static function addMembersToGroupData($groups){
         
+        //Creates instances of necessary business services
         $membersService = new AffinityMemberService();
         $userService = new UserService();
         
-        for($i = 0; $i < count($group); $i++){
+        //Fills all the groups with their members
+        for($i = 0; $i < count($groups); $i++){
             $members = [];
-            $users = $membersService->getAllMembers($group[$i]['IDAFFINITYGROUPS']);
+            $users = $membersService->getAllMembers($groups[$i]['IDAFFINITYGROUPS']);
             foreach($users as $user){
                 $userResults = $userService->findByID($user['USERS_IDUSERS'])['user'];
                 array_push($members, ['ID' => $userResults['IDUSERS'], 'USERNAME' => $userResults['USERNAME']]);
             }
-            $group[$i]['members'] = $members;
+            $groups[$i]['members'] = $members;
         }
         
-        return $group;
+        return $groups;
     }
 }

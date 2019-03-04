@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Brady Berner & Pengyu Yin
+ * CST-256
+ * 3-3-19
+ * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
+ */
+
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Log;
@@ -8,12 +15,19 @@ use App\Services\Utility\DatabaseException;
 
 class AffinityMemberDAO{
     
+    //Connection user for all queries
     private $conn;
     
+    /*
+     * Non-default constructor that sets the connection field
+     */
     public function __construct($connection){
         $this->conn = $connection;
     }
     
+    /*
+     * Method gets the id of all the groups a user is a member of 
+     */
     public function getAllGroups(int $id){
         
         Log::info("Entering AffinityMemberDAO.getAllGroups()");
@@ -29,6 +43,7 @@ class AffinityMemberDAO{
         
         $groups = [];
         
+        //Adds all results to the groups array
         while($group = $statement->fetch(PDO::FETCH_ASSOC)){
             array_push($groups, $group);
         }
@@ -38,6 +53,9 @@ class AffinityMemberDAO{
         return $groups;
     }
     
+    /*
+     * Method gets the id of all the members of a particular group
+     */
     public function getAllMembers(int $id){
         
         Log::info("Entering AffinityMemberDAO.getAllMembers()");
@@ -53,6 +71,7 @@ class AffinityMemberDAO{
         
         $members = [];
         
+        //Adds all of the results from the query to the members array ot be returned to the service
         while($member = $statement->fetch(PDO::FETCH_ASSOC)){
             array_push($members, $member);
         }
@@ -62,6 +81,9 @@ class AffinityMemberDAO{
         return $members;
     }
     
+    /*
+     * Creates a new entry meaning that a user has joined an affinity group
+     */
     public function create(int $groupID, int $userID){
         
         Log::info("Entering AffinityMemberDAO.create()");
@@ -81,6 +103,9 @@ class AffinityMemberDAO{
         return $statement->rowCount();
     }
     
+    /*
+     * Removes an entry from the table meaning that a particular user has left a particular affinity group
+     */
     public function delete(int $groupID, int $userID){
         
         Log::info("Entering AffinityMemberDAO.delete()");
