@@ -10,9 +10,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\UserModel;
 use App\Services\Business\SecurityService;
+use App\Services\Utility\MyLogger;
 
 class RegistrationController extends Controller
 {
@@ -43,7 +43,7 @@ class RegistrationController extends Controller
 
             return view('registrationResult')->with($data);
         } catch (\Exception $e) {
-            Log::error("Exception occurred in RegistrationController.index(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in RegistrationController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

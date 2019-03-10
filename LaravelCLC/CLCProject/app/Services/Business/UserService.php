@@ -9,8 +9,8 @@
 
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\UserDAO;
 use App\Models\UserModel;
 
@@ -19,7 +19,7 @@ class UserService{
     //Takes in an ID and gets the user associated with this ID
     public function findByID(int $id){
         
-        Log::info("Entering UserService.getAllUsers()");
+        MyLogger::getLogger()->info("Entering UserService.getAllUsers()");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -33,7 +33,7 @@ class UserService{
         //Closes connection to the database
         $connection = null;
         
-        Log::info("Exiting UserService.findByID()");
+        MyLogger::getLogger()->info("Exiting UserService.findByID()");
         
         //Returns the result obtained from the data access object
         return $results;
@@ -42,7 +42,7 @@ class UserService{
     //Gets all of the users contained within the user table of the database
     public function getAllUsers(){
         
-        Log::info("Entering UserService.getAllUsers()");
+        MyLogger::getLogger()->info("Entering UserService.getAllUsers()");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -56,7 +56,7 @@ class UserService{
         //Closes the connection to the databse
         $connection = null;
         
-        Log::info("Exiting UserService.getAllUsers()");
+        MyLogger::getLogger()->info("Exiting UserService.getAllUsers()");
         
         //Returns the results obtained from the data access object
         return $results;
@@ -65,7 +65,7 @@ class UserService{
     //Takes a usermodel as an argument and sends it to the associated data access object function to edit the user passed
     public function editUser(UserModel $user){
         
-        Log::info("Entering UserService.editUser");
+        MyLogger::getLogger()->info("Entering UserService.editUser");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -79,7 +79,7 @@ class UserService{
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting UserService.editUser()");
+        MyLogger::getLogger()->info("Exiting UserService.editUser()");
         
         //Returns the results obtained from the data access object
         return $results;
@@ -88,7 +88,7 @@ class UserService{
     //Takes an ID as an argument and attempts to remove the user associated with the ID from the database
     public function removeUser($id){
         
-        Log::info("Entering UserService.removeUser()");
+        MyLogger::getLogger()->info("Entering UserService.removeUser()");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -102,7 +102,7 @@ class UserService{
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting UserService.removeUser()");
+        MyLogger::getLogger()->info("Exiting UserService.removeUser()");
         
         //Returns the results obtained from the data access object
         return $results;

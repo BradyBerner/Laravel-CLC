@@ -10,11 +10,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Services\Business\UserInfoService;
 use App\Services\Business\AddressService;
 use App\Models\UserInfoModel;
 use App\Models\AddressModel;
+use App\Services\Utility\MyLogger;
 use App\Services\Utility\ViewData;
 
 class UserEditController extends Controller
@@ -22,7 +22,7 @@ class UserEditController extends Controller
     // Takes user input from the previous form and passes it along so that a user can edit their info in the database
     public function editUserInfo(Request $request)
     {
-        Log::info("Entering UserEditController.editUserInfo()");
+        MyLogger::getLogger()->info("Entering UserEditController.editUserInfo()");
 
         // Validates the user's input against pre-defined rules
         $this->validateInfoInput($request);
@@ -38,11 +38,11 @@ class UserEditController extends Controller
             // Stores the result of the database query to edit the user's info according to the info in the model passed
             $results = $service->editUserInfo($info);
 
-            Log::info("Exiting UserEditController.editUserInfo() with a result of " . $results);
+            MyLogger::getLogger()->info("Exiting UserEditController.editUserInfo() with a result of " . $results);
 
             return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
         } catch (\Exception $e) {
-            Log::error("Exception occurred in UserEditController.editUserInfo(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in UserEditController.editUserInfo(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -63,7 +63,7 @@ class UserEditController extends Controller
     // Takes user input from the previous form and passes it along so that a user can edit their address in the database
     public function editAddress(Request $request)
     {
-        Log::info("Entering UserEditController.editAddress()");
+        MyLogger::getLogger()->info("Entering UserEditController.editAddress()");
 
         // Validates the user's input against pre-defined rules
         $this->validateAddressInput($request);
@@ -79,11 +79,11 @@ class UserEditController extends Controller
             // Stores the result of the database query to edit the user's address according to the info in the model passed
             $results = $service->editAddress($address);
 
-            Log::info("Exiting UserEditController.editAddress() with a result of " . $results);
+            MyLogger::getLogger()->info("Exiting UserEditController.editAddress() with a result of " . $results);
 
             return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
         } catch (\Exception $e) {
-            Log::error("Exception occurred in UserEditController.editAddress(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in UserEditController.editAddress(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

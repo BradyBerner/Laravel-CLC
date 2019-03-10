@@ -2,7 +2,8 @@
 
 namespace App\Services\Utility;
 
-use GuzzleHttp\Handler\StreamHandler;
+use Illuminate\Support\Facades\Log;
+use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Logger;
 
@@ -12,17 +13,16 @@ class MyLogger implements ILogger{
     
     static function getLogger(){
         if(self::$logger == null){
-            self::$logger = new Logger('InClassActivity');
-            $stream = new StreamHandler('storage/logs/InClassActivity.log', Logger::DEBUG);
-            $stream->setFormatter(new LineFormatter("%datetime% : %level_name% : %message% %context%\n", "g: iA n/j/Y"));
-            
+            self::$logger = new Logger('CLC');
+            $stream = new StreamHandler('storage/logs/CLC.log', Logger::DEBUG);
+            $stream->setFormatter(new LineFormatter("%datetime% : %level_name% : %message% %context%\n", "g:iA n/j/Y"));
             self::$logger->pushHandler($stream);
         }
         return self::$logger;
     }
     
     public function debug($message, $data=[]){
-        self::getLogger()->debug($message, $data);
+        Log::debug($message . (count($data != 0 ? ' with data of ' . print_r($data, TRUE) : "")));
     }
     
     public function warning($message, $data=[]){
@@ -34,6 +34,6 @@ class MyLogger implements ILogger{
     }
     
     public function info($message, $data=[]){
-        self::getLogger()->info($message, $data);
+        self::getLogger()->info($message . (count($data != 0 ? ' with data of ' . print_r($data, TRUE) : "")));
     }
 }

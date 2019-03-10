@@ -9,8 +9,8 @@
 
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\EducationDAO;
 use App\Models\EducationModel;
 
@@ -18,7 +18,7 @@ class EducationService{
     
     public function findByID(int $id){
         
-        Log::info("Entering EducationService.findByID()");
+        MyLogger::getLogger()->info("Entering EducationService.findByID()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -32,14 +32,14 @@ class EducationService{
         //Destroys the connection to the database 
         $connection = null;
         
-        Log::info("Exiting EducationService.findByID()");
+        MyLogger::getLogger()->info("Exiting EducationService.findByID()");
         
         return $results;
     }
     
     public function getAll(){
         
-        Log::info("Entering EducationService.getAll()");
+        MyLogger::getLogger()->info("Entering EducationService.getAll()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -53,14 +53,14 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting EducationService.getAll()");
+        MyLogger::getLogger()->info("Exiting EducationService.getAll()");
         
         return $results;
     }
     
     public function create(EducationModel $education){
         
-        Log::info("Entering EducationService.create()");
+        MyLogger::getLogger()->info("Entering EducationService.create()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -74,14 +74,14 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting EducationService.create()");
+        MyLogger::getLogger()->info("Exiting EducationService.create()");
         
         return $results;
     }
     
     public function update(EducationModel $education){
         
-        Log::info("Entering EducationService.update()");
+        MyLogger::getLogger()->info("Entering EducationService.update()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -95,14 +95,14 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting EducationService.update()");
+        MyLogger::getLogger()->info("Exiting EducationService.update()");
         
         return $results;
     }
     
     public function remove(int $id){
         
-        Log::info("Entering EducationService.remove()");
+        MyLogger::getLogger()->info("Entering EducationService.remove()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -116,7 +116,7 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting EducationService.remove()");
+        MyLogger::getLogger()->info("Exiting EducationService.remove()");
         
         return $results;
     }

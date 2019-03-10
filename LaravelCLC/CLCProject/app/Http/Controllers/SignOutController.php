@@ -9,7 +9,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
+use App\Services\Utility\MyLogger;
 use Illuminate\Support\Facades\Session;
 
 class SignOutController extends Controller
@@ -19,11 +19,11 @@ class SignOutController extends Controller
     public function index()
     {
         try {
-            Log::info("Entering SignOutController.index()");
+            MyLogger::getLogger()->iinfo("Entering SignOutController.index()");
             // Flushing session variables will effectively log the user out of the website
             Session::flush();
 
-            Log::info("Exiting SignOutController.index()");
+            MyLogger::getLogger()->iinfo("Exiting SignOutController.index()");
 
             return view('home');
         } catch (\Exception $e){

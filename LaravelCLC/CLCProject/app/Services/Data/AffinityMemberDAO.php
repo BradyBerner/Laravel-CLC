@@ -9,9 +9,9 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Facades\Log;
 use PDO;
 use App\Services\Utility\DatabaseException;
+use App\Services\Utility\MyLogger;
 
 class AffinityMemberDAO{
     
@@ -30,14 +30,14 @@ class AffinityMemberDAO{
      */
     public function getAllGroups(int $id){
         
-        Log::info("Entering AffinityMemberDAO.getAllGroups()");
+        MyLogger::getLogger()->info("Entering AffinityMemberDAO.getAllGroups()");
         
         try{
             $statement = $this->conn->prepare("SELECT AFFINITYGROUPS_IDAFFINITYGROUPS FROM AFFINITYGROUPMEMBER WHERE USERS_IDUSERS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -48,7 +48,7 @@ class AffinityMemberDAO{
             array_push($groups, $group);
         }
         
-        Log::info("Exiting AffinityMemberDAO.getAllGroups()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberDAO.getAllGroups()");
         
         return $groups;
     }
@@ -58,14 +58,14 @@ class AffinityMemberDAO{
      */
     public function getAllMembers(int $id){
         
-        Log::info("Entering AffinityMemberDAO.getAllMembers()");
+        MyLogger::getLogger()->info("Entering AffinityMemberDAO.getAllMembers()");
         
         try{
             $statement = $this->conn->prepare("SELECT USERS_IDUSERS FROM AFFINITYGROUPMEMBER WHERE AFFINITYGROUPS_IDAFFINITYGROUPS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -76,7 +76,7 @@ class AffinityMemberDAO{
             array_push($members, $member);
         }
         
-        Log::info("Exiting AffinityMemberDAO.getAllMembers()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberDAO.getAllMembers()");
         
         return $members;
     }
@@ -86,7 +86,7 @@ class AffinityMemberDAO{
      */
     public function create(int $groupID, int $userID){
         
-        Log::info("Entering AffinityMemberDAO.create()");
+        MyLogger::getLogger()->info("Entering AffinityMemberDAO.create()");
         
         try{
             $statement = $this->conn->prepare("INSERT INTO AFFINITYGROUPMEMBER (AFFINITYGROUPS_IDAFFINITYGROUPS, USERS_IDUSERS) VALUES (:groupID, :userID)");
@@ -94,11 +94,11 @@ class AffinityMemberDAO{
             $statement->bindParam(':userID', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exiting AffinityMemberDAO.create()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberDAO.create()");
         
         return $statement->rowCount();
     }
@@ -108,7 +108,7 @@ class AffinityMemberDAO{
      */
     public function delete(int $groupID, int $userID){
         
-        Log::info("Entering AffinityMemberDAO.delete()");
+        MyLogger::getLogger()->info("Entering AffinityMemberDAO.delete()");
         
         try{
             $statement = $this->conn->prepare("DELETE FROM AFFINITYGROUPMEMBER WHERE USERS_IDUSERS = :userID AND AFFINITYGROUPS_IDAFFINITYGROUPS = :groupID");
@@ -116,11 +116,11 @@ class AffinityMemberDAO{
             $statement->bindParam(':groupID', $groupID);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exiting AffinityMemberDAO.delete()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberDAO.delete()");
         
         return $statement->rowCount();
     }

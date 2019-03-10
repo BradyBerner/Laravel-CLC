@@ -9,8 +9,8 @@
 
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\ExperienceDAO;
 use App\Models\ExperienceModel;
 
@@ -18,7 +18,7 @@ class ExperienceService{
     
     public function findByID(int $id){
         
-        Log::info("Entering ExperienceService.findByID()");
+        MyLogger::getLogger()->info("Entering ExperienceService.findByID()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -32,14 +32,14 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting ExperienceService.findByID()");
+        MyLogger::getLogger()->info("Exiting ExperienceService.findByID()");
         
         return $results;
     }
     
     public function getAll(){
         
-        Log::info("Entering ExperienceService.getAll()");
+        MyLogger::getLogger()->info("Entering ExperienceService.getAll()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -53,14 +53,14 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting ExperienceService.getAll()");
+        MyLogger::getLogger()->info("Exiting ExperienceService.getAll()");
         
         return $results;
     }
     
     public function create(ExperienceModel $experience){
         
-        Log::info("Entering ExperienceService.create()");
+        MyLogger::getLogger()->info("Entering ExperienceService.create()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -74,14 +74,14 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting ExperienceService.create()");
+        MyLogger::getLogger()->info("Exiting ExperienceService.create()");
         
         return $results;
     }
     
     public function update(ExperienceModel $experience){
         
-        Log::info("Entering ExperienceService.update()");
+        MyLogger::getLogger()->info("Entering ExperienceService.update()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -95,14 +95,14 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting ExperienceService.update()");
+        MyLogger::getLogger()->info("Exiting ExperienceService.update()");
         
         return $results;
     }
     
     public function remove(int $id){
         
-        Log::info("Entering ExperienceService.remove()");
+        MyLogger::getLogger()->info("Entering ExperienceService.remove()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -116,7 +116,7 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting ExperienceService.remove()");
+        MyLogger::getLogger()->info("Exiting ExperienceService.remove()");
         
         return $results;
     }

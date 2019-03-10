@@ -413,7 +413,7 @@ input {
 									</div>
 									<div class="modal-footer" id="darkStyle">
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        								<button form="addExperienceForm" type="submit" class="btn btn-primary">Create Education Card</button>
+        								<button form="addExperienceForm" type="submit" class="btn btn-primary">Create Experience Card</button>
 									</div>
 								</div>
 							</div>

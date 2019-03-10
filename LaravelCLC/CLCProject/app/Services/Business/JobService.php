@@ -11,7 +11,7 @@ namespace App\Services\Business;
 
 use App\Models\JobModel;
 use App\Services\Utility\Connection;
-use Illuminate\Support\Facades\Log;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\JobDAO;
 
 class JobService
@@ -21,7 +21,7 @@ class JobService
     // the result it gets
     public function newJob(JobModel $job)
     {
-        Log::info("Entering JobService.newJob()");
+        MyLogger::getLogger()->info("Entering JobService.newJob()");
 
         //Creates connection with the database
         $connection = new Connection();
@@ -35,14 +35,14 @@ class JobService
         //Closes the connection to the database
         $connection = null;
 
-        Log::info("Exiting JobService.newJob() with result: " . $result['result']);
+        MyLogger::getLogger()->info("Exiting JobService.newJob() with result: " . $result['result']);
 
         return $result;
     }
     
     public function getAllJobs(){
         
-        Log::info("Entering JobService.getAllUsers()");
+        MyLogger::getLogger()->info("Entering JobService.getAllUsers()");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -56,7 +56,7 @@ class JobService
         //Closes the connection to the databse
         $connection = null;
         
-        Log::info("Exiting JobService.getAllUsers()");
+        MyLogger::getLogger()->info("Exiting JobService.getAllUsers()");
         
         //Returns the results obtained from the data access object
         return $results;
@@ -64,7 +64,7 @@ class JobService
     
     public function editJob(JobModel $job){
         
-        Log::info("Entering JobService.editJob");
+        MyLogger::getLogger()->info("Entering JobService.editJob");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -78,7 +78,7 @@ class JobService
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting JobService.editJob()");
+        MyLogger::getLogger()->info("Exiting JobService.editJob()");
         
         //Returns the results obtained from the data access object
         return $results;
@@ -86,7 +86,7 @@ class JobService
     
     public function removeJob($id){
         
-        Log::info("Entering JobService.removeJob()");
+        MyLogger::getLogger()->info("Entering JobService.removeJob()");
         
         //Creates connection with the database
         $connection = new Connection();
@@ -100,7 +100,7 @@ class JobService
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting UserService.removeUser()");
+        MyLogger::getLogger()->info("Exiting UserService.removeUser()");
         
         //Returns the results obtained from the data access object
         return $results;

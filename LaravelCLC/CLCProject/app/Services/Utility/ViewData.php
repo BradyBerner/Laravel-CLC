@@ -22,6 +22,8 @@ class ViewData{
     
     public static function getProfileData(int $userID){
         
+        MyLogger::getLogger()->info("Entering ViewData.getProfileData()", ['UserID' => $userID]);
+        
         // Gets the user's info from the user table, address table, and the info table
         $userService = new UserService();
         $addressService = new AddressService();
@@ -49,11 +51,15 @@ class ViewData{
             'skills' => $skillResults['skills']
         ];
         
+        MyLogger::getLogger()->info("Exiting ViewData.getProfileData()", ['data' => $data]);
+        
         return $data;
     }
     
     //Gets all of the affinity group data for a particular user when viewing the affinity group page
     public static function getAffinityData(int $userID){
+        
+        MyLogger::getLogger()->info("Entering ViewData.getAffinityData()", ['UserID' => $userID]);
         
         //Creates instances of all the necessary services
         $groupsService = new AffinityGroupService();
@@ -108,6 +114,8 @@ class ViewData{
             'skills' => $skills['skills']
         ];
         
+        MyLogger::getLogger()->info("Exiting ViewData.getAffinityData()", ['data' => $data]);
+        
         return $data;
     }
     
@@ -116,6 +124,8 @@ class ViewData{
      * to be returned to the view
      */
     private static function addMembersToGroupData($groups){
+        
+        MyLogger::getLogger()->info("Entering ViewData.addMembersToGroupData()");
         
         //Creates instances of necessary business services
         $membersService = new AffinityMemberService();
@@ -131,6 +141,8 @@ class ViewData{
             }
             $groups[$i]['members'] = $members;
         }
+        
+        MyLogger::getLogger()->info("Exiting ViewData.addMembersToGroupData()");
         
         return $groups;
     }

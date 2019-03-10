@@ -11,8 +11,8 @@ namespace App\Services\Data;
 
 use App\Models\UserModel;
 use App\Services\Utility\DatabaseException;
-use Illuminate\Support\Facades\Log;
 use PDO;
+use App\Services\Utility\MyLogger;
 
 class UserDAO{
     
@@ -26,13 +26,13 @@ class UserDAO{
     
     //Returns an array of all the users in the database in the form of associative arrays
     public function getAll(){
-        Log::info("Entering UserDAO.getAll()");
+        MyLogger::getLogger()->info("Entering UserDAO.getAll()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM USERS WHERE ROLE != 1");
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ["message" => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -45,7 +45,7 @@ class UserDAO{
             array_push($users, $user);
         }
         
-        Log::info("Exit UserDAO.getAll()");
+        MyLogger::getLogger()->info("Exit UserDAO.getAll()");
         
         //Returns the completed users array containing all of the user associative arrays
         return $users;
@@ -53,18 +53,18 @@ class UserDAO{
     
     //Takes in a userID and returns an associative array containing that user's infromation from the database
     public function findByID(int $id){
-        Log::info("Entering UserDAO.findByID()");
+        MyLogger::getLogger()->info("Entering UserDAO.findByID()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM USERS WHERE IDUSERS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exiting UserDAo.findByID()");
+        MyLogger::getLogger()->info("Exiting UserDAo.findByID()");
         //Returns whether or not the query found anything and the user in the event that it did
         return ['result' => $statement->rowCount(), 'user' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
@@ -72,31 +72,32 @@ class UserDAO{
     /*Takes a Login model as an argument and checks the database for an entry with both the appropriate username and password
     this method is to be used for the purpose of authenticating a user during login or for any other security check*/
     public function findByLogin(UserModel $user){
-        Log::info("Entering UserDAO.authenticate()");
+        MyLogger::getLogger()->info("Entering UserDAO.findByLogin()");
+        MyLogger::getLogger()->info("Entering UserDAO.findByLogin()");
         
         try{
             //Gets username and password from the login model
             $username = $user->getUsername();
             $password = $user->getPassword();
             
-            $statement = $this->conn->prepare("SELECT * FROM USERS WHERE USERNAME = :username AND PASSWORD = :password");
+            $statement = $this->conn->prepare("SELECT * FROM USERS WHERE BINARY USERNAME = :username AND PASSWORD = :password");
             //Binds the username and password to the respective query tokens
             $statement->bindParam(':username', $username);
             $statement->bindParam(':password', $password);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            MyLogger::getLogger()->error("Exception: ", array("message" => $e->getMessage()));
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exit UserDAO.authenticate()");
+        MyLogger::getLogger()->info("Exit UserDAO.authenticate()");
         //Returns the result of the query and an associative array representing the user
         return ['result' => $statement->rowCount(), 'user' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
     //Takes in a usermodel and uses it to create a new user in the database
     public function create(UserModel $user){
-        Log::info("Entering UserDAO.register()");
+        MyLogger::getLogger()->info("Entering UserDAO.register()");
         
         try{
             //Gets all of the information from the usermodel passed as an argument
@@ -116,18 +117,18 @@ class UserDAO{
             $statement->bindParam(':lastname', $lastname);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", array("message" => $e->getMessage()));
+            MyLogger::getLogger()->error("Exception: ", array("message" => $e->getMessage()));
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exit UserDAO.register()");
+        MyLogger::getLogger()->info("Exit UserDAO.register()");
         //Returns the result of the database query as well as the ID of the created user
         return ['result' => $statement->rowCount(), 'insertID' => $this->conn->lastInsertID()];
     }
     
     //Takes a usermodel as an argument and updates the user's database entry with the information passed
     public function update(UserModel $user){
-        Log::info("Entering UserDAO.update()");
+        MyLogger::getLogger()->info("Entering UserDAO.update()");
         
         try{
             //Gets all of the information from the usermodel
@@ -152,18 +153,18 @@ class UserDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ["message" => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exit UserDAO.update()");
+        MyLogger::getLogger()->info("Exit UserDAO.update()");
         //Returns the result of the query
         return $statement->rowCount();
     }
     
     //Takes in an ID as an argument and attempts to delete the user
     public function remove($id){
-        Log::info("Entering UserDAO.remove()");
+        MyLogger::getLogger()->info("Entering UserDAO.remove()");
         
         try{            
             $statement = $this->conn->prepare("DELETE FROM `USERS` WHERE `IDUSERS` = :id");
@@ -171,11 +172,11 @@ class UserDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ["message" => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exit UserDAO.remove()");
+        MyLogger::getLogger()->info("Exit UserDAO.remove()");
         //Returns the result of the query
         return $statement->rowCount();
     }

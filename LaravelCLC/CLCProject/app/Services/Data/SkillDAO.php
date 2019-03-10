@@ -10,9 +10,9 @@
 namespace App\Services\Data;
 
 use App\Models\SkillModel;
-use Illuminate\Support\Facades\Log;
 use PDO;
 use App\Services\Utility\DatabaseException;
+use App\Services\Utility\MyLogger;
 
 class SkillDAO{
     
@@ -27,7 +27,7 @@ class SkillDAO{
     //Gets all of the skills connected to a certain user
     public function findByID(int $id){
         
-        Log::info("Entering SkillDAO.findByID()");
+        MyLogger::getLogger()->info("Entering SkillDAO.findByID()");
         
         try{
             $statement = $this->connection->prepare("SELECT * FROM SKILLS WHERE USERS_IDUSERS = :userID");
@@ -42,11 +42,11 @@ class SkillDAO{
             }
             
         } catch(\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exiting SkillDAO.findByID()");
+        MyLogger::getLogger()->info("Exiting SkillDAO.findByID()");
         
         return ['result' => $statement->rowCount(), 'skills' => $results];
     }
@@ -54,7 +54,7 @@ class SkillDAO{
     //Takes a skill model as an argument and creates a new skill entry in the database
     public function create(SkillModel $skill){
         
-        Log::info("Entering SkillDAO.create()");
+        MyLogger::getLogger()->info("Entering SkillDAO.create()");
         
         try{
             //Gets the information needed from the skill object
@@ -68,11 +68,11 @@ class SkillDAO{
             $statement->bindParam(':userID', $userID);
             $statement->execute();
         } catch(\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exiting SkillDAO.create()");
+        MyLogger::getLogger()->info("Exiting SkillDAO.create()");
         
         return $statement->rowCount();
     }
@@ -80,7 +80,7 @@ class SkillDAO{
     //Takes in the ID of the skill and then removes the associated skill from the database
     public function remove($id){
         
-        Log::info("Entering SkillDAO.remove()");
+        MyLogger::getLogger()->info("Entering SkillDAO.remove()");
         
         try{
             
@@ -88,11 +88,11 @@ class SkillDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            Log::error("Exception: ", ['message' => $e->getMessage()]);
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        Log::info("Exiting SkillDAO.remove()");
+        MyLogger::getLogger()->info("Exiting SkillDAO.remove()");
         
         return $statement->rowCount();
     }

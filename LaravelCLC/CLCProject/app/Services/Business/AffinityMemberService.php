@@ -9,8 +9,8 @@
 
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\AffinityMemberDAO;
 
 class AffinityMemberService{
@@ -20,7 +20,7 @@ class AffinityMemberService{
      */
     public function getAllJoined($userID){
         
-        Log::info("Entering AffinityMemberService.getAllJoined()");
+        MyLogger::getLogger()->info("Entering AffinityMemberService.getAllJoined()");
         
         //Creates connection
         $connection = new Connection();
@@ -45,7 +45,7 @@ class AffinityMemberService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityMemberService.getAllJoined()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberService.getAllJoined()");
         
         return $groups;
     }
@@ -55,7 +55,7 @@ class AffinityMemberService{
      */
     public function getAllMembers($groupID){
         
-        Log::info("Entering AffinityMemberService.getAllMembers()");
+        MyLogger::getLogger()->info("Entering AffinityMemberService.getAllMembers()");
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -68,7 +68,7 @@ class AffinityMemberService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityMemberService.getAllMembers()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberService.getAllMembers()");
         
         return $results;
     }
@@ -78,7 +78,7 @@ class AffinityMemberService{
      */
     public function joinGroup(int $userID, int $groupID){
         
-        Log::info("Entering AffinityMemberService.joinGroup()");
+        MyLogger::getLogger()->info("Entering AffinityMemberService.joinGroup()");
         
         //Creates connection to the database
         $connection = new Connection();
@@ -91,7 +91,7 @@ class AffinityMemberService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityMemberService.joinGroup()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberService.joinGroup()");
         
         return $results;
     }
@@ -102,7 +102,7 @@ class AffinityMemberService{
      */
     public function joinOnCreation($connection, int $userID, int $groupID){
         
-        Log::info("Entering AffinityMemberService.joinOnCreation()");
+        MyLogger::getLogger()->info("Entering AffinityMemberService.joinOnCreation()");
         
         //Creates instance of dao using the connection passed to the method
         $DAO = new AffinityMemberDAO($connection);
@@ -110,7 +110,7 @@ class AffinityMemberService{
         //Gets the results of the dao method call
         $results = $DAO->create($groupID, $userID);
         
-        Log::info("Exiting AffinityMemberService.JoinOnCreation()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberService.JoinOnCreation()");
         
         return $results;
     }
@@ -120,7 +120,7 @@ class AffinityMemberService{
      */
     public function leaveGroup(int $userID, int $groupID){
         
-        Log::info("Entering AffinityMemberService.leaveGroup()");
+        MyLogger::getLogger()->info("Entering AffinityMemberService.leaveGroup()");
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -133,7 +133,7 @@ class AffinityMemberService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityMemberService.leaveGroup()");
+        MyLogger::getLogger()->info("Exiting AffinityMemberService.leaveGroup()");
         
         return $results;
     }

@@ -11,7 +11,7 @@ namespace App\Services\Business;
 
 use App\Models\UserModel;
 use App\Services\Utility\Connection;
-use Illuminate\Support\Facades\Log;
+use App\Services\Utility\MyLogger;
 use PDO;
 use App\Services\Data\UserDAO;
 use App\Services\Utility\DatabaseException;
@@ -23,7 +23,7 @@ class SecurityService
     // the result it gets
     public function register(UserModel $user)
     {
-        Log::info("Entering SecurityService.register()");
+        MyLogger::getLogger()->info("Entering SecurityService.register()");
 
         try{
         $connection = new Connection();
@@ -56,12 +56,12 @@ class SecurityService
         $connection = null;
         
         } catch (\Exception $e){
-            Log::error("Database exception: ", $e->getMessage());
+            MyLogger::getLogger()->error("Database exception: ", $e->getMessage());
             $connection->rollBack();
             throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
         }
 
-        Log::info("Exiting SecurityService.register() with result: " . $result['result']);
+        MyLogger::getLogger()->info("Exiting SecurityService.register() with result: " . $result['result']);
 
         return $result;
     }
@@ -69,7 +69,7 @@ class SecurityService
     // Function takes user as an argument and calls the database login service and returns the result
     public function login(UserModel $user)
     {
-        Log::info("Entering SecurityService.login()");
+        MyLogger::getLogger()->info("Entering SecurityService.login()");
 
         $connection = new Connection();
 
@@ -79,7 +79,7 @@ class SecurityService
 
         $result = $DAO->findByLogin($user);
 
-        Log::info("Exiting SecurityService.login() with result: " . $result['result']);
+        MyLogger::getLogger()->info("Exiting SecurityService.login() with result: " . $result['result']);
         
         return $result;
     }

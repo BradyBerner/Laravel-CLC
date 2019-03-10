@@ -10,7 +10,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Services\Utility\MyLogger;
 use App\Services\Utility\ViewData;
 
 class UserProfileController extends Controller
@@ -20,16 +20,16 @@ class UserProfileController extends Controller
     public function index(Request $request)
     {
         try {
-            Log::info("Entering UserProfileController.index()");
+            MyLogger::getLogger()->info("Entering UserProfileController.index()");
 
             // Gets the user ID from the previous form
             $userID = $request->input('ID');
 
-            Log::info("Exiting UserProfileController.index()");
+            MyLogger::getLogger()->info("Exiting UserProfileController.index()");
         
             return view('userProfile')->with(ViewData::getProfileData($userID));
         } catch (\Exception $e){
-            Log::error("Exception occurred in UserProfileController.index(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in UserProfileController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

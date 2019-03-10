@@ -9,8 +9,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Services\Business\SecurityService;
+use App\Services\Utility\MyLogger;
 use App\Models\UserModel;
 
 class LoginController extends Controller
@@ -19,7 +19,8 @@ class LoginController extends Controller
     // Function recieves user login input, then authenticates user input against database entries
     public function index(Request $request)
     {
-
+        MyLogger::getLogger()->info("Entering LoginController.index()");
+        
         // Validates the user's input against pre-defined rules
         $this->validateForm($request);
 
@@ -54,10 +55,12 @@ class LoginController extends Controller
                 'result' => $results['result'],
                 'status' => $results['user']['STATUS']
             ];
+            
+            MyLogger::getLogger()->info("Exiting LoginController.index()", ['data' => $data]);
 
             return view('loginResult')->with($data);
         } catch (\Exception $e) {
-            Log::error("Exception occurred in LoginController.index(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in LoginController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

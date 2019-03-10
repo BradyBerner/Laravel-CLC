@@ -10,8 +10,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Services\Business\JobService;
+use App\Services\Utility\MyLogger;
 use App\Models\JobModel;
 
 class JobAdminController extends Controller
@@ -21,7 +21,7 @@ class JobAdminController extends Controller
     public function index()
     {
         try {
-            Log::info("Entering JobAdminController.index()");
+            MyLogger::getLogger()->info("Entering JobAdminController.index()");
 
             // Creates new instance of the appropriate service
             $service = new JobService();
@@ -34,11 +34,11 @@ class JobAdminController extends Controller
                 'results' => $results
             ];
 
-            Log::info("Exiting JobAdminController.index()");
+            MyLogger::getLogger()->info("Exiting JobAdminController.index()");
 
             return view('jobAdmin')->with($data);
         } catch (\Exception $e) {
-            Log::error("Exception occurred in JobAdminController.index(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in JobAdminController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -47,7 +47,7 @@ class JobAdminController extends Controller
     // Method takes form input from the previous form and attempts to update the database entry for the corresponding job
     public function editJob(Request $request)
     {
-        Log::info("Entering JobAdminController.editJob()");
+        MyLogger::getLogger()->info("Entering JobAdminController.editJob()");
 
         // Validates form input against pre-defined rules
         $this->validateEdit($request);
@@ -63,13 +63,13 @@ class JobAdminController extends Controller
             // Stores the results of the appropriate query
             $results = $service->editJob($job);
 
-            Log::info("Exiting JobAdminController.editJob()");
+            MyLogger::getLogger()->info("Exiting JobAdminController.editJob()");
 
             if ($results) {
                 return view('jobAdmin')->with(['results' => $service->getAllJobs()]);
             }
         } catch (\Exception $e) {
-            Log::error("Exception occurred in JobAdminController.editJob(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in JobAdminController.editJob(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -93,7 +93,7 @@ class JobAdminController extends Controller
     public function removeJob(Request $request)
     {
         try {
-            Log::info("Entering JobAdminController.removeJob()");
+            MyLogger::getLogger()->info("Entering JobAdminController.removeJob()");
 
             // Get's the job's ID from the previous form
             $id = $request->input('id');
@@ -104,13 +104,13 @@ class JobAdminController extends Controller
             // Stores the result of the attempted removal of the job
             $results = $service->removeJob($id);
 
-            Log::info("Exiting JobAdminController.removeJob()");
+            MyLogger::getLogger()->info("Exiting JobAdminController.removeJob()");
 
             if ($results) {
                 return view('jobAdmin')->with(['results' => $service->getAllJobs()]);
             }
         } catch (\Exception $e) {
-            Log::error("Exception occurred in JobAdminController.removeJob(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in JobAdminController.removeJob(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

@@ -9,9 +9,9 @@
 
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use PDO;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\AffinityGroupDAO;
 use App\Models\AffinityGroupModel;
 use App\Services\Utility\DatabaseException;
@@ -23,7 +23,7 @@ class AffinityGroupService{
      */
     public function getByID(int $id){
         
-        Log::info("Entering AffinityGroupService.getByID()");
+        MyLogger::getLogger()->info("Entering AffinityGroupService.getByID()");
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -36,7 +36,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityGroupService.getByID()");
+        MyLogger::getLogger()->info("Exiting AffinityGroupService.getByID()");
         
         return $results;
     }
@@ -46,7 +46,7 @@ class AffinityGroupService{
      */
     public function getAllOwned($userID){
         
-        Log::info("Entering AffinityGroupService.getAllOwned()");
+        MyLogger::getLogger()->info("Entering AffinityGroupService.getAllOwned()");
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -59,7 +59,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityGroupService.getAllOwned()");
+        MyLogger::getLogger()->info("Exiting AffinityGroupService.getAllOwned()");
         
         return $results;
     }
@@ -69,7 +69,7 @@ class AffinityGroupService{
      */
     public function getAll(){
         
-        Log::info("Entering AffinityGroupService.getAll()");
+        MyLogger::getLogger()->info("Entering AffinityGroupService.getAll()");
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -82,7 +82,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityGroupService.getAll()");
+        MyLogger::getLogger()->info("Exiting AffinityGroupService.getAll()");
         
         return $results;
     }
@@ -92,7 +92,7 @@ class AffinityGroupService{
      */
     public function createGroup(AffinityGroupModel $group){
         
-        Log::info("Entering AffinityGroupService.createGroup()");
+        MyLogger::getLogger()->info("Entering AffinityGroupService.createGroup()");
         
         try{
         //Creates a connection to the database
@@ -129,12 +129,12 @@ class AffinityGroupService{
         $connection = null;
         
         } catch (\Exception $e){
-            Log::error("Database exception: ", $e->getMessage());
+            MyLogger::getLogger()->error("Database exception: ", $e->getMessage());
             $connection->rollBack();
             throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
         }
         
-        Log::info("Exiting AffinityGroupService.createGroup()");
+        MyLogger::getLogger()->info("Exiting AffinityGroupService.createGroup()");
         
         return $results['result'];
     }
@@ -144,7 +144,7 @@ class AffinityGroupService{
      */
     public function editGroup(AffinityGroupModel $group){
         
-        Log::info("Entering AffinityGroupService.editGroup()");
+        MyLogger::getLogger()->info("Entering AffinityGroupService.editGroup()");
 
         //Get a connection to the database
         $connection = new Connection();
@@ -157,7 +157,7 @@ class AffinityGroupService{
         
         $connection = null;
             
-        Log::info("Exiting AffinityGroupService.editGroup()");
+        MyLogger::getLogger()->info("Exiting AffinityGroupService.editGroup()");
             
         return $results;
     }
@@ -167,7 +167,7 @@ class AffinityGroupService{
      */
     public function deleteGroup(int $id){
         
-        Log::info("Entering AffinityGroupService.deleteGroup()");
+        MyLogger::getLogger()->info("Entering AffinityGroupService.deleteGroup()");
         
         //Get a connection to the database
         $connection = new Connection();
@@ -180,7 +180,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        Log::info("Exiting AffinityGroupService.deleteGroup()");
+        MyLogger::getLogger()->info("Exiting AffinityGroupService.deleteGroup()");
         
         return $results;
     }

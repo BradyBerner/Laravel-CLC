@@ -9,8 +9,8 @@
 
 namespace App\Services\Business;
 
-use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\UserInfoDAO;
 use App\Models\UserInfoModel;
 
@@ -19,7 +19,7 @@ class UserInfoService{
     //Attempts to find the userInfo associated with the passed user ID
     public function findByUserID(int $userID){
         
-        Log::info("Entering UserInfoService.findByUserID()");
+        MyLogger::getLogger()->info("Entering UserInfoService.findByUserID()");
         
         //Creates connection to the database
         $connection = new Connection();
@@ -33,7 +33,7 @@ class UserInfoService{
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting UserInfoService.findByUserID()");
+        MyLogger::getLogger()->info("Exiting UserInfoService.findByUserID()");
         
         //Returns the result from the data access object
         return $result;
@@ -42,7 +42,7 @@ class UserInfoService{
     //Takes a userInfoModel object as an argument and attempts to update the corresponding database entry
     public function editUserInfo(UserInfoModel $userInfo){
         
-        Log::info("Entering UserInfoService.editUserID()");
+        MyLogger::getLogger()->info("Entering UserInfoService.editUserID()");
         
         //Creates connection to the database
         $connection = new Connection();
@@ -56,7 +56,7 @@ class UserInfoService{
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting UserInfoService.editUserID()");
+        MyLogger::getLogger()->info("Exiting UserInfoService.editUserID()");
         
         //Returns the result from the data access object
         return $result;
@@ -65,7 +65,7 @@ class UserInfoService{
     //Creates a new userInfo entry in the database with a foreign key corresponding to the ID passed as an argumnet
     public function createUserInfo(int $userID, $connection){
         
-        Log::info("Entering UserInfoService.createUserInfo()");
+        MyLogger::getLogger()->info("Entering UserInfoService.createUserInfo()");
         
         //Creates an instance of the data access object
         $DAO = new UserInfoDAO($connection);
@@ -76,7 +76,7 @@ class UserInfoService{
         //Closes the connection to the database
         $connection = null;
         
-        Log::info("Exiting UserInfoService.createUserInfo()");
+        MyLogger::getLogger()->info("Exiting UserInfoService.createUserInfo()");
         
         //Returns the result from the data access object
         return $result;

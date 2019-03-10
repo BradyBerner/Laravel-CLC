@@ -10,8 +10,8 @@
 namespace App\Services\Business;
 
 use App\Models\SkillModel;
-use Illuminate\Support\Facades\Log;
 use App\Services\Utility\Connection;
+use App\Services\Utility\MyLogger;
 use App\Services\Data\SkillDAO;
 
 class SkillService{
@@ -19,7 +19,7 @@ class SkillService{
     //Takes in a user id and finds all the skills associated with the user
     public function findByID(int $userID){
         
-        Log::info("Entering SkillService.findByID()");
+        MyLogger::getLogger()->info("Entering SkillService.findByID()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -33,7 +33,7 @@ class SkillService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting SkillService.findByID()");
+        MyLogger::getLogger()->info("Exiting SkillService.findByID()");
         
         return $results;
     }
@@ -41,7 +41,7 @@ class SkillService{
     //Takes in a skill model and attempts to create an entry in the database with the information contained in the model
     public function create(SkillModel $skill){
         
-        Log::info("Entering SkillService.create()");
+        MyLogger::getLogger()->info("Entering SkillService.create()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -55,7 +55,7 @@ class SkillService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting SkillService.create()");
+        MyLogger::getLogger()->info("Exiting SkillService.create()");
         
         return $results;
     }
@@ -63,7 +63,7 @@ class SkillService{
     //Takes in a skill id and attempts to remove the associated database entry
     public function remove(int $id){
         
-        Log::info("Entering SkillService.remove()");
+        MyLogger::getLogger()->info("Entering SkillService.remove()");
         
         //Gets a connection to the database
         $connection = new Connection();
@@ -77,7 +77,7 @@ class SkillService{
         //Destroys the connection to the database
         $connection = null;
         
-        Log::info("Exiting SkillService.remove()");
+        MyLogger::getLogger()->info("Exiting SkillService.remove()");
         
         return $results;
     }

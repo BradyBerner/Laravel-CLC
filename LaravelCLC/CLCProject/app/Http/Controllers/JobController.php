@@ -10,9 +10,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\JobModel;
 use App\Services\Business\JobService;
+use App\Services\Utility\MyLogger;
 
 class JobController extends Controller
 {
@@ -21,7 +21,7 @@ class JobController extends Controller
     // to attempt to create a new database entry
     public function createJob(Request $request)
     {
-        Log::info("Entering NewJobController.index()");
+        MyLogger::getLogger()->info("Entering NewJobController.index()");
         
         // Validates the user's input against pre-defined rules
         $this->validateForm($request);
@@ -41,13 +41,13 @@ class JobController extends Controller
                 'result' => $result['result']
             ];
             
-            Log::info("Exiting NewJobController.index() with a result of " . $result['result']);
+            MyLogger::getLogger()->info("Exiting NewJobController.index() with a result of " . $result['result']);
 
             //Returns the user to the job admin page
             return redirect('/jobAdmin');
             return view('jobAdmin')->with(['results' => $jobService->getAllJobs()]);
         } catch (\Exception $e) {
-            Log::error("Exception occurred in NewJobController.index(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in NewJobController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
