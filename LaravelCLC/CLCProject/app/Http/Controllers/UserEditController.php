@@ -94,7 +94,7 @@ class UserEditController extends Controller
     {
         $rules = [
             'street' => 'Required | Between:6,45',
-            'city' => 'Required | Alpha | Between:4,45',
+            'city' => 'Required | Between:4,45',
             'state' => 'Required | Alpha | Between:4,45',
             'zip' => 'Required | Numeric | Digits:5'
         ];

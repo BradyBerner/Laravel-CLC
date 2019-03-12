@@ -103,9 +103,9 @@ class PortfolioController extends Controller
     
     private function validateEducationInput(Request $request){
         $rules = [
-            'school' => 'Required | Alpha | Between:4,50',
-            'degree' => 'Required | Alpha | Between:4,45',
-            'field' => 'Required | Alpha | Between:4,45',
+            'school' => 'Required | Between:4,50',
+            'degree' => 'Required | Between:4,45',
+            'field' => 'Required | Between:4,45',
             'gpa' => 'Required | Numeric | Digits_between:2,3',
             'startyear' => 'Required | Numeric | Digits:4',
             'endyear' => 'Required | Numeric | Digits:4'
@@ -196,12 +196,12 @@ class PortfolioController extends Controller
     
     private function validateExperienceInput(Request $request){
         $rules = [
-            'title' => 'Required | Alpha | Between:4,45',
-            'company' => 'Required | Alpha | Between:4,45',
+            'title' => 'Required | Between:4,45',
+            'company' => 'Required | Between:4,45',
             'current' => 'Required | Numeric | Digits:1',
             'startyear' => 'Required | Numeric | Digits:4',
             'endyear' => $request->input('endyear') != null ? 'Numeric | Digits:4' : '',
-            'description' => $request->input('description') != null ? 'Alpha_dash | Between:1,65535' : ''
+            'description' => $request->input('description') != null ? 'Between:1,65535' : ''
         ];
         
         $this->validate($request, $rules);
@@ -237,10 +237,10 @@ class PortfolioController extends Controller
     
     private function validateSkillInput(Request $request){
         $rules = [
-            'skill' => ['Required | Alpha_dash | Between:2,45', Rule::unique('SKILLS', 'SKILL')->where(function ($query){
+            'skill' => ['Required', 'Between:2,45', Rule::unique('SKILLS', 'SKILL')->where(function ($query){
             return $query->where('USERS_IDUSERS', Session::get('ID'));
             })],
-            'description' => 'Required | Alpha_dash | Between:4,65535'
+            'description' => 'Required | Between:4,65535'
         ];
         
         $this->validate($request, $rules);
