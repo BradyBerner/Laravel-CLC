@@ -70,6 +70,14 @@ class JobDAO{
         return ['result' => $statement->rowCount(), 'job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
+    public function findByName(string $title){
+        
+    }
+    
+    public function findByDescription(string $description){
+        
+    }
+    
     //Takes in a jobModel and uses it to create a new job in the database
     public function create(JobModel $job){
         MyLogger::getLogger()->info("Entering JobDAO.newJob()");

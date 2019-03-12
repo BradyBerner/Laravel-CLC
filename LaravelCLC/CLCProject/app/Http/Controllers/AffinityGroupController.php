@@ -106,10 +106,10 @@ class AffinityGroupController extends Controller
     
     private function validateGroupInput(Request $request){
         $rules = [
-            'name' => ['Required', Rule::unique('AFFINITYGROUPS', 'NAME')->where(function ($query){
+            'name' => ['Required', 'Alpha_dash', 'Between:3,45', Rule::unique('AFFINITYGROUPS', 'NAME')->where(function ($query){
             return $query->where('USERS_IDUSERS', Session::get('ID'));
             })],
-            'description' => 'Required',
+            'description' => 'Required | Between:1,65535 | Alpha_dash',
             'focus' => 'Required'
         ];
         
@@ -118,8 +118,8 @@ class AffinityGroupController extends Controller
     
     private function validateGroupEditInput(Request $request){
         $rules = [
-            'name' => 'Required',
-            'description' => 'Required',
+            'name' => 'Required | Alpha_dash | Between:3,45',
+            'description' => 'Required | Between:1,65535 | Alpha_dash',
             'focus' => 'Required'
         ];
         

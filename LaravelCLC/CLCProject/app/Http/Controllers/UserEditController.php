@@ -52,9 +52,9 @@ class UserEditController extends Controller
     private function validateInfoInput(Request $request)
     {
         $rules = [
-            'phone' => 'Numeric',
-            'age' => 'Numeric',
-            'gender' => 'Alpha'
+            'phone' => 'Numeric | Digits_between:10,14',
+            'age' => 'Numeric | Digits_between:1,120',
+            'gender' => 'Alpha | Between:4,6'
         ];
 
         $this->validate($request, $rules);
@@ -93,10 +93,10 @@ class UserEditController extends Controller
     private function validateAddressInput(Request $request)
     {
         $rules = [
-            'street' => 'Required',
-            'city' => 'Required | Alpha',
-            'state' => 'Required | Alpha',
-            'zip' => 'Required | Numeric'
+            'street' => 'Required | Between:6,45',
+            'city' => 'Required | Alpha | Between:4,45',
+            'state' => 'Required | Alpha | Between:4,45',
+            'zip' => 'Required | Numeric | Digits:5'
         ];
         
         $this->validate($request, $rules);

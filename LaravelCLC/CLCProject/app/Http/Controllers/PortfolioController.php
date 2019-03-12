@@ -103,12 +103,12 @@ class PortfolioController extends Controller
     
     private function validateEducationInput(Request $request){
         $rules = [
-            'school' => 'Required',
-            'degree' => 'Required',
-            'field' => 'Required',
-            'gpa' => 'Required | Numeric',
-            'startyear' => 'Required | Numeric',
-            'endyear' => 'Required | Numeric'
+            'school' => 'Required | Alpha | Between:4,50',
+            'degree' => 'Required | Alpha | Between:4,45',
+            'field' => 'Required | Alpha | Between:4,45',
+            'gpa' => 'Required | Numeric | Digits_between:2,3',
+            'startyear' => 'Required | Numeric | Digits:4',
+            'endyear' => 'Required | Numeric | Digits:4'
         ];
         
         $this->validate($request, $rules);
@@ -196,11 +196,12 @@ class PortfolioController extends Controller
     
     private function validateExperienceInput(Request $request){
         $rules = [
-            'title' => 'Required',
-            'company' => 'Required',
-            'current' => 'Required | Numeric',
-            'startyear' => 'Required | Numeric',
-            'endyear' => $request->input('endyear') != null ? 'Numeric' : ''
+            'title' => 'Required | Alpha | Between:4,45',
+            'company' => 'Required | Alpha | Between:4,45',
+            'current' => 'Required | Numeric | Digits:1',
+            'startyear' => 'Required | Numeric | Digits:4',
+            'endyear' => $request->input('endyear') != null ? 'Numeric | Digits:4' : '',
+            'description' => $request->input('description') != null ? 'Alpha_dash | Between:1,65535' : ''
         ];
         
         $this->validate($request, $rules);
@@ -236,11 +237,11 @@ class PortfolioController extends Controller
     
     private function validateSkillInput(Request $request){
         $rules = [
-            'skill' => ['Required', Rule::unique('SKILLS', 'SKILL')->where(function ($query){
+            'skill' => ['Required | Alpha_dash | Between:2,45', Rule::unique('SKILLS', 'SKILL')->where(function ($query){
             return $query->where('USERS_IDUSERS', Session::get('ID'));
             })],
-            'description' => 'Required'
-                ];
+            'description' => 'Required | Alpha_dash | Between:4,65535'
+        ];
         
         $this->validate($request, $rules);
     }
