@@ -61,7 +61,7 @@ class JobController extends Controller
             'company' => 'Required | Between:1,45',
             'state' => 'Required | Between:1,20',
             'city' => 'Required | Between:1,20',
-            'description' => 'Required | Between:1,45'
+            'description' => 'Required | Between:1,65535'
         ];
         
         $this->validate($request, $rules);
