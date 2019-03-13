@@ -1,6 +1,6 @@
 @include('layouts.admin')
 @extends('layouts.appmaster')
-@section('title','NewJob')
+@section('title','New Job')
 <!--
 Brady Berner & Pengyu Yin
 CST-256
@@ -9,7 +9,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
 @section('content')
-		<div class="alert alert-warning" role="alert" style="width:30%;">All fields are required!</div>
 		<!-- form to capture user registration input and send it to the propoer route to lead to the controller -->
 		<form action="newJobHandler" method="post">
 			<input type="hidden" name="_token" value="<?php echo csrf_token()?>"/>
@@ -43,7 +42,7 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 			</div>
 			<div class="form-group">
 				<label for="description">Description: </label>
-				<input type="text" class="form-control" id="description" style="width:20%;" name="description"/><br>
+				<textarea class="form-control" id="description" rows="5" style="width:40%;" name="description"/></textarea><br>
 				@if($errors->first('description') != null)
 					<div class="alert alert-danger" role="alert" style="width:20%;">{{$errors->first('description')}}</div>
 				@endif

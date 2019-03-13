@@ -70,12 +70,52 @@ class JobDAO{
         return ['result' => $statement->rowCount(), 'job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
-    public function findByName(string $title){
+    public function findByTitle(string $title){
         
+        MyLogger::getLogger()->info("Entering JobDAO.findByName()", [$title]);
+        
+        try{
+            $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE TITLE LIKE :search");
+            $statement->bindParam(':search', $title);
+            $statement->execute();
+        } catch (\PDOException $e){
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        $jobs = [];
+        
+        while($job = $statement->fetch(PDO::FETCH_ASSOC)){
+            array_push($jobs, $job);
+        }
+        
+        MyLogger::getLogger()->info("Exiting JobDAO.findByTitle()");
+        
+        return $jobs;
     }
     
     public function findByDescription(string $description){
         
+        MyLogger::getLogger()->info("Entering JobDAO.findByDescription()", [$description]);
+        
+        try{
+            $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE DESCRIPTION LIKE :search");
+            $statement->bindParam(':search', $description);
+            $statement->execute();
+        } catch (\PDOException $e){
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        $jobs = [];
+        
+        while($job = $statement->fetch(PDO::FETCH_ASSOC)){
+            array_push($jobs, $job);
+        }
+        
+        MyLogger::getLogger()->info("Exiting JobDAO.findByDescription()");
+        
+        return $jobs;
     }
     
     //Takes in a jobModel and uses it to create a new job in the database

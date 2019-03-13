@@ -19,11 +19,11 @@ class SignOutController extends Controller
     public function index()
     {
         try {
-            MyLogger::getLogger()->iinfo("Entering SignOutController.index()");
+            MyLogger::getLogger()->info("Entering SignOutController.index()");
             // Flushing session variables will effectively log the user out of the website
             Session::flush();
 
-            MyLogger::getLogger()->iinfo("Exiting SignOutController.index()");
+            MyLogger::getLogger()->info("Exiting SignOutController.index()");
 
             return view('home');
         } catch (\Exception $e){

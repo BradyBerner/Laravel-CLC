@@ -43,6 +43,8 @@ Route::get('/createJob', function() {
     return view('createJob');
 });
 
+Route::get('/jobSearch', 'JobSearchController@index');
+
 Route::get('/groups', 'AffinityGroupController@index');
 
 //Submits form data to job controller to create new job entry
