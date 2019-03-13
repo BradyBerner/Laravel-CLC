@@ -5,8 +5,6 @@ CST-256
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
-<!-- Checks to make sure the user is logged in -->
-@include('layouts.loggedIn') 
 @extends('layouts.appmaster') 
 @section('title','Profile') 
 

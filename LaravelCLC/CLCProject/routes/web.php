@@ -45,13 +45,13 @@ Route::get('/createJob', function() {
 
 Route::get('/jobSearch', 'JobSearchController@index');
 
-Route::get('/groups', 'AffinityGroupController@index');
+Route::get('/groups', 'AffinityGroupController@index')->middleware('loggedin');
 
 //Submits form data to job controller to create new job entry
 Route::post('/newJobHandler', 'JobController@createJob');
 
 //Gets job data from the database and sends it to the job view
-Route::get('/jobAdmin', 'JobAdminController@index');
+Route::get('/jobAdmin', 'JobAdminController@index')->middleware('admin');
 
 //Submits form data from edit form to the controller
 Route::post('/jobEditHandler', 'JobAdminController@editJob');
@@ -63,7 +63,7 @@ Route::post('/jobRemoveHandler', 'JobAdminController@removeJob');
 Route::post('/registrationHandler', 'RegistrationController@index');
 
 //Loads the user admin page after going through the admin controller and getting all user data
-Route::get('/userAdmin', 'UserAdminController@index');
+Route::get('/userAdmin', 'UserAdminController@index')->middleware('admin');
 
 //Submits form data from editing a user to the controller
 Route::post('/userEditHandler', 'UserAdminController@editUser');
@@ -72,7 +72,7 @@ Route::post('/userEditHandler', 'UserAdminController@editUser');
 Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 
 //Submits form data to a controller so that it can then return back the proper information for the user's profile
-Route::get('/userProfile', 'UserProfileController@index');
+Route::get('/userProfile', 'UserProfileController@index')->middleware('loggedin');
 
 //Submits form data from the edit user profile form to the controller to commit user edits to the database
 Route::post('/editUserInfo', 'UserEditController@editUserInfo');
