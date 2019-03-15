@@ -17,6 +17,7 @@ use App\Services\Business\ExperienceService;
 use App\Services\Business\SkillService;
 use App\Services\Business\AffinityGroupService;
 use App\Services\Business\AffinityMemberService;
+use App\Services\Business\JobApplicantService;
 
 class ViewData{
     
@@ -31,6 +32,7 @@ class ViewData{
         $educationService = new EducationService();
         $experienceService = new ExperienceService();
         $skillService = new SkillService();
+        $applicantService = new JobApplicantService();
         
         // Stores the results for the user from all of the tables accessed
         $user = $userService->findByID($userID);
@@ -39,6 +41,7 @@ class ViewData{
         $educationResults = $educationService->findByID($userID);
         $experienceResults = $experienceService->findByID($userID);
         $skillResults = $skillService->findByID($userID);
+        $jobResults = $applicantService->getAllJobs($userID);
         
         // Stores all of the needed retrieved data in an associative array to be passed to the user profile view for display
         $data = [
@@ -48,7 +51,8 @@ class ViewData{
             'address' => $addressResults['address'],
             'educations' => $educationResults['education'],
             'experiences' => $experienceResults['experience'],
-            'skills' => $skillResults['skills']
+            'skills' => $skillResults['skills'],
+            'appliedJobs' => $jobResults
         ];
         
         MyLogger::getLogger()->info("Exiting ViewData.getProfileData()", ['data' => $data]);

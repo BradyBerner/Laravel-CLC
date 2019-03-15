@@ -25,6 +25,23 @@ class JobApplicantService {
         return $results;
     }
     
+    public function getAllApplicants($jobID){
+        
+        MyLogger::getLogger()->info("Entering JobApplicantService.getAllApplicants()", [$jobID]);
+        
+        $connection = new Connection();
+        
+        $DAO = new JobApplicantDAO($connection);
+        
+        $results = $DAO->getAllApplicants($jobID);
+        
+        $connection = null;
+        
+        MyLogger::getLogger()->info("Exiting JobApplicantService.getAllApplicants()");
+        
+        return $results;
+    }
+    
     public function apply($jobID, $userID){
         
         MyLogger::getLogger()->info("Entering JobApplicantService.apply()", ['jobID' => $jobID, 'userID' => $userID]);

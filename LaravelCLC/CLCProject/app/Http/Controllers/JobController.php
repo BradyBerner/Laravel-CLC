@@ -10,9 +10,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use App\Models\JobModel;
 use App\Services\Business\JobService;
 use App\Services\Utility\MyLogger;
+use App\Services\Business\JobApplicantService;
 
 class JobController extends Controller
 {
@@ -26,8 +28,20 @@ class JobController extends Controller
             $jobService = new JobService();
             
             $result = $jobService->getJob($jobID);
+            $applied = false;
             
-            $data = ['job' => $result];
+            if(Session::has('ID')){
+                $applicantService = new JobApplicantService();
+                $applicants = $applicantService->getAllApplicants($jobID);
+                
+                foreach($applicants as $applicant){
+                    if($applicant['USERS_IDUSERS'] == Session::get('ID')){
+                        $applied = true;
+                    }
+                }
+            }
+            
+            $data = ['job' => $result, 'applied' => $applied];
             
             MyLogger::getLogger()->addInfo("Exiting JobController.index()");
             
@@ -68,7 +82,7 @@ class JobController extends Controller
             //Returns the user to the job admin page
             return view('jobAdmin')->with(['results' => $jobService->getAllJobs()]);
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in JobController.createJob(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occured in JobController.createJob(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -86,5 +100,51 @@ class JobController extends Controller
         ];
         
         $this->validate($request, $rules);
+    }
+    
+    public function apply(Request $request){
+        
+        MyLogger::getLogger()->info("Entering JobController.apply()");
+        
+        try{
+            
+            $userID = $request->input('userID');
+            $jobID = $request->input('jobID');
+            
+            $applicantService = new JobApplicantService();
+            
+            $result = $applicantService->apply($jobID, $userID);
+            
+            MyLogger::getLogger()->info("Exiting JobController.apply()", [$result]);
+            
+            return view('home');
+        } catch (\Exception $e){
+            MyLogger::getLogger()->error("Exception occured in JobController.apply(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
+    
+    public function cancelApplication(Request $request){
+        
+        MyLogger::getLogger()->info("Entering JobController.cancelApplication()");
+        
+        try{
+            
+            $userID = $request->input('userID');
+            $jobID = $request->input('jobID');
+            
+            $applicantService = new JobApplicantService();
+            
+            $result = $applicantService->cancelApplication($jobID, $userID);
+            
+            MyLogger::getLogger()->info("Exiting JobController.cancelApplication()", [$result]);
+            
+            return view('home');
+        } catch (\Exception $e){
+            MyLogger::getLogger()->error("Exception occured in JobController.cancelApplication(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
     }
 }

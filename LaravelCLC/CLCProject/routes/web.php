@@ -61,6 +61,10 @@ Route::post('/jobEditHandler', 'JobAdminController@editJob');
 //Submits the id of the job to be removed to the controller
 Route::post('/jobRemoveHandler', 'JobAdminController@removeJob');
 
+Route::post('/jobApply', 'JobController@apply');
+
+Route::post('/jobCancel', 'JobController@cancelApplication');
+
 // Submits form data from registration form to registration controller
 Route::post('/registrationHandler', 'RegistrationController@index');
 

@@ -38,6 +38,30 @@ class JobApplicantDAO{
         return $jobs;
     }
     
+    public function getAllApplicants(int $jobID){
+        
+        MyLogger::getLogger()->info("Entering JobApplicantDAO.getAllApplicants()", [$jobID]);
+        
+        try{
+            $statement = $this->conn->prepare("SELECT * FROM JOBAPPLICANTS WHERE JOBS_IDJOBS = :id");
+            $statement->bindParam(':id', $jobID);
+            $statement->execute();
+        } catch (\PDOException $e){
+            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        $users = [];
+        
+        while($user = $statement->fetch(PDO::FETCH_ASSOC)){
+            array_push($users, $user);
+        }
+        
+        MyLogger::getLogger()->info("Exiting JobApplicantDAO.getAllApplicants()");
+        
+        return $users;
+    }
+    
     public function create(int $jobID, int $userID){
         
         MyLogger::getLogger()->info("Entering JobApplicantDAO.create()");
