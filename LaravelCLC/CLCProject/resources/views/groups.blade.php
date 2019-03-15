@@ -1,4 +1,3 @@
-@include('layouts.loggedIn')
 @extends('layouts.appmaster')
 @section('title','Affinity Groups')
 
@@ -62,8 +61,10 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
               			<th scope="col">Name</th>
               			<th scope="col">Description</th>
               			<th scope="col">Focus</th>
-              			<th scope="col">Edit</th>
-              			<th scope="col">Delete</th>
+              			@if(Session::get('ID') == $ID)
+              				<th scope="col">Edit</th>
+              				<th scope="col">Delete</th>
+              			@endif
               		</tr>
               	</thead>
               	
@@ -80,50 +81,52 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
   						</td>
               			<td>{{$group['DESCRIPTION']}}</td>
               			<td>{{$group['FOCUS']}}</td>
-              			<td>
-              				<button type="button" class="btn btn-primary" data-toggle="modal" href="#editGroup{{$group['IDAFFINITYGROUPS']}}">Edit</button>
-              				
-              				<div class="modal fade" id="editGroup{{$group['IDAFFINITYGROUPS']}}" tabindex="-1" role="dialog" aria-labelledby="editGroup" aria-hidden="true">
-                        		<div class="modal-dialog modal-lg" role="document">
-                        			<div class="modal-content">
-                        				<div class="modal-header" id="darkerStyle">
-                        					<h5 class="modal-title" id="ModalLabel">Edit Group</h5>
-                        					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
-                        						<span aria-hidden="true">&times;</span>
-                        					</button>
-                        				</div>
-                        				<div class="modal-body" id="darkerStyle">
-                        					<div class="card" id="darkerStyle" align="center">
-                        						<!-- Form for editing owned affinity groups -->
-                        						<form action="editGroup" method="post" style="width:70%; text-align:center !important;">
-                        							<input type="hidden" name="_token" value="{{csrf_token()}}">
-                        							<input type="hidden" name="ID" value="{{$group['IDAFFINITYGROUPS']}}">
-                        							<label for="name" class="formLabel">Group Name: </label><br>
-                        							<input type="text" id="name" name="name" class="form-control" value="{{$group['NAME']}}">
-                        							<label for="description" class="formLabel">Description: </label>
-                        							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;">{{$group['DESCRIPTION']}}</textarea><br>
-                        							<label for="focus" class="formLabel">Focus: </label>
-                        							<select class="form-control" id="focus" name="focus" style="width:40%;" value="{{$group['FOCUS']}}">
-                        								@foreach($skills as $skill)
-                        									<option value="{{$skill['SKILL']}}">{{$skill['SKILL']}}</option>
-                        								@endforeach
-                        							</select><br>    
-                        							<button type="submit" class="btn btn-primary">Edit Group</button> 								
-                								</form>
-                        					</div>
-                        				</div>
-                        			</div>
-                        		</div>
-            				</div>
-              			</td>
-              			<td>
-              				<!-- Form for deleting owned affinity groups -->
-              				<form action="deleteGroup" method="post">
-              					<input type="hidden" name="_token" value="{{csrf_token()}}">
-              					<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
-              					<button type="submit" class="btn btn-primary">Delete Group</button>
-              				</form>
-              			</td>
+              			@if(Session::get('ID') == $ID)
+                  			<td>
+                  				<button type="button" class="btn btn-primary" data-toggle="modal" href="#editGroup{{$group['IDAFFINITYGROUPS']}}">Edit</button>
+                  				
+                  				<div class="modal fade" id="editGroup{{$group['IDAFFINITYGROUPS']}}" tabindex="-1" role="dialog" aria-labelledby="editGroup" aria-hidden="true">
+                            		<div class="modal-dialog modal-lg" role="document">
+                            			<div class="modal-content">
+                            				<div class="modal-header" id="darkerStyle">
+                            					<h5 class="modal-title" id="ModalLabel">Edit Group</h5>
+                            					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+                            						<span aria-hidden="true">&times;</span>
+                            					</button>
+                            				</div>
+                            				<div class="modal-body" id="darkerStyle">
+                            					<div class="card" id="darkerStyle" align="center">
+                            						<!-- Form for editing owned affinity groups -->
+                            						<form action="editGroup" method="post" style="width:70%; text-align:center !important;">
+                            							<input type="hidden" name="_token" value="{{csrf_token()}}">
+                            							<input type="hidden" name="ID" value="{{$group['IDAFFINITYGROUPS']}}">
+                            							<label for="name" class="formLabel">Group Name: </label><br>
+                            							<input type="text" id="name" name="name" class="form-control" value="{{$group['NAME']}}">
+                            							<label for="description" class="formLabel">Description: </label>
+                            							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;">{{$group['DESCRIPTION']}}</textarea><br>
+                            							<label for="focus" class="formLabel">Focus: </label>
+                            							<select class="form-control" id="focus" name="focus" style="width:40%;" value="{{$group['FOCUS']}}">
+                            								@foreach($skills as $skill)
+                            									<option value="{{$skill['SKILL']}}">{{$skill['SKILL']}}</option>
+                            								@endforeach
+                            							</select><br>    
+                            							<button type="submit" class="btn btn-primary">Edit Group</button> 								
+                    								</form>
+                            					</div>
+                            				</div>
+                            			</div>
+                            		</div>
+                				</div>
+                  			</td>
+                  			<td>
+                  				<!-- Form for deleting owned affinity groups -->
+                  				<form action="deleteGroup" method="post">
+                  					<input type="hidden" name="_token" value="{{csrf_token()}}">
+                  					<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
+                  					<button type="submit" class="btn btn-primary">Delete Group</button>
+                  				</form>
+                  			</td>
+              			@endif
               		</tr>
               		<div class="collapse" id="collapse{{$group['IDAFFINITYGROUPS']}}">
               			<div class="card card-body" id="darkerStyle">
@@ -204,41 +207,43 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 				
           
           	<!-- Allows people to create a new affinity group as long as they have skills on their profile -->
-            @if(count($skills) != 0)
-            <button type="button" class="btn btn-primary" data-toggle="modal" href="#createGroup">New Group</button>
-            
-            <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroup" aria-hidden="true">
-        		<div class="modal-dialog modal-lg" role="document">
-        			<div class="modal-content">
-        				<div class="modal-header" id="darkerStyle">
-        					<h5 class="modal-title" id="ModalLabel">Create an Affinity Group</h5>
-        					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
-        						<span aria-hidden="true">&times;</span>
-        					</button>
-        				</div>
-        				<div class="modal-body" id="darkerStyle">
-        					<div class="card" id="darkerStyle">
-        						<!-- Form for creating affinity group -->
-        						<form action="createGroup" method="post" style="width:70%;">
-        							<input type="hidden" name="_token" value="{{csrf_token()}}">
-        							<input type="hidden" name="ID" value="{{Session::get('ID')}}">
-        							<label for="name" class="formLabel">Group Name: </label>
-        							<input type="text" id="name" name="name" class="form-control">
-        							<label for="description" class="formLabel">Description: </label>
-        							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea>
-        							<label for="focus" class="formLabel">Focus: </label>
-        							<select class="form-control" id="focus" name="focus" style="width:40%;">
-        								@foreach($skills as $skill)
-        									<option value="{{$skill['SKILL']}}">{{$skill['SKILL']}}</option>
-        								@endforeach
-        							</select><br>    
-        							<button type="submit" class="btn btn-primary">Create Group</button> 								
-								</form>
-        					</div>
-        				</div>
-        			</div>
-        		</div>
-        	</div>
+          	@if(Session::get('ID') == $ID)
+                @if(count($skills) != 0)
+                    <button type="button" class="btn btn-primary" data-toggle="modal" href="#createGroup">New Group</button>
+                    
+                    <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroup" aria-hidden="true">
+                		<div class="modal-dialog modal-lg" role="document">
+                			<div class="modal-content">
+                				<div class="modal-header" id="darkerStyle">
+                					<h5 class="modal-title" id="ModalLabel">Create an Affinity Group</h5>
+                					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.6;">
+                						<span aria-hidden="true">&times;</span>
+                					</button>
+                				</div>
+                				<div class="modal-body" id="darkerStyle">
+                					<div class="card" id="darkerStyle">
+                						<!-- Form for creating affinity group -->
+                						<form action="createGroup" method="post" style="width:70%;">
+                							<input type="hidden" name="_token" value="{{csrf_token()}}">
+                							<input type="hidden" name="ID" value="{{Session::get('ID')}}">
+                							<label for="name" class="formLabel">Group Name: </label>
+                							<input type="text" id="name" name="name" class="form-control">
+                							<label for="description" class="formLabel">Description: </label>
+                							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea>
+                							<label for="focus" class="formLabel">Focus: </label>
+                							<select class="form-control" id="focus" name="focus" style="width:40%;">
+                								@foreach($skills as $skill)
+                									<option value="{{$skill['SKILL']}}">{{$skill['SKILL']}}</option>
+                								@endforeach
+                							</select><br>    
+                							<button type="submit" class="btn btn-primary">Create Group</button> 								
+        								</form>
+                					</div>
+                				</div>
+                			</div>
+                		</div>
+                	</div>
+            	@endif
         	@endif
           </div>
         </div>
@@ -263,7 +268,9 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
           				<th scope="col">Name</th>
           				<th scope="col">Description</th>
           				<th scope="col">Focus</th>
-          				<th scope="col">Join</th>
+          				@if(Session::get('ID') == $ID)
+          					<th scope="col">Join</th>
+          				@endif
           			</tr>
           		</thead>
           		<tbody>
@@ -280,15 +287,17 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
               				</td>
               				<td>{{$group['DESCRIPTION']}}</td>
               				<td>{{$group['FOCUS']}}</td>
-              				<td>
-              					<!-- Form/button for joining an affinity group -->
-              					<form action="joinGroup" method="post">
-    								<input type="hidden" name="_token" value="{{csrf_token()}}">
-    								<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
-    								<input type="hidden" name="userID" value="{{Session::get('ID')}}">
-    								<button type="submit" class="btn btn-primary">Join Group</button>
-    							</form>
-              				</td>
+              				@if(Session::get('ID') == $ID)
+                  				<td>
+                  					<!-- Form/button for joining an affinity group -->
+                  					<form action="joinGroup" method="post">
+        								<input type="hidden" name="_token" value="{{csrf_token()}}">
+        								<input type="hidden" name="groupID" value="{{$group['IDAFFINITYGROUPS']}}">
+        								<input type="hidden" name="userID" value="{{Session::get('ID')}}">
+        								<button type="submit" class="btn btn-primary">Join Group</button>
+        							</form>
+                  				</td>
+              				@endif
               			</tr>
               			<div class="collapse" id="collapseSuggested{{$group['IDAFFINITYGROUPS']}}">
                       		<div class="card card-body" id="darkerStyle">

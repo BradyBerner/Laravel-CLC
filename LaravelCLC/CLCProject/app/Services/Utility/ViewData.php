@@ -108,6 +108,7 @@ class ViewData{
         
         //Data array to be returned to the view
         $data = [
+            'ID' => $userID,
             'owned' => ViewData::addMembersToGroupData($owned),
             'joined' => ViewData::addMembersToGroupData($joined),
             'suggested' => ViewData::addMembersToGroupData($suggested),
