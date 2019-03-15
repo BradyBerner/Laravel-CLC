@@ -140,7 +140,7 @@ input {
 </div>
 
 <!-- Tabbed card for displaying all of a user's e-portfolio information -->
-<div class="card" style="width:73%; float: left !important; margin-left: 20px;">
+<div class="card" style="width:73%; float: left !important; margin-left: 20px; margin-bottom:20px;">
 	<div class="card-header" id="darkStyle">
 		<ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
 			<li class="nav-item" id="darkerStyle" style="border-top-left-radius: 5px; border-top-right-radius: 5px;"><a class="nav-link active"
@@ -148,13 +148,13 @@ input {
 			<li class="nav-item" id="darkerStyle" style="border-top-left-radius: 5px; border-top-right-radius: 5px;"><a class="nav-link" id="profile-tab"
 				data-toggle="tab" href="#workExperience" role="tab" aria-controls="profile" aria-selected="false">Work Experience</a></li>
 			<li class="nav-item" id="darkerStyle" style="border-top-left-radius:5px; border-top-right-radius:5px;"><a class="nav-link"
-				id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skill" aria-selected="false">Skills</a>
+				id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skill" aria-selected="false">Skills</a></li>
 		</ul>
 	</div>
 	<div class="card-body" id="darkStyle">
 		<div class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="education" role="tabpanel" aria-labelledby="home-tab">
-				<div class="card-deck" style="overflow-x: scroll; overflow-y: hidden;">
+				<div class="card-deck"">
 				@if(count($educations) > 0)
 					@foreach($educations as $education)
 						<div class="card" id="darkerStyle">
@@ -282,7 +282,7 @@ input {
 				@endif
 			</div>
 			<div class="tab-pane fade" id="workExperience" role="tabpanel" aria-labelledby="profile-tab">
-				<div class="card-deck" style="overflow-x: scroll; overflow-y: hidden;">
+				<div class="card-deck">
 					@if(count($experiences) > 0)
     					@foreach($experiences as $experience)
     						<div class="card" id="darkerStyle">
@@ -486,5 +486,37 @@ input {
 			</div>
 		</div>
 	</div>
+</div>
+<!-- Job Accordion -->
+    <div class="accordion" id="appliedJobs" style="width:93%;">
+    	<div class="card" id="darkStyle" style="margin-left:20px;">
+    		<div class="card-header" id="headingOne">
+    			<h2 class="mb-0">
+                	<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  		Jobs Applied to
+                	</button>
+              	</h2>
+            </div>
+    		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#appliedJobs">
+     	     	<div class="card-body" id="darkerStyle">
+     	     		Jobs table goes here
+            	</div>
+    		</div>
+    	</div>
+    	<div class="card" id="darkStyle" style="margin-left:20px;">
+    		<div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Suggested Jobs
+                </button>
+              </h2>
+            </div>
+    		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#appliedJobs">
+    			<div class="card-body" id="darkerStyle">
+    				Jobs table goes here
+    			</div>
+    		</div>
+    	</div>
+    </div>
 </div>
 @endsection
