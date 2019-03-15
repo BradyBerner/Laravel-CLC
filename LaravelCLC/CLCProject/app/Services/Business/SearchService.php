@@ -10,7 +10,7 @@ class SearchService{
     
     public function JobSearch(string $searchString){
         
-        MyLogger::getLogger()->info("Entering SearchService.JobSearch()");
+        MyLogger::getLogger()->info("Entering SearchService.JobSearch()", [$searchString]);
         
         $connection = new Connection();
         

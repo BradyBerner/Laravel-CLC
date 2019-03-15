@@ -488,18 +488,51 @@ input {
 	</div>
 </div>
 <!-- Job Accordion -->
+<div style="margin-left:20%;">
     <div class="accordion" id="appliedJobs" style="width:93%;">
     	<div class="card" id="darkStyle" style="margin-left:20px;">
     		<div class="card-header" id="headingOne">
     			<h2 class="mb-0">
                 	<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  		Jobs Applied to
+                  		Applied Jobs
                 	</button>
               	</h2>
             </div>
-    		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#appliedJobs">
+    		<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#appliedJobs">
      	     	<div class="card-body" id="darkerStyle">
-     	     		Jobs table goes here
+     	     		@if(count($appliedJobs) != 0)
+     	     			<table class="table text-center" align="center">
+     	     				<thead>
+     	     					<tr>
+     	     						<th scope="col">#</th>
+     	     						<th scope="col">Job Title</th>
+     	     						<th scope="col">Company</th>
+     	     						<th scope="col">View</th>
+     	     					</tr>
+     	     				</thead>
+     	     				<tbody>
+     	     					@php $i = 0 @endphp
+     	     					
+     	     					@foreach($appliedJobs as $job)
+     	     						@php $i++ @endphp
+     	     						<tr>
+     	     							<th scope="row">{{$i}}</th>
+     	     							<td>{{$job['TITLE']}}</td>
+     	     							<td>{{$job['COMPANY']}}</td>
+     	     							<td>
+     	     								<form action="viewJob" method="post">
+                            					<input type="hidden" name="_token" value="{{csrf_token()}}">
+                            					<input type="hidden" name="jobID" value="{{$job['IDJOBS']}}">
+                            					<button type="submit" class="btn btn-primary">View Job</button>
+                            				</form>
+     	     							</td>
+     	     						</tr>
+     	     					@endforeach
+     	     				</tbody>
+     	     			</table>
+     	     		@else
+     	     			<h3>You have not yet applied to any jobs</h3>
+     	     		@endif
             	</div>
     		</div>
     	</div>
@@ -513,10 +546,43 @@ input {
             </div>
     		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#appliedJobs">
     			<div class="card-body" id="darkerStyle">
-    				Jobs table goes here
+    				@if(count($suggestedJobs) != 0)
+     	     			<table class="table text-center" align="center">
+     	     				<thead>
+     	     					<tr>
+     	     						<th scope="col">#</th>
+     	     						<th scope="col">Job Title</th>
+     	     						<th scope="col">Company</th>
+     	     						<th scope="col">View</th>
+     	     					</tr>
+     	     				</thead>
+     	     				<tbody>
+     	     					@php $i = 0 @endphp
+     	     					
+     	     					@foreach($suggestedJobs as $job)
+     	     						@php $i++ @endphp
+     	     						<tr>
+     	     							<th scope="row">{{$i}}</th>
+     	     							<td>{{$job['TITLE']}}</td>
+     	     							<td>{{$job['COMPANY']}}</td>
+     	     							<td>
+     	     								<form action="viewJob" method="post">
+                            					<input type="hidden" name="_token" value="{{csrf_token()}}">
+                            					<input type="hidden" name="jobID" value="{{$job['IDJOBS']}}">
+                            					<button type="submit" class="btn btn-primary">View Job</button>
+                            				</form>
+     	     							</td>
+     	     						</tr>
+     	     					@endforeach
+     	     				</tbody>
+     	     			</table>
+     	     		@else
+     	     			<h3>There are currently no suggested jobs for you</h3>
+     	     		@endif
     			</div>
     		</div>
     	</div>
+    </div>
     </div>
 </div>
 @endsection

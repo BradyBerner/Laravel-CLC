@@ -18,6 +18,8 @@ use App\Services\Business\SkillService;
 use App\Services\Business\AffinityGroupService;
 use App\Services\Business\AffinityMemberService;
 use App\Services\Business\JobApplicantService;
+use App\Services\Business\JobService;
+use App\Services\Business\SearchService;
 
 class ViewData{
     
@@ -33,6 +35,7 @@ class ViewData{
         $experienceService = new ExperienceService();
         $skillService = new SkillService();
         $applicantService = new JobApplicantService();
+        $jobService = new JobService();
         
         // Stores the results for the user from all of the tables accessed
         $user = $userService->findByID($userID);
@@ -43,6 +46,12 @@ class ViewData{
         $skillResults = $skillService->findByID($userID);
         $jobResults = $applicantService->getAllJobs($userID);
         
+        $appliedJobs = [];
+        
+        foreach($jobResults as $job){
+            array_push($appliedJobs, $jobService->getJob($job['JOBS_IDJOBS']));
+        }
+        
         // Stores all of the needed retrieved data in an associative array to be passed to the user profile view for display
         $data = [
             'ID' => $userID,
@@ -52,7 +61,8 @@ class ViewData{
             'educations' => $educationResults['education'],
             'experiences' => $experienceResults['experience'],
             'skills' => $skillResults['skills'],
-            'appliedJobs' => $jobResults
+            'appliedJobs' => $appliedJobs,
+            'suggestedJobs' => ViewData::getSuggestedJobs($userID)
         ];
         
         MyLogger::getLogger()->info("Exiting ViewData.getProfileData()", ['data' => $data]);
@@ -150,5 +160,39 @@ class ViewData{
         MyLogger::getLogger()->info("Exiting ViewData.addMembersToGroupData()");
         
         return $groups;
+    }
+    
+    private static function getSuggestedJobs($userID){
+        
+        MyLogger::getLogger()->info("Entering ViewData.getSuggestedJobs()", [$userID]);
+        
+        $skillService = new SkillService();
+        $searchService = new SearchService();
+        $applicantService = new JobApplicantService();
+        
+        $skills = $skillService->findByID($userID)['skills'];
+        
+        $searchResults = [];
+        
+        foreach($skills as $skill){
+            $results = $searchService->JobSearch("%".$skill['SKILL']."%");
+            if(count($results) != 0){
+                foreach($results as $result){
+                    array_push($searchResults, $result);
+                }
+            }
+        }
+        
+        $appliedJobs = $applicantService->getAllJobs($userID);
+        
+        for($i = 0; $i < count($appliedJobs); $i++){
+            for($n = 0; $n < count($searchResults); $n++){
+                if($appliedJobs[$i]['JOBS_IDJOBS'] == $searchResults[$n]['IDJOBS']){
+                    unset($searchResults[$n]);
+                }
+            }
+        }
+        
+        return $searchResults;
     }
 }

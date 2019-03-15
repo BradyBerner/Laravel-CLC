@@ -5,6 +5,8 @@ CST-256
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
-<div style="position:absolute; Width:100%; bottom:0; width:100%; text-align:center;">
-	<h5 align="center">@Copyright 2019</h5>
+<div class="footer-basic" align="center" style="position:fixed; left:0; bottom:0; width:100%; text-align:center;">
+    <footer>
+        <p class="copyright">Kafka © 2019</p>
+    </footer>
 </div>
