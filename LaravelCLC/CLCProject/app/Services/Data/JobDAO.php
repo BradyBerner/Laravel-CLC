@@ -25,6 +25,23 @@ class JobDAO{
         $this->conn = $conn;
     }
     
+    public function getByID(int $id){
+        MyLogger::getLogger()->info("Entering JobDAO.getByID()");
+        
+        try{
+            $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE IDJOBS = :id");
+            $statement->bindParam(':id', $id);
+            $statement->execute();
+        } catch (\PDOException $e){
+            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+        
+        MyLogger::getLogger()->info("Exit JobDAO.getByID()");
+        
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+    
     //Returns an array of all the jobs in the database in the form of associative arrays
     public function getAll(){
         MyLogger::getLogger()->info("Entering JobDAO.getAll()");

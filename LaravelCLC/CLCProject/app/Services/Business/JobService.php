@@ -40,6 +40,23 @@ class JobService
         return $result;
     }
     
+    public function getJob($id){
+        
+        MyLogger::getLogger()->info("Entering JobService.getJob()");
+        
+        $connection = new Connection();
+        
+        $DAO = new JobDAO($connection);
+        
+        $results = $DAO->getByID($id);
+        
+        $connection = null;
+        
+        MyLogger::getLogger()->info("Exiting JobService.getJob()");
+        
+        return $results;
+    }
+    
     public function getAllJobs(){
         
         MyLogger::getLogger()->info("Entering JobService.getAllUsers()");

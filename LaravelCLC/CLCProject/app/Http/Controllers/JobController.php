@@ -16,12 +16,34 @@ use App\Services\Utility\MyLogger;
 
 class JobController extends Controller
 {
+    
+    public function index(Request $request){
+        try{
+            MyLogger::getLogger()->info("Entering JobController.index()");
+            
+            $jobID = $request->input('jobID');
+            
+            $jobService = new JobService();
+            
+            $result = $jobService->getJob($jobID);
+            
+            $data = ['job' => $result];
+            
+            MyLogger::getLogger()->addInfo("Exiting JobController.index()");
+            
+            return view('viewJob')->with($data);
+        } catch (\Exception $e){
+            MyLogger::getLogger()->error("Exception occurred in JobController.inswz(): " . $e->getMessage());
+            $data = ['error_message' => $e->getMessage()];
+            return view('error')->with($data);
+        }
+    }
 
     // Function recives user registration input, uses it to create a job object and then uses that object
     // to attempt to create a new database entry
     public function createJob(Request $request)
     {
-        MyLogger::getLogger()->info("Entering NewJobController.index()");
+        MyLogger::getLogger()->info("Entering JobController.createJob()");
         
         // Validates the user's input against pre-defined rules
         $this->validateForm($request);
@@ -41,13 +63,12 @@ class JobController extends Controller
                 'result' => $result['result']
             ];
             
-            MyLogger::getLogger()->info("Exiting NewJobController.index() with a result of " . $result['result']);
+            MyLogger::getLogger()->info("Exiting JobController.createJob() with a result of " . $result['result']);
 
             //Returns the user to the job admin page
-            return redirect('/jobAdmin');
             return view('jobAdmin')->with(['results' => $jobService->getAllJobs()]);
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in NewJobController.index(): " . $e->getMessage());
+            MyLogger::getLogger()->error("Exception occurred in JobController.createJob(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

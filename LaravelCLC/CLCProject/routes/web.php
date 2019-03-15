@@ -41,9 +41,11 @@ Route::get('/Register', function () {
 //Form for creating a new job posting
 Route::get('/createJob', function() {
     return view('createJob');
-});
+})->middleware('admin');
 
 Route::get('/jobSearch', 'JobSearchController@index');
+
+Route::post('/viewJob', 'JobController@index');
 
 Route::get('/groups', 'AffinityGroupController@index')->middleware('loggedin');
 

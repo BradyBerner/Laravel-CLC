@@ -6,7 +6,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
 
 <!-- Ensures that the one looking at the page is an administrator -->
-@include('layouts.admin')
 @extends('layouts.appmaster')
 @section('title','Job Admin')
 

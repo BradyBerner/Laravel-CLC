@@ -19,7 +19,11 @@
                 				<h3 class="text-white name">Company: {{$job['COMPANY']}}</h3>
                 				<h3 class="text-white name">Job Title: {{$job['TITLE']}}</h3>
                 				<p class="description">{{$job['DESCRIPTION']}}</p>
-                				<a href="#" class="learn-more">Learn more »</a>
+                				<form action="viewJob" method="post">
+                					<input type="hidden" name="_token" value="{{csrf_token()}}">
+                					<input type="hidden" name="jobID" value="{{$job['IDJOBS']}}">
+                					<button type="submit" class="btn btn-primary">Learn more »</button>
+                				</form>
                 			</div>
                 		</div>
                 	@endforeach
