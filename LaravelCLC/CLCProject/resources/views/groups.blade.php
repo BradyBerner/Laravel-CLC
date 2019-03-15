@@ -102,10 +102,10 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
                             							<input type="hidden" name="ID" value="{{$group['IDAFFINITYGROUPS']}}">
                             							<label for="name" class="formLabel">Group Name: </label><br>
                             							<input type="text" id="name" name="name" class="form-control" value="{{$group['NAME']}}">
-                            							<label for="description" class="formLabel">Description: </label>
+                            							<label for="description" class="formLabel">Description: </label><br>
                             							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;">{{$group['DESCRIPTION']}}</textarea><br>
-                            							<label for="focus" class="formLabel">Focus: </label>
-                            							<select class="form-control" id="focus" name="focus" style="width:40%;" value="{{$group['FOCUS']}}">
+                            							<label for="focus" class="formLabel">Focus: </label><br>
+                            							<select class="form-control" id="focus" name="focus" style="width:40%;" value="{{$group['FOCUS']}}"><br>
                             								@foreach($skills as $skill)
                             									<option value="{{$skill['SKILL']}}">{{$skill['SKILL']}}</option>
                             								@endforeach
@@ -228,10 +228,10 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
                 							<input type="hidden" name="ID" value="{{Session::get('ID')}}">
                 							<label for="name" class="formLabel">Group Name: </label>
                 							<input type="text" id="name" name="name" class="form-control">
-                							<label for="description" class="formLabel">Description: </label>
-                							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea>
-                							<label for="focus" class="formLabel">Focus: </label>
-                							<select class="form-control" id="focus" name="focus" style="width:40%;">
+                							<label for="description" class="formLabel">Description: </label><br>
+                							<textarea class="form-control" id="description" name="description" rows="5" style="width: 70%;"></textarea><br>
+                							<label for="focus" class="formLabel">Focus: </label><br>
+                							<select class="form-control" id="focus" name="focus" style="width:40%;"><br>
                 								@foreach($skills as $skill)
                 									<option value="{{$skill['SKILL']}}">{{$skill['SKILL']}}</option>
                 								@endforeach
