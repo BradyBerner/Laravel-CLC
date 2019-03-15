@@ -488,7 +488,7 @@ input {
 	</div>
 </div>
 <!-- Job Accordion -->
-<div style="margin-left:20%;">
+<div style="margin-left:20.5%;">
     <div class="accordion" id="appliedJobs" style="width:93%;">
     	<div class="card" id="darkStyle" style="margin-left:20px;">
     		<div class="card-header" id="headingOne">
