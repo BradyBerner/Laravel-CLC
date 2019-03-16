@@ -140,7 +140,7 @@ input {
 </div>
 
 <!-- Tabbed card for displaying all of a user's e-portfolio information -->
-<div class="card" style="width:73%; float: left !important; margin-left: 20px; margin-bottom:20px;">
+<div class="card" style="width:73%; float: left !important; margin-left: 20px; margin-bottom:20px; border-color:rgb(43, 43, 43);">
 	<div class="card-header" id="darkStyle">
 		<ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
 			<li class="nav-item" id="darkerStyle" style="border-top-left-radius: 5px; border-top-right-radius: 5px;"><a class="nav-link active"
