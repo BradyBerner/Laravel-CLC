@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Mar 04, 2019 at 03:40 AM
+-- Generation Time: Mar 17, 2019 at 06:22 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.2.7
 
@@ -25,7 +25,7 @@ CREATE TABLE `ADDRESS` (
   `STREET` varchar(45) DEFAULT NULL,
   `CITY` varchar(45) DEFAULT NULL,
   `STATE` varchar(45) DEFAULT NULL,
-  `ZIP` varchar(45) DEFAULT NULL,
+  `ZIP` int(5) DEFAULT NULL,
   `USERS_IDUSERS` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -34,8 +34,8 @@ CREATE TABLE `ADDRESS` (
 --
 
 INSERT INTO `ADDRESS` (`IDADDRESS`, `STREET`, `CITY`, `STATE`, `ZIP`, `USERS_IDUSERS`) VALUES
-(1, 'tester', 'Loveland', 'Colorado', '80537', 1),
-(3, 'example', 'City', 'State', '0987', 10),
+(1, 'tester', 'Loveland', 'Colorado', 80537, 1),
+(3, 'example', 'City', 'State', 987, 10),
 (4, NULL, NULL, NULL, NULL, 11);
 
 -- --------------------------------------------------------
@@ -66,7 +66,7 @@ INSERT INTO `AFFINITYGROUPMEMBER` (`AFFINITYGROUPS_IDAFFINITYGROUPS`, `USERS_IDU
 CREATE TABLE `AFFINITYGROUPS` (
   `IDAFFINITYGROUPS` int(11) NOT NULL,
   `NAME` varchar(45) NOT NULL,
-  `DESCRIPTION` mediumtext NOT NULL,
+  `DESCRIPTION` text NOT NULL,
   `FOCUS` varchar(45) NOT NULL,
   `USERS_IDUSERS` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -76,7 +76,7 @@ CREATE TABLE `AFFINITYGROUPS` (
 --
 
 INSERT INTO `AFFINITYGROUPS` (`IDAFFINITYGROUPS`, `NAME`, `DESCRIPTION`, `FOCUS`, `USERS_IDUSERS`) VALUES
-(2, 'testing', 'test', 'PHP', 1),
+(2, 'testing', 'testing', 'PHP', 1),
 (3, 'test2', 'test2', 'PHP', 10);
 
 -- --------------------------------------------------------
@@ -118,7 +118,7 @@ CREATE TABLE `EXPERIENCE` (
   `CURRENT` int(11) NOT NULL,
   `STARTYEAR` varchar(45) NOT NULL,
   `ENDYEAR` varchar(45) DEFAULT NULL,
-  `DESCRIPTION` varchar(45) DEFAULT NULL,
+  `DESCRIPTION` text,
   `USERS_IDUSERS` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -134,6 +134,25 @@ INSERT INTO `EXPERIENCE` (`IDEXPERIENCE`, `TITLE`, `COMPANY`, `CURRENT`, `STARTY
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `JOBAPPLICANTS`
+--
+
+CREATE TABLE `JOBAPPLICANTS` (
+  `JOBS_IDJOBS` int(11) NOT NULL,
+  `USERS_IDUSERS` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `JOBAPPLICANTS`
+--
+
+INSERT INTO `JOBAPPLICANTS` (`JOBS_IDJOBS`, `USERS_IDUSERS`) VALUES
+(5, 1),
+(7, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `JOBS`
 --
 
@@ -143,7 +162,7 @@ CREATE TABLE `JOBS` (
   `COMPANY` varchar(45) NOT NULL,
   `STATE` varchar(45) NOT NULL,
   `CITY` varchar(45) NOT NULL,
-  `DESCRIPTION` varchar(45) NOT NULL
+  `DESCRIPTION` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -152,7 +171,9 @@ CREATE TABLE `JOBS` (
 
 INSERT INTO `JOBS` (`IDJOBS`, `TITLE`, `COMPANY`, `STATE`, `CITY`, `DESCRIPTION`) VALUES
 (5, 'test', 'test', 'test1', 'test', 'test'),
-(6, 'tester', 'tester', 'tester', 'tester', 'tester');
+(6, 'tester', 'tester', 'tester', 'tester', 'tester'),
+(7, 'PHP Developer', 'Amazon', 'Washington', 'Seattle', 'You will be developing web applications'),
+(8, 'Java Developer', 'Oracle', 'Arizona', 'Phoenix', 'You will be writing java applications');
 
 -- --------------------------------------------------------
 
@@ -163,7 +184,7 @@ INSERT INTO `JOBS` (`IDJOBS`, `TITLE`, `COMPANY`, `STATE`, `CITY`, `DESCRIPTION`
 CREATE TABLE `SKILLS` (
   `IDSKILLS` int(11) NOT NULL,
   `SKILL` varchar(45) NOT NULL,
-  `DESCRIPTION` mediumtext NOT NULL,
+  `DESCRIPTION` text NOT NULL,
   `USERS_IDUSERS` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -175,7 +196,7 @@ INSERT INTO `SKILLS` (`IDSKILLS`, `SKILL`, `DESCRIPTION`, `USERS_IDUSERS`) VALUE
 (9, 'test', 'test', 10),
 (10, 'PHP', 'I have a good deal of experience with creating php applications', 1),
 (12, 'Java', 'Can make java stuff sometimes', 1),
-(13, 'test', 'test', 1);
+(14, 'test', 'testing_validation', 1);
 
 -- --------------------------------------------------------
 
@@ -223,7 +244,7 @@ CREATE TABLE `USER_INFO` (
 --
 
 INSERT INTO `USER_INFO` (`IDUSER_INFO`, `DESCRIPTION`, `PHONE`, `AGE`, `GENDER`, `USERS_IDUSERS`) VALUES
-(3, 'this is an admin account for test', '4441115555', 19, 'Male', 1),
+(3, 'this is an admin account for testing', '4441115555', 18, 'Male', 1),
 (5, 'this is just a test user', '123985', 12, 'Female', 10),
 (6, NULL, NULL, NULL, NULL, 11);
 
@@ -266,6 +287,14 @@ ALTER TABLE `EDUCATION`
 ALTER TABLE `EXPERIENCE`
   ADD PRIMARY KEY (`IDEXPERIENCE`),
   ADD KEY `fk_EXPERIENCE_USERS1_idx` (`USERS_IDUSERS`);
+
+--
+-- Indexes for table `JOBAPPLICANTS`
+--
+ALTER TABLE `JOBAPPLICANTS`
+  ADD PRIMARY KEY (`JOBS_IDJOBS`,`USERS_IDUSERS`),
+  ADD KEY `fk_JOBS_has_USERS_USERS1_idx` (`USERS_IDUSERS`),
+  ADD KEY `fk_JOBS_has_USERS_JOBS1_idx` (`JOBS_IDJOBS`);
 
 --
 -- Indexes for table `JOBS`
@@ -325,13 +354,13 @@ ALTER TABLE `EXPERIENCE`
 -- AUTO_INCREMENT for table `JOBS`
 --
 ALTER TABLE `JOBS`
-  MODIFY `IDJOBS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IDJOBS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `SKILLS`
 --
 ALTER TABLE `SKILLS`
-  MODIFY `IDSKILLS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `IDSKILLS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `USERS`
@@ -379,6 +408,13 @@ ALTER TABLE `EDUCATION`
 --
 ALTER TABLE `EXPERIENCE`
   ADD CONSTRAINT `fk_EXPERIENCE_USERS1` FOREIGN KEY (`USERS_IDUSERS`) REFERENCES `USERS` (`IDUSERS`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `JOBAPPLICANTS`
+--
+ALTER TABLE `JOBAPPLICANTS`
+  ADD CONSTRAINT `fk_JOBS_has_USERS_JOBS1` FOREIGN KEY (`JOBS_IDJOBS`) REFERENCES `JOBS` (`IDJOBS`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_JOBS_has_USERS_USERS1` FOREIGN KEY (`USERS_IDUSERS`) REFERENCES `USERS` (`IDUSERS`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `SKILLS`
