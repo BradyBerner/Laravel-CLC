@@ -3,7 +3,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 3-3-19
+ * 3-17-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -23,6 +23,11 @@ use App\Services\Business\SearchService;
 
 class ViewData{
     
+    /**
+     * Gets all of the data necessary to the user's profile view
+     * @param int $userID the user ID of the user profile to be viewed
+     * @return [] Associative array of all the information needed to view the user's profile
+     */
     public static function getProfileData(int $userID){
         
         MyLogger::getLogger()->info("Entering ViewData.getProfileData()", ['UserID' => $userID]);
@@ -162,6 +167,11 @@ class ViewData{
         return $groups;
     }
     
+    /**
+     * Takes in a user's ID and gets a list of jobs to suggest to the user
+     * @param int $userID the ID of the user to get suggested jobs for
+     * @return array An array of jobs that might be good for the user
+     */
     private static function getSuggestedJobs($userID){
         
         MyLogger::getLogger()->info("Entering ViewData.getSuggestedJobs()", [$userID]);
@@ -192,6 +202,8 @@ class ViewData{
                 }
             }
         }
+        
+        MyLogger::getLogger()->info("Exiting ViewData.getSuggestedJobs()");
         
         return $searchResults;
     }

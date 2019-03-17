@@ -1,11 +1,13 @@
 @extends('layouts.appmaster')
 @section('title','Login')
+
 <!--
 Brady Berner & Pengyu Yin
 CST-256
-3-3-19
+3-17-19
 This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 -->
+
 @section('content')
 		<!-- Form to capture user login input -->
 		<form action='loginHandler' id="testingLogin" method="POST">

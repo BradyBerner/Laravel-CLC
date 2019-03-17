@@ -3,7 +3,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 3-3-19
+ * 3-17-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -19,6 +19,11 @@ use App\Services\Business\JobApplicantService;
 class JobController extends Controller
 {
     
+    /**
+     * Handles the user's viewing of a job
+     * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function index(Request $request){
         try{
             MyLogger::getLogger()->info("Entering JobController.index()");
@@ -117,7 +122,12 @@ class JobController extends Controller
             
             MyLogger::getLogger()->info("Exiting JobController.apply()", [$result]);
             
-            return view('home');
+            $data = [];
+            
+            $data['message'] = $result ? "You successfully applied for the job" : "Something went wrong with your application";
+            $data['messageType'] = $result ? "success" : "danger";
+            
+            return view('home')->with($data);
         } catch (\Exception $e){
             MyLogger::getLogger()->error("Exception occured in JobController.apply(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
@@ -140,7 +150,12 @@ class JobController extends Controller
             
             MyLogger::getLogger()->info("Exiting JobController.cancelApplication()", [$result]);
             
-            return view('home');
+            $data = [];
+            
+            $data['message'] = $result ? "Your application was canceled successfully" : "Something went wrong with the cancelation process";
+            $data['messageType'] = $result ? "success" : "danger";
+            
+            return view('home')->with($data);
         } catch (\Exception $e){
             MyLogger::getLogger()->error("Exception occured in JobController.cancelApplication(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];

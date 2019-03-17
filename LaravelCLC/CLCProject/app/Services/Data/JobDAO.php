@@ -3,7 +3,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 3-3-19
+ * 3-17-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -25,6 +25,12 @@ class JobDAO{
         $this->conn = $conn;
     }
     
+    /**
+     * Gets a job based off the ID passed to the function
+     * @param int $id The ID of the job to be retrieved from the database
+     * @throws DatabaseException 
+     * @return array An associative array containing all of the values from the job retrieved
+     */
     public function getByID(int $id){
         MyLogger::getLogger()->info("Entering JobDAO.getByID()");
         
@@ -87,6 +93,12 @@ class JobDAO{
         return ['result' => $statement->rowCount(), 'job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
+    /**
+     * Gets all of the jobs with titles linked to the search string
+     * @param string $title The search string that will be used for the query
+     * @throws DatabaseException
+     * @return array An array of all the jobs that are linked to the search string
+     */
     public function findByTitle(string $title){
         
         MyLogger::getLogger()->info("Entering JobDAO.findByName()", [$title]);
@@ -111,6 +123,12 @@ class JobDAO{
         return $jobs;
     }
     
+    /**
+     * Gets all of the jobs with descriptions linked to the search string
+     * @param string $description The search string that will be used for the query
+     * @throws DatabaseException
+     * @return array An array of all the jobs that are linked to the search string
+     */
     public function findByDescription(string $description){
         
         MyLogger::getLogger()->info("Entering JobDAO.findByDescription()", [$description]);

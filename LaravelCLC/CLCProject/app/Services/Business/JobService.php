@@ -3,7 +3,7 @@
 /*
  * Brady Berner & Pengyu Yin
  * CST-256
- * 3-3-19
+ * 3-17-19
  * This assignment was completed in collaboration with Brady Berner, Pengyu Yin
  */
 
@@ -40,23 +40,36 @@ class JobService
         return $result;
     }
     
+    /**
+     * Gets a specific job based off its ID
+     * @param int $id The ID of the job to be retrieved
+     * @return array Associative array representing the job returned from the database
+     */
     public function getJob($id){
         
         MyLogger::getLogger()->info("Entering JobService.getJob()");
         
+        //Creates connection with the database
         $connection = new Connection();
         
+        //Creates an instance of the appropriate DAO
         $DAO = new JobDAO($connection);
         
+        //Stores the results of the dao method
         $results = $DAO->getByID($id);
         
+        //Closes the connection to the database
         $connection = null;
         
         MyLogger::getLogger()->info("Exiting JobService.getJob()");
         
         return $results;
     }
-    
+
+    /**
+     * Gets all of the jobs form the database
+     * @return array An array containing all the jobs in the database
+     */
     public function getAllJobs(){
         
         MyLogger::getLogger()->info("Entering JobService.getAllUsers()");
@@ -101,6 +114,11 @@ class JobService
         return $results;
     }
     
+    /**
+     * Removes a job posting from the database
+     * @param int $id The ID of the job to be removed from the database
+     * @return boolean The result of whether or not the job was removed from the database
+     */
     public function removeJob($id){
         
         MyLogger::getLogger()->info("Entering JobService.removeJob()");
