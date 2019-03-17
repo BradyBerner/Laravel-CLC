@@ -194,17 +194,23 @@ class ViewData{
         }
         
         $appliedJobs = $applicantService->getAllJobs($userID);
+        $suggestedJobs = [];
         
-        for($i = 0; $i < count($appliedJobs); $i++){
-            for($n = 0; $n < count($searchResults); $n++){
-                if($appliedJobs[$i]['JOBS_IDJOBS'] == $searchResults[$n]['IDJOBS']){
-                    unset($searchResults[$n]);
+        foreach($searchResults as $result){
+            $add = true;
+            foreach($appliedJobs as $applied){
+                if($result['IDJOBS'] == $applied['JOBS_IDJOBS']){
+                    $add = false;
                 }
+            }
+            
+            if($add){
+                array_push($suggestedJobs, $result);
             }
         }
         
         MyLogger::getLogger()->info("Exiting ViewData.getSuggestedJobs()");
         
-        return $searchResults;
+        return $suggestedJobs;
     }
 }

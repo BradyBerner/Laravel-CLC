@@ -12,7 +12,6 @@ namespace App\Services\Data;
 use App\Services\Utility\MyLogger;
 use App\Services\Utility\DatabaseException;
 use PDO;
-use Lcobucci\JWT\Token;
 
 class JobApplicantDAO{
     
