@@ -15,7 +15,7 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 @section('content')
 	@if(count($jobs) != 0)
 		@if(count($jobs) > 9)
-			<div class="alert alert-danger" style="width:40%;">There were too many results here are some of them.<br>Consider searching with more specific terms</div><br>
+			<div class="alert alert-warning" style="width:40%;">There were too many results here are some of them.<br>Consider searching with more specific terms</div><br>
 		@endif
         <div class="features-boxed">
             <div class="container">
