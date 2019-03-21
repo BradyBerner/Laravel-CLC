@@ -13,10 +13,10 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 		@if($result)
 			<!-- Checks to see that the user's account has not been suspended -->
 			@if($status)
-				<h3 class="alert alert-success" role="alert" style="width:20%;">You logged in successfully</h3>
+				<h3 class="alert alert-success" role="alert" style="width:30%;">You logged in successfully</h3>
 			@else
 				<!-- If the user's account has been suspended flushes the session and gives a message to the user -->
-				<div class="alert alert-danger" role="alert" style="width:20%;">Your account has been disabled please contact an administrator</div>
+				<div class="alert alert-danger" role="alert" style="width:40%;">Your account has been disabled please contact an administrator</div>
 			@endif
 		@else
 			<!-- Lets the user know that they entered invalid login credentials -->
