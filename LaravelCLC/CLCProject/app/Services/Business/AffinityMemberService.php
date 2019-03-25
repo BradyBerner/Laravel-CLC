@@ -37,7 +37,7 @@ class AffinityMemberService{
         //Adds all of the affinity groups that a user does not own to the groups array
         foreach($results as $result){
             $id = $result['AFFINITYGROUPS_IDAFFINITYGROUPS'];
-            $group = $service->getByID($id);
+            $group = $service->getByID($id)['group'];
             if($group['USERS_IDUSERS'] != $userID){
                 array_push($groups, $group);
             }

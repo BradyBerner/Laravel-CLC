@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlDialectInspection */
 
 /*
  * Brady Berner & Pengyu Yin
@@ -21,7 +21,7 @@ class JobDAO{
     private $conn;
     
     //Takes in a PDO connection and sets the conn field equal to it
-    public function __construct($conn){
+    public function __construct(PDO $conn){
         $this->conn = $conn;
     }
     
@@ -44,8 +44,9 @@ class JobDAO{
         }
         
         MyLogger::getLogger()->info("Exit JobDAO.getByID()");
-        
-        return $statement->fetch(PDO::FETCH_ASSOC);
+
+        //TODO:: return results in assoc array
+        return ['job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
     
     //Returns an array of all the jobs in the database in the form of associative arrays
@@ -92,12 +93,12 @@ class JobDAO{
         //Returns whether or not the query found anything and the user in the event that it did
         return ['result' => $statement->rowCount(), 'job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
-    
+
     /**
      * Gets all of the jobs with titles linked to the search string
      * @param string $title The search string that will be used for the query
-     * @throws DatabaseException
      * @return array An array of all the jobs that are linked to the search string
+     * @throws DatabaseException
      */
     public function findByTitle(string $title){
         

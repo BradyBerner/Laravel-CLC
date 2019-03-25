@@ -54,7 +54,7 @@ class ViewData{
         $appliedJobs = [];
         
         foreach($jobResults as $job){
-            array_push($appliedJobs, $jobService->getJob($job['JOBS_IDJOBS']));
+            array_push($appliedJobs, $jobService->getJob($job['JOBS_IDJOBS'])['job']);
         }
         
         // Stores all of the needed retrieved data in an associative array to be passed to the user profile view for display

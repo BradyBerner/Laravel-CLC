@@ -77,12 +77,17 @@ class AffinityGroupController extends Controller
      * Handles a user request to edit an affinity group
      */
     public function editGroup(Request $request){
-        
+
         MyLogger::getLogger()->info("Entering AffinityGroupController.editGroup()");
-        
+
         //Validates the user's input against pre-defined rules
-        $this->validateGroupEditInput($request);
-        
+        //TODO:: ask Reha about the proper way for passing back validation errors to a view when catching them
+        try {
+            $this->validateGroupEditInput($request);
+        } catch (\Exception $e){
+            return view('groups')->with(ViewData::getAffinityData($request->session()->get('ID')))->withErrors($e->getMessage());
+        }
+
         try{
             //Creates an affinity group model using the information from the request
             $group = new AffinityGroupModel($request->input('ID'), $request->input('name'), $request->input('description'), $request->input('focus'), 0);

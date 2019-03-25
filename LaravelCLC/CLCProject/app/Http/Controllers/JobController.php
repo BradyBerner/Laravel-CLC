@@ -32,7 +32,7 @@ class JobController extends Controller
             
             $jobService = new JobService();
             
-            $result = $jobService->getJob($jobID);
+            $result = $jobService->getJob($jobID)['job'];
             $applied = false;
             
             if(Session::has('ID')){

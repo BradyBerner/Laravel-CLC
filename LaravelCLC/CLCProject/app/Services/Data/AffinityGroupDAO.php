@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 /*
  * Brady Berner & Pengyu Yin
@@ -22,7 +22,7 @@ class AffinityGroupDAO{
     /*
      * Non-default constructor that sets the connection field that all methods will use to execute their queries
      */
-    public function __construct($connection){
+    public function __construct(PDO $connection){
         $this->conn = $connection;
     }
     
@@ -76,8 +76,8 @@ class AffinityGroupDAO{
         }
         
         MyLogger::getLogger()->info("Exiting AffinityGroupDAO.getByID()");
-        
-        return $statement->fetch(PDO::FETCH_ASSOC);
+
+        return ['group' =>$statement->fetch(PDO::FETCH_ASSOC)];
     }
     
     /*
