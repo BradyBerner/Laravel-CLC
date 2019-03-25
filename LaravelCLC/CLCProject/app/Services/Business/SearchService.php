@@ -9,26 +9,28 @@
 
 namespace App\Services\Business;
 
-use App\Services\Utility\MyLogger;
+use App\Services\Utility\ILoggerService;
 use App\Services\Utility\Connection;
 use App\Services\Data\JobDAO;
 
 class SearchService{
-    
+
     /**
      * Function allows for the user to search for a job
      * @param string $searchString The string that will be used to search through the database for matches
+     * @param ILoggerService $logger
      * @return array An array containing all of the jobs that matched the user's search string in some way
+     * @throws \App\Services\Utility\DatabaseException
      */
-    public function JobSearch(string $searchString){
+    public function JobSearch(string $searchString, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering SearchService.JobSearch()", [$searchString]);
+        $logger->info("Entering SearchService.JobSearch()", [$searchString]);
         
         //Creates connection to the database
         $connection = new Connection();
         
         //Creates instance of the appropriate DAO
-        $DAO = new JobDAO($connection);
+        $DAO = new JobDAO($connection, $logger);
         
         //Calls the appropriate methods for searching through job descriptions and titles
         $descriptionResults = $DAO->findByDescription($searchString);
@@ -58,7 +60,7 @@ class SearchService{
             }
         }
         
-        MyLogger::getLogger()->info("Exiting SearchService.JobSearch()");
+        $logger->info("Exiting SearchService.JobSearch()");
         
         return $allResults;
     }

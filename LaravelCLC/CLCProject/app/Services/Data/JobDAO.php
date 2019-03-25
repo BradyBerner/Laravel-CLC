@@ -12,38 +12,40 @@ namespace App\Services\Data;
 use App\Models\JobModel;
 
 use App\Services\Utility\DatabaseException;
-use App\Services\Utility\MyLogger;
+use App\Services\Utility\ILoggerService;
 use PDO;
 
 class JobDAO{
     
     //Stores the connection that functions will use to access the database
     private $conn;
+    private $logger;
     
     //Takes in a PDO connection and sets the conn field equal to it
-    public function __construct(PDO $conn){
+    public function __construct(PDO $conn, ILoggerService $logger){
         $this->conn = $conn;
+        $this->logger = $logger;
     }
-    
+
     /**
      * Gets a job based off the ID passed to the function
      * @param int $id The ID of the job to be retrieved from the database
-     * @throws DatabaseException 
      * @return array An associative array containing all of the values from the job retrieved
+     * @throws DatabaseException
      */
     public function getByID(int $id){
-        MyLogger::getLogger()->info("Entering JobDAO.getByID()");
+        $this->logger->info("Entering JobDAO.getByID()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE IDJOBS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exit JobDAO.getByID()");
+        $this->logger->info("Exit JobDAO.getByID()");
 
         //TODO:: return results in assoc array
         return ['job' => $statement->fetch(PDO::FETCH_ASSOC)];
@@ -51,13 +53,13 @@ class JobDAO{
     
     //Returns an array of all the jobs in the database in the form of associative arrays
     public function getAll(){
-        MyLogger::getLogger()->info("Entering JobDAO.getAll()");
+        $this->logger->info("Entering JobDAO.getAll()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM JOBS");
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -70,7 +72,7 @@ class JobDAO{
             array_push($jobs, $job);
         }
         
-        MyLogger::getLogger()->info("Exit JobDAO.getAll()");
+        $this->logger->info("Exit JobDAO.getAll()");
         
         //Returns the completed jobs array containing all of the job associative arrays
         return $jobs;
@@ -78,18 +80,18 @@ class JobDAO{
     
     //Takes in a userID and returns an associative array containing all the jobs associated with that user
     public function findByID(int $id){
-        MyLogger::getLogger()->info("Entering JobDAO.findByID()");
+        $this->logger->info("Entering JobDAO.findByID()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE IDJOBS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting JobDAO.findByID()");
+        $this->logger->info("Exiting JobDAO.findByID()");
         //Returns whether or not the query found anything and the user in the event that it did
         return ['result' => $statement->rowCount(), 'job' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
@@ -102,14 +104,14 @@ class JobDAO{
      */
     public function findByTitle(string $title){
         
-        MyLogger::getLogger()->info("Entering JobDAO.findByName()", [$title]);
+        $this->logger->info("Entering JobDAO.findByName()", [$title]);
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE TITLE LIKE :search");
             $statement->bindParam(':search', $title);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -119,7 +121,7 @@ class JobDAO{
             array_push($jobs, $job);
         }
         
-        MyLogger::getLogger()->info("Exiting JobDAO.findByTitle()");
+        $this->logger->info("Exiting JobDAO.findByTitle()");
         
         return $jobs;
     }
@@ -132,14 +134,14 @@ class JobDAO{
      */
     public function findByDescription(string $description){
         
-        MyLogger::getLogger()->info("Entering JobDAO.findByDescription()", [$description]);
+        $this->logger->info("Entering JobDAO.findByDescription()", [$description]);
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM JOBS WHERE DESCRIPTION LIKE :search");
             $statement->bindParam(':search', $description);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -149,14 +151,14 @@ class JobDAO{
             array_push($jobs, $job);
         }
         
-        MyLogger::getLogger()->info("Exiting JobDAO.findByDescription()");
+        $this->logger->info("Exiting JobDAO.findByDescription()");
         
         return $jobs;
     }
     
     //Takes in a jobModel and uses it to create a new job in the database
     public function create(JobModel $job){
-        MyLogger::getLogger()->info("Entering JobDAO.newJob()");
+        $this->logger->info("Entering JobDAO.newJob()");
         
         try{
             //Gets all of the information from the jobModel passed as an argument
@@ -176,18 +178,18 @@ class JobDAO{
             $statement->bindParam(':description', $description);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", array("message" => $e->getMessage()));
+            $this->logger->error("Exception: ", array("message" => $e->getMessage()));
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exit JobDAO.newJob()");
+        $this->logger->info("Exit JobDAO.newJob()");
         //Returns the result of the database query as well as the ID of the created user
         return ['result' => $statement->rowCount(), 'insertID' => $this->conn->lastInsertID()];
     }
     
     //Takes a jobModel as an argument and updates the job's database entry with the information passed
     public function update(JobModel $job){
-        MyLogger::getLogger()->info("Entering JobDAO.update()");
+        $this->logger->info("Entering JobDAO.update()");
         
         try{
             //Gets all of the information from the jobModel
@@ -210,18 +212,18 @@ class JobDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exit JobDAO.update()");
+        $this->logger->info("Exit JobDAO.update()");
         //Returns the result of the query
         return $statement->rowCount();
     }
     
     //Takes in an ID as an argument and attempts to delete the job
     public function remove($id){
-        MyLogger::getLogger()->info("Entering JobDAO.remove()");
+        $this->logger->info("Entering JobDAO.remove()");
         
         try{            
             $statement = $this->conn->prepare("DELETE FROM `JOBS` WHERE `IDJOBS` = :id");
@@ -229,11 +231,11 @@ class JobDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exit JobDAO.remove()");
+        $this->logger->info("Exit JobDAO.remove()");
         //Returns the result of the query
         return $statement->rowCount();
     }

@@ -9,9 +9,9 @@
 
 namespace App\Services\Business;
 
+use App\Services\Utility\ILoggerService;
 use PDO;
 use App\Services\Utility\Connection;
-use App\Services\Utility\MyLogger;
 use App\Services\Data\AffinityGroupDAO;
 use App\Models\AffinityGroupModel;
 use App\Services\Utility\DatabaseException;
@@ -21,22 +21,22 @@ class AffinityGroupService{
     /*
      * Gets an affinity group with a particular id
      */
-    public function getByID(int $id){
+    public function getByID(int $id, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupService.getByID()");
+        $logger->info("Entering AffinityGroupService.getByID()");
         
         //Creates a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the dao
-        $DAO = new AffinityGroupDAO($connection);
+        $DAO = new AffinityGroupDAO($connection, $logger);
         
         //Stores the results of the dao method call
         $results = $DAO->getByID($id);
         
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupService.getByID()");
+        $logger->info("Exiting AffinityGroupService.getByID()");
         
         return $results;
     }
@@ -44,22 +44,22 @@ class AffinityGroupService{
     /*
      * Gets all of the affinity groups that a particular user owns
      */
-    public function getAllOwned($userID){
+    public function getAllOwned($userID, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupService.getAllOwned()");
+        $logger->info("Entering AffinityGroupService.getAllOwned()");
         
         //Creates a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the dao
-        $DAO = new AffinityGroupDAO($connection);
+        $DAO = new AffinityGroupDAO($connection, $logger);
         
         //Stores the results of the dao method call
         $results = $DAO->getOwned($userID);
         
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupService.getAllOwned()");
+        $logger->info("Exiting AffinityGroupService.getAllOwned()");
         
         return $results;
     }
@@ -67,22 +67,22 @@ class AffinityGroupService{
     /*
      * Gets all of the affinity groups in the database
      */
-    public function getAll(){
+    public function getAll(ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupService.getAll()");
+        $logger->info("Entering AffinityGroupService.getAll()");
         
         //Creates a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the dao
-        $DAO = new AffinityGroupDAO($connection);
+        $DAO = new AffinityGroupDAO($connection, $logger);
         
         //Stores the results of the dao method call
         $results = $DAO->getAll();
         
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupService.getAll()");
+        $logger->info("Exiting AffinityGroupService.getAll()");
         
         return $results;
     }
@@ -90,9 +90,9 @@ class AffinityGroupService{
     /*
      * Creates a new group entry in the database
      */
-    public function createGroup(AffinityGroupModel $group){
+    public function createGroup(AffinityGroupModel $group, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupService.createGroup()");
+        $logger->info("Entering AffinityGroupService.createGroup()");
         
         try{
         //Creates a connection to the database
@@ -103,7 +103,7 @@ class AffinityGroupService{
         $connection->beginTransaction();
         
         //Creates an instance of the group dao
-        $DAO = new AffinityGroupDAO($connection);
+        $DAO = new AffinityGroupDAO($connection, $logger);
         
         //Gets the result of the group dao method call
         $results = $DAO->create($group);
@@ -129,12 +129,12 @@ class AffinityGroupService{
         $connection = null;
         
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Database exception: ", $e->getMessage());
+            $logger->error("Database exception: ", $e->getMessage());
             $connection->rollBack();
             throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupService.createGroup()");
+        $logger->info("Exiting AffinityGroupService.createGroup()");
         
         return $results['result'];
     }
@@ -142,22 +142,22 @@ class AffinityGroupService{
     /*
      * Method for editing an existing group in the database
      */
-    public function editGroup(AffinityGroupModel $group){
+    public function editGroup(AffinityGroupModel $group, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupService.editGroup()");
+        $logger->info("Entering AffinityGroupService.editGroup()");
 
         //Get a connection to the database
         $connection = new Connection();
            
         //Create an instance of the dao
-        $DAO = new AffinityGroupDAO($connection);
+        $DAO = new AffinityGroupDAO($connection, $logger);
             
         //Store the results of the dao method call
         $results = $DAO->edit($group);
         
         $connection = null;
             
-        MyLogger::getLogger()->info("Exiting AffinityGroupService.editGroup()");
+        $logger->info("Exiting AffinityGroupService.editGroup()");
             
         return $results;
     }
@@ -165,22 +165,22 @@ class AffinityGroupService{
     /*
      * Method for deleting an existing group in the database
      */
-    public function deleteGroup(int $id){
+    public function deleteGroup(int $id, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupService.deleteGroup()");
+        $logger->info("Entering AffinityGroupService.deleteGroup()");
         
         //Get a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the dao
-        $DAO = new AffinityGroupDAO($connection);
+        $DAO = new AffinityGroupDAO($connection, $logger);
         
         //Store the results of the dao method call
         $results = $DAO->delete($id);
         
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupService.deleteGroup()");
+        $logger->info("Exiting AffinityGroupService.deleteGroup()");
         
         return $results;
     }

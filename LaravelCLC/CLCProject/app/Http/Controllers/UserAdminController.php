@@ -9,45 +9,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use App\Services\Business\UserService;
-use App\Services\Utility\MyLogger;
 use App\Models\UserModel;
 
 class UserAdminController extends Controller
 {
 
     // Method gets the all the user data in the database and returns it to the admin page so administrators can manage users
-    public function index()
+    public function index(ILoggerService $logger)
     {
         try {
-            MyLogger::getLogger()->info("Entering UserAdminController.index()");
+            $logger->info("Entering UserAdminController.index()");
 
             // Creates new instance of the appropriate service
             $service = new UserService();
 
             // Stores the results of the respective data access object's query
-            $results = $service->getAllUsers();
+            $results = $service->getAllUsers($logger);
 
             // Stores the results in an associative array to be passed on to the admin view
             $data = [
                 'results' => $results
             ];
 
-            MyLogger::getLogger()->info("Exiting UserAdminController.index()");
+            $logger->info("Exiting UserAdminController.index()");
 
             return view('userAdmin')->with($data);
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in UserAdminController.index(): " . $e->getMessage());
+            $logger->error("Exception occurred in UserAdminController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
 
     // Method takes form input from the previous form and attempts to update the database entry for the corresponding user
-    public function editUser(Request $request)
+    public function editUser(Request $request, ILoggerService $logger)
     {
-        MyLogger::getLogger()->info("Entering UserAdminController.editUser()");
+        $logger->info("Entering UserAdminController.editUser()");
 
         // Validates form input against pre-defined rules
         $this->validateEdit($request);
@@ -61,15 +61,15 @@ class UserAdminController extends Controller
             $service = new UserService();
 
             // Stores the results of the appropriate query
-            $results = $service->editUser($user);
+            $results = $service->editUser($user, $logger);
 
-            MyLogger::getLogger()->info("Exiting UserAdminController.editUser()");
+            $logger->info("Exiting UserAdminController.editUser()");
 
             if ($results) {
-                return view('userAdmin')->with(['results' => $service->getAllUsers()]);
+                return view('userAdmin')->with(['results' => $service->getAllUsers($logger)]);
             }
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in UserAdminController.editUser(): " . $e->getMessage());
+            $logger->error("Exception occurred in UserAdminController.editUser(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -90,10 +90,11 @@ class UserAdminController extends Controller
     }
 
     // Method takes an ID from the form that submitted the request and attempts to delete the user of the corresponding ID
-    public function removeUser(Request $request)
+    public function removeUser(Request $request, ILoggerService $logger)
     {
+        $logger->info("Entering UserAdminController.removeUser()");
+
         try {
-            MyLogger::getLogger()->info("Entering UserAdminController.removeUser()");
 
             // Get's the user's ID from the previous form
             $id = $request->input('id');
@@ -102,15 +103,15 @@ class UserAdminController extends Controller
             $service = new UserService();
 
             // Stores the result of the attempted removal of the user
-            $results = $service->removeUser($id);
+            $results = $service->removeUser($id, $logger);
 
-            MyLogger::getLogger()->info("Exiting UserAdminController.removeUser()");
+            $logger->info("Exiting UserAdminController.removeUser()");
 
             if ($results) {
-                return view('userAdmin')->with(['results' => $service->getAllUsers()]);
+                return view('userAdmin')->with(['results' => $service->getAllUsers($logger)]);
             }
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in UserAdminController.removeUser(): " . $e->getMessage());
+            $logger->error("Exception occurred in UserAdminController.removeUser(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

@@ -9,8 +9,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
-use App\Services\Utility\MyLogger;
 use App\Services\Business\SearchService;
 
 class JobSearchController extends Controller
@@ -20,10 +20,10 @@ class JobSearchController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(Request $request){
+    public function index(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering JobSearchController.index()");
-        
+        $logger->info("Entering JobSearchController.index()");
+
         try{
             //Validates the user's search
             $this->validateSearch($request);
@@ -37,13 +37,13 @@ class JobSearchController extends Controller
             
             $service = new SearchService();
             
-            $results = $service->JobSearch($searchString);
+            $results = $service->JobSearch($searchString, $logger);
             
             $data = ['jobs' => $results];
             
             return view('jobSearchResults')->with($data);
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in JobSearchController.index(): " . $e->getMessage());
+            $logger->error("Exception occured in JobSearchController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

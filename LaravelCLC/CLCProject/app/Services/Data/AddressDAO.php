@@ -10,8 +10,7 @@
 namespace App\Services\Data;
 
 use App\Models\AddressModel;
-use App\Services\Utility\Connection;
-use App\Services\Utility\MyLogger;
+use App\Services\Utility\ILoggerService;
 use PDO;
 use App\Services\Utility\DatabaseException;
 
@@ -19,16 +18,18 @@ class AddressDAO{
     
     //Field that stores the connection all the function user to execute their queries
     private $connection;
+    private $logger;
     
     //Takes in a connection as an argument and assigns it to the connection field
-    public function __construct(Connection $conn){
+    public function __construct(PDO $conn, ILoggerService $logger){
         $this->connection = $conn;
+        $this->logger = $logger;
     }
     
     //Takes in an ID and returns the address associated with that userID
     public function findByUserID(int $userID){
         
-        MyLogger::getLogger()->info("Entering AddressDAO.findByUserID()");
+        $this->logger->info("Entering AddressDAO.findByUserID()");
         
         try{
             $statement = $this->connection->prepare("SELECT * FROM ADDRESS WHERE USERS_IDUSERS = :id");
@@ -36,11 +37,11 @@ class AddressDAO{
             $statement->bindParam(':id', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AddressDAO.findByUserID()");
+        $this->logger->info("Exiting AddressDAO.findByUserID()");
         //Returns the result of the query along with an associative array containing the address information
         return ['result' => $statement->rowCount(), 'address' => $statement->fetch(PDO::FETCH_ASSOC)];
     }
@@ -49,7 +50,7 @@ class AddressDAO{
     in the addressModel*/
     public function editAddress(AddressModel $address){
         
-        MyLogger::getLogger()->info("Entering AddressDAO.editAddress()");
+        $this->logger->info("Entering AddressDAO.editAddress()");
         
         try{
             //Gets all the information from the addressModel
@@ -68,11 +69,11 @@ class AddressDAO{
             $statement->bindParam(':userid', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AddressDAO.editAddress()");
+        $this->logger->info("Exiting AddressDAO.editAddress()");
         //Returns the result of the query
         return $statement->rowCount();
     }
@@ -80,7 +81,7 @@ class AddressDAO{
     //Takes an ID as an argument and creates a new address entry in the database with the passed ID as a foreign key
     public function createAddress(int $userID){
         
-        MyLogger::getLogger()->info("Entering AddressDAO.createAddress()");
+        $this->logger->info("Entering AddressDAO.createAddress()");
         
         try{
             $statement = $this->connection->prepare("INSERT INTO ADDRESS (IDADDRESS, STREET, CITY, STATE, ZIP, USERS_IDUSERS) VALUES (NULL, NULL, NULL, NULL, NULL, :userid)");
@@ -88,11 +89,11 @@ class AddressDAO{
             $statement->bindParam(':userid', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AddressDAO.createAddress()");
+        $this->logger->info("Exiting AddressDAO.createAddress()");
         //Returns teh result of the query
         return $statement->rowCount();
     }

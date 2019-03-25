@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
@@ -18,14 +19,13 @@ use App\Services\Business\ExperienceService;
 use App\Models\ExperienceModel;
 use App\Services\Business\SkillService;
 use App\Models\SkillModel;
-use App\Services\Utility\MyLogger;
 use App\Services\Utility\ViewData;
 
 class PortfolioController extends Controller
 {
-    public function removeEducation(Request $request){
+    public function removeEducation(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering UserEditController.removeEducation()");
+        $logger->info("Entering UserEditController.removeEducation()");
         
         try{
             $id = $request->input('ID');
@@ -34,21 +34,21 @@ class PortfolioController extends Controller
             $service = new EducationService();
             
             //Calls associated function and stores the results of the function call
-            $results = $service->remove($id);
+            $results = $service->remove($id, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.removeEducation() with a result of " . $results);
+            $logger->info("Exiting UserEditController.removeEducation() with a result of " . $results);
             
             //Redirects the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in UserEditController.removeEducation(): " . $e->getMessage());
+            $logger->error("Exception occured in UserEditController.removeEducation(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
     
-    public function addEducation(Request $request){
-        MyLogger::getLogger()->info("Entering UserEditController.addEducation()");
+    public function addEducation(Request $request, ILoggerService $logger){
+        $logger->info("Entering UserEditController.addEducation()");
         
         //Validates form input against pre-defined rules
         $this->validateEducationInput($request);
@@ -61,21 +61,21 @@ class PortfolioController extends Controller
             $service = new EducationService();
             
             //Calls associated function and stores the results of the function call
-            $results = $service->create($education);
+            $results = $service->create($education, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.addEducation() with a result of " . $results);
+            $logger->info("Exiting UserEditController.addEducation() with a result of " . $results);
             
             //Redirects the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
+            $logger->error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
     
-    public function editEducation(Request $request){
-        MyLogger::getLogger()->info("Entering UserEditController.editEducation()");
+    public function editEducation(Request $request, ILoggerService $logger){
+        $logger->info("Entering UserEditController.editEducation()");
         
         //Validates the form input against pre-defined rules
         $this->validateEducationInput($request);
@@ -88,14 +88,14 @@ class PortfolioController extends Controller
             $service = new EducationService();
             
             //Calls associated function and stores the result of the function call
-            $results = $service->update($education);
+            $results = $service->update($education, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.editEducation() with a result of " . $results);
+            $logger->info("Exiting UserEditController.editEducation() with a result of " . $results);
             
             //Redirects the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
+            $logger->error("Exception occurred in UserEditController.editEducation(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -114,9 +114,9 @@ class PortfolioController extends Controller
         $this->validate($request, $rules);
     }
     
-    public function removeExperience(Request $request){
+    public function removeExperience(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering UserEditController.removeExperience()");
+        $logger->info("Entering UserEditController.removeExperience()");
         
         try{
             $id = $request->input('ID');
@@ -125,22 +125,22 @@ class PortfolioController extends Controller
             $service = new ExperienceService();
             
             //Calls the associated function and stores the results of the function call
-            $results = $service->remove($id);
+            $results = $service->remove($id, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.removeExperience() with a result of " . $results);
+            $logger->info("Exiting UserEditController.removeExperience() with a result of " . $results);
             
             //Redirects the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in UserEditController.removeExperience(): " . $e->getMessage());
+            $logger->error("Exception occured in UserEditController.removeExperience(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
     
-    public function addExperience(Request $request){
+    public function addExperience(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering UserEditController.addExperience()");
+        $logger->info("Entering UserEditController.addExperience()");
         
         //Validates form input against pre-defined rules
         $this->validateExperienceInput($request);
@@ -153,22 +153,22 @@ class PortfolioController extends Controller
             $service = new ExperienceService();
             
             //Calls the associated function and stores the results of the function call
-            $results = $service->create($experience);
+            $results = $service->create($experience, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.addExperience() with a result of " . $results);
+            $logger->info("Exiting UserEditController.addExperience() with a result of " . $results);
             
             //Redirect the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
+            $logger->error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
     
-    public function editExperience (Request $request){
+    public function editExperience (Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering UserEditController.editExperience()");
+        $logger->info("Entering UserEditController.editExperience()");
         
         //Validates the form input against pre-defined rules
         $this->validateExperienceInput($request);
@@ -181,14 +181,14 @@ class PortfolioController extends Controller
             $service = new ExperienceService();
             
             //Calls teh associated function and stores the results of the function call
-            $results = $service->update($experience);
+            $results = $service->update($experience, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.editExperience() with a result of " . $results);
+            $logger->info("Exiting UserEditController.editExperience() with a result of ", [$results]);
             
             //Redirect the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
+            $logger->error("Exception occured in UserEditController.addExperience(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -207,9 +207,9 @@ class PortfolioController extends Controller
         $this->validate($request, $rules);
     }
     
-    public function addSkill(Request $request){
+    public function addSkill(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering UserEditController.addSkill()");
+        $logger->info("Entering UserEditController.addSkill()");
         
         //Validates the form input against pre-defined rules
         $this->validateSkillInput($request);
@@ -222,14 +222,14 @@ class PortfolioController extends Controller
             $service = new SkillService();
             
             //Calls the associated function and stores the results of the function call
-            $results = $service->create($skill);
+            $results = $service->create($skill, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.addSkill() with a result of " . $results);
+            $logger->info("Exiting UserEditController.addSkill() with a result of ", [$results]);
             
             //Redirects the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in UserEditController.addSkill(): " . $e->getMessage());
+            $logger->error("Exception occured in UserEditController.addSkill(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -246,9 +246,9 @@ class PortfolioController extends Controller
         $this->validate($request, $rules);
     }
     
-    public function removeSkill(Request $request){
+    public function removeSkill(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering UserEditController.removeSkill()");
+        $logger->info("Entering UserEditController.removeSkill()");
         
         try{
             $id = $request->input('ID');
@@ -257,14 +257,14 @@ class PortfolioController extends Controller
             $service = new SkillService();
             
             //Calls the associated function and stores the results of the function call
-            $results = $service->remove($id);
+            $results = $service->remove($id, $logger);
             
-            MyLogger::getLogger()->info("Exiting UserEditController.removeSkill() with a result of " . $results);
+            $logger->info("Exiting UserEditController.removeSkill() with a result of ", [$results]);
             
             //Redirects the user back to their profile page
-            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID')));
+            return view('userProfile')->with(ViewData::getProfileData($request->session()->get('ID'), $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in UserEditController.removeSkill(): " . $e->getMessage());
+            $logger->error("Exception occured in UserEditController.removeSkill(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

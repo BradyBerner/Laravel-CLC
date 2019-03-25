@@ -9,31 +9,33 @@
 
 namespace App\Services\Data;
 
+use App\Services\Utility\ILoggerService;
 use PDO;
 use App\Services\Utility\DatabaseException;
-use App\Services\Utility\MyLogger;
 use App\Models\ExperienceModel;
 
 class ExperienceDAO{
     
     //Stores the database connection used by all the functions in the class
     private $conn;
+    private $logger;
     
     //Sets the connection
-    public function __construct($connection){
+    public function __construct(PDO $connection, ILoggerService $logger){
         $this->conn = $connection;
+        $this->logger = $logger;
     }
     
     //Get's all of the experience entries associated with a certain user
     public function getByID(int $id){
-        MyLogger::getLogger()->info("Entering ExperienceDAO.getByID()");
+        $this->logger->info("Entering ExperienceDAO.getByID()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM EXPERIENCE WHERE USERS_IDUSERS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -45,7 +47,7 @@ class ExperienceDAO{
             array_push($results, $result);
         }
         
-        MyLogger::getLogger()->info("Exit ExperienceDAO.getByID()");
+        $this->logger->info("Exit ExperienceDAO.getByID()");
         
         //Returns the result of the query as well as the array with all the results
         return ['result' => $statement->rowCount(), 'experience' => $results];
@@ -53,13 +55,13 @@ class ExperienceDAO{
     
     //Gets all of the experience entries from the database
     public function getAll(){
-        MyLogger::getLogger()->info("Entering ExperienceDAO.getAll()");
+        $this->logger->info("Entering ExperienceDAO.getAll()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM EXPERIENCE");
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -71,7 +73,7 @@ class ExperienceDAO{
             array_push($results, $result);
         }
         
-        MyLogger::getLogger()->info("Exit ExperienceDAO.getAll()");
+        $this->logger->info("Exit ExperienceDAO.getAll()");
 
         //Returns the array full of results
         return $results;
@@ -80,7 +82,7 @@ class ExperienceDAO{
     //Takes in an experience model and attempts to make a new database entry with the information contained within the experience model
     public function create(ExperienceModel $experience){
         
-        MyLogger::getLogger()->info("Entering ExperienceDAO.create()");
+        $this->logger->info("Entering ExperienceDAO.create()");
         
         //Gets all of the information from the experience model
         $title = $experience->getTitle();
@@ -103,11 +105,11 @@ class ExperienceDAO{
             $statement->bindParam(':userID', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message', $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message', $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting ExperienceDAO.create()");
+        $this->logger->info("Exiting ExperienceDAO.create()");
         
         //Returns the result of the query
         return $statement->rowCount();
@@ -116,7 +118,7 @@ class ExperienceDAO{
     //Takes in an experience model and attempts to update the database entry with the information in the model
     public function update(ExperienceModel $experience){
         
-        MyLogger::getLogger()->info("Entering ExperienceDAO.update()");
+        $this->logger->info("Entering ExperienceDAO.update()");
         
         //Gets all of the information from the model
         $id = $experience->getId();
@@ -139,11 +141,11 @@ class ExperienceDAO{
             $statement->bindParam(':description', $description);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message', $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message', $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting ExperienceDAO.update()");
+        $this->logger->info("Exiting ExperienceDAO.update()");
         
         //Returns the result of the query
         return $statement->rowCount();
@@ -152,18 +154,18 @@ class ExperienceDAO{
     //Takes in the id of an experience entry and attempts to remove it from the database
     public function remove(int $id){
         
-        MyLogger::getLogger()->info("Entering ExperienceDAO.remove()");
+        $this->logger->info("Entering ExperienceDAO.remove()");
         
         try{
             $statement = $this->conn->prepare("DELETE FROM EXPERIENCE WHERE IDEXPERIENCE = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message', $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message', $e->getMessage()]);
             throw new DatabaseException("Database Exception: ".$e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting ExperienceDAO.remove()");
+        $this->logger->info("Exiting ExperienceDAO.remove()");
         
         //Returns the result of the query
         return $statement->rowCount();

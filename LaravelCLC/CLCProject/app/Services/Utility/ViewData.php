@@ -22,15 +22,17 @@ use App\Services\Business\JobService;
 use App\Services\Business\SearchService;
 
 class ViewData{
-    
+
     /**
      * Gets all of the data necessary to the user's profile view
      * @param int $userID the user ID of the user profile to be viewed
-     * @return [] Associative array of all the information needed to view the user's profile
+     * @param ILoggerService $logger
+     * @return array [] Associative array of all the information needed to view the user's profile
+     * @throws DatabaseException
      */
-    public static function getProfileData(int $userID){
+    public static function getProfileData(int $userID, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ViewData.getProfileData()", ['UserID' => $userID]);
+        $logger->info("Entering ViewData.getProfileData()", ['UserID' => $userID]);
         
         // Gets the user's info from the user table, address table, and the info table
         $userService = new UserService();
@@ -43,18 +45,18 @@ class ViewData{
         $jobService = new JobService();
         
         // Stores the results for the user from all of the tables accessed
-        $user = $userService->findByID($userID);
-        $infoResults = $infoService->findByUserID($userID);
-        $addressResults = $addressService->findByUserID($userID);
-        $educationResults = $educationService->findByID($userID);
-        $experienceResults = $experienceService->findByID($userID);
-        $skillResults = $skillService->findByID($userID);
-        $jobResults = $applicantService->getAllJobs($userID);
+        $user = $userService->findByID($userID, $logger);
+        $infoResults = $infoService->findByUserID($userID, $logger);
+        $addressResults = $addressService->findByUserID($userID, $logger);
+        $educationResults = $educationService->findByID($userID, $logger);
+        $experienceResults = $experienceService->findByID($userID, $logger);
+        $skillResults = $skillService->findByID($userID, $logger);
+        $jobResults = $applicantService->getAllJobs($userID, $logger);
         
         $appliedJobs = [];
         
         foreach($jobResults as $job){
-            array_push($appliedJobs, $jobService->getJob($job['JOBS_IDJOBS'])['job']);
+            array_push($appliedJobs, $jobService->getJob($job['JOBS_IDJOBS'], $logger)['job']);
         }
         
         // Stores all of the needed retrieved data in an associative array to be passed to the user profile view for display
@@ -67,18 +69,18 @@ class ViewData{
             'experiences' => $experienceResults['experience'],
             'skills' => $skillResults['skills'],
             'appliedJobs' => $appliedJobs,
-            'suggestedJobs' => ViewData::getSuggestedJobs($userID)
+            'suggestedJobs' => ViewData::getSuggestedJobs($userID, $logger)
         ];
         
-        MyLogger::getLogger()->info("Exiting ViewData.getProfileData()", ['data' => $data]);
+        $logger->info("Exiting ViewData.getProfileData()", ['data' => $data]);
         
         return $data;
     }
     
     //Gets all of the affinity group data for a particular user when viewing the affinity group page
-    public static function getAffinityData(int $userID){
+    public static function getAffinityData(int $userID, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ViewData.getAffinityData()", ['UserID' => $userID]);
+        $logger->info("Entering ViewData.getAffinityData()", ['UserID' => $userID]);
         
         //Creates instances of all the necessary services
         $groupsService = new AffinityGroupService();
@@ -86,10 +88,10 @@ class ViewData{
         $skillService = new SkillService();
         
         //Gets neccessary results from all services
-        $owned = $groupsService->getAllOwned($userID);
-        $joined = $membersService->getAllJoined($userID);
-        $all = $groupsService->getAll($userID);
-        $skills = $skillService->findByID($userID);
+        $owned = $groupsService->getAllOwned($userID, $logger);
+        $joined = $membersService->getAllJoined($userID, $logger);
+        $all = $groupsService->getAll($logger);
+        $skills = $skillService->findByID($userID, $logger);
         $notJoined = [];
         
         //Fills notJoined array with all groups that the user is not a part of or owns
@@ -128,13 +130,13 @@ class ViewData{
         //Data array to be returned to the view
         $data = [
             'ID' => $userID,
-            'owned' => ViewData::addMembersToGroupData($owned),
-            'joined' => ViewData::addMembersToGroupData($joined),
-            'suggested' => ViewData::addMembersToGroupData($suggested),
+            'owned' => ViewData::addMembersToGroupData($owned, $logger),
+            'joined' => ViewData::addMembersToGroupData($joined, $logger),
+            'suggested' => ViewData::addMembersToGroupData($suggested, $logger),
             'skills' => $skills['skills']
         ];
         
-        MyLogger::getLogger()->info("Exiting ViewData.getAffinityData()", ['data' => $data]);
+        $logger->info("Exiting ViewData.getAffinityData()", ['data' => $data]);
         
         return $data;
     }
@@ -143,9 +145,9 @@ class ViewData{
      * Method for getting all the members in a group and adding them to the existing affinity group array
      * to be returned to the view
      */
-    private static function addMembersToGroupData($groups){
+    private static function addMembersToGroupData($groups, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ViewData.addMembersToGroupData()");
+        $logger->info("Entering ViewData.addMembersToGroupData()");
         
         //Creates instances of necessary business services
         $membersService = new AffinityMemberService();
@@ -154,38 +156,39 @@ class ViewData{
         //Fills all the groups with their members
         for($i = 0; $i < count($groups); $i++){
             $members = [];
-            $users = $membersService->getAllMembers($groups[$i]['IDAFFINITYGROUPS']);
+            $users = $membersService->getAllMembers($groups[$i]['IDAFFINITYGROUPS'], $logger);
             foreach($users as $user){
-                $userResults = $userService->findByID($user['USERS_IDUSERS'])['user'];
+                $userResults = $userService->findByID($user['USERS_IDUSERS'], $logger)['user'];
                 array_push($members, ['ID' => $userResults['IDUSERS'], 'USERNAME' => $userResults['USERNAME']]);
             }
             $groups[$i]['members'] = $members;
         }
         
-        MyLogger::getLogger()->info("Exiting ViewData.addMembersToGroupData()");
+        $logger->info("Exiting ViewData.addMembersToGroupData()");
         
         return $groups;
     }
-    
+
     /**
      * Takes in a user's ID and gets a list of jobs to suggest to the user
      * @param int $userID the ID of the user to get suggested jobs for
      * @return array An array of jobs that might be good for the user
+     * @throws DatabaseException
      */
-    private static function getSuggestedJobs($userID){
+    private static function getSuggestedJobs($userID, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ViewData.getSuggestedJobs()", [$userID]);
+        $logger->info("Entering ViewData.getSuggestedJobs()", [$userID]);
         
         $skillService = new SkillService();
         $searchService = new SearchService();
         $applicantService = new JobApplicantService();
         
-        $skills = $skillService->findByID($userID)['skills'];
+        $skills = $skillService->findByID($userID, $logger)['skills'];
         
         $searchResults = [];
         
         foreach($skills as $skill){
-            $results = $searchService->JobSearch("%".$skill['SKILL']."%");
+            $results = $searchService->JobSearch("%".$skill['SKILL']."%", $logger);
             if(count($results) != 0){
                 foreach($results as $result){
                     array_push($searchResults, $result);
@@ -193,7 +196,7 @@ class ViewData{
             }
         }
         
-        $appliedJobs = $applicantService->getAllJobs($userID);
+        $appliedJobs = $applicantService->getAllJobs($userID, $logger);
         $suggestedJobs = [];
         
         foreach($searchResults as $result){
@@ -209,7 +212,7 @@ class ViewData{
             }
         }
         
-        MyLogger::getLogger()->info("Exiting ViewData.getSuggestedJobs()");
+        $logger->info("Exiting ViewData.getSuggestedJobs()");
         
         return $suggestedJobs;
     }

@@ -9,38 +9,28 @@
 
 namespace App\Services\Utility;
 
-use Illuminate\Support\Facades\Log;
-use Monolog\Handler\StreamHandler;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Logger;
+//TODO:: add passing data support to methods
+class MyLogger implements ILoggerService{
+    
+    private $logger = null;
 
-class MyLogger implements ILogger{
-    
-    private static $logger = null;
-    
-    static function getLogger(){
-        if(self::$logger == null){
-            self::$logger = new Logger('CLC');
-            $stream = new StreamHandler('storage/logs/CLC.log', Logger::DEBUG);
-            $stream->setFormatter(new LineFormatter("%datetime% : %level_name% : %message% %context%\n", "g:iA n/j/Y"));
-            self::$logger->pushHandler($stream);
-        }
-        return self::$logger;
+    public function __construct($logger){
+        $this->logger = $logger;
     }
-    
+
     public function debug($message, $data=[]){
-        Log::debug($message . (count($data != 0 ? ' with data of ' . print_r($data, TRUE) : "")));
+        $this->logger->debug($message);
     }
     
     public function warning($message, $data=[]){
-        self::getLogger()->warning($message, $data);
+        $this->logger->warning($message);
     }
     
     public function error($message, $data=[]){
-        self::getLogger()->error($message, $data);
+        $this->logger->error($message);
     }
     
     public function info($message, $data=[]){
-        self::getLogger()->info($message . (count($data != 0 ? ' with data of ' . print_r($data, TRUE) : "")));
+        $this->logger->info($message);
     }
 }

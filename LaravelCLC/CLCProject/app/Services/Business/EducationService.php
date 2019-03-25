@@ -10,21 +10,21 @@
 namespace App\Services\Business;
 
 use App\Services\Utility\Connection;
-use App\Services\Utility\MyLogger;
+use App\Services\Utility\ILoggerService;
 use App\Services\Data\EducationDAO;
 use App\Models\EducationModel;
 
 class EducationService{
     
-    public function findByID(int $id){
-        
-        MyLogger::getLogger()->info("Entering EducationService.findByID()");
+    public function findByID(int $id, ILoggerService $logger){
+
+        $logger->info("Entering EducationService.findByID()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new EducationDAO($connection);
+        $DAO = new EducationDAO($connection, $logger);
         
         //Calls the associated dao function and stores the results
         $results = $DAO->getByID($id);
@@ -32,20 +32,20 @@ class EducationService{
         //Destroys the connection to the database 
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting EducationService.findByID()");
+        $logger->info("Exiting EducationService.findByID()");
         
         return $results;
     }
     
-    public function getAll(){
+    public function getAll(ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering EducationService.getAll()");
+        $logger->info("Entering EducationService.getAll()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new EducationDAO($connection);
+        $DAO = new EducationDAO($connection, $logger);
         
         //Calls the associated dao function and stores the results
         $results = $DAO->getAll();
@@ -53,20 +53,20 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting EducationService.getAll()");
+        $logger->info("Exiting EducationService.getAll()");
         
         return $results;
     }
     
-    public function create(EducationModel $education){
+    public function create(EducationModel $education, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering EducationService.create()");
+        $logger->info("Entering EducationService.create()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new EducationDAO($connection);
+        $DAO = new EducationDAO($connection, $logger);
         
         //Calls the associated dao function and stores the results
         $results = $DAO->create($education);
@@ -74,20 +74,20 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting EducationService.create()");
+        $logger->info("Exiting EducationService.create()");
         
         return $results;
     }
     
-    public function update(EducationModel $education){
+    public function update(EducationModel $education, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering EducationService.update()");
+        $logger->info("Entering EducationService.update()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new EducationDAO($connection);
+        $DAO = new EducationDAO($connection, $logger);
         
         //Calls the associated dao functino and stores the results
         $results = $DAO->update($education);
@@ -95,20 +95,20 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting EducationService.update()");
+        $logger->info("Exiting EducationService.update()");
         
         return $results;
     }
     
-    public function remove(int $id){
+    public function remove(int $id, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering EducationService.remove()");
+        $logger->info("Entering EducationService.remove()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new EducationDAO($connection);
+        $DAO = new EducationDAO($connection, $logger);
         
         //Calls the associated dao functino and stores the results
         $results = $DAO->remove($id);
@@ -116,7 +116,7 @@ class EducationService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting EducationService.remove()");
+        $logger->info("Exiting EducationService.remove()");
         
         return $results;
     }

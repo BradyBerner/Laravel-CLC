@@ -9,9 +9,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use App\Services\Business\AffinityMemberService;
-use App\Services\Utility\MyLogger;
 use App\Services\Utility\ViewData;
 
 class AffinityMemberController extends Controller
@@ -19,9 +19,9 @@ class AffinityMemberController extends Controller
     /*
      * Method for handling a user request to join a group
      */
-    public function joinGroup(Request $request){
+    public function joinGroup(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityMemberController.joinGroup()");
+        $logger->info("Entering AffinityMemberController.joinGroup()");
         
         try{
             //Gets the IDs from the request
@@ -32,14 +32,14 @@ class AffinityMemberController extends Controller
             $service = new AffinityMemberService();
             
             //Stores the result of the service method call
-            $results = $service->joinGroup($userID, $groupID);
+            $results = $service->joinGroup($userID, $groupID, $logger);
             
-            MyLogger::getLogger()->info("Exiting AffinityMemberController.joinGroup() with a result of " . $results);
+            $logger->info("Exiting AffinityMemberController.joinGroup() with a result of " . $results);
             
             //Retuns the affinity group view along with the data returned from the view data method
-            return view('groups')->with(ViewData::getAffinityData($userID));
+            return view('groups')->with(ViewData::getAffinityData($userID, $logger));
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in AffinityMemberController.joinGroup(): " . $e->getMessage());
+            $logger->error("Exception occured in AffinityMemberController.joinGroup(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -48,9 +48,9 @@ class AffinityMemberController extends Controller
     /*
      * Method for handling a user request to leave a group
      */
-    public function leaveGroup(Request $request){
+    public function leaveGroup(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering AffinityMemberController.leaveGroup()");
+        $logger->info("Entering AffinityMemberController.leaveGroup()");
         
         try{
             //Gets the IDs from the request
@@ -61,14 +61,14 @@ class AffinityMemberController extends Controller
             $service = new AffinityMemberService();
             
             //Stores the result of the service method call
-            $results = $service->leaveGroup($userID, $groupID);
+            $results = $service->leaveGroup($userID, $groupID, $logger);
             
-            MyLogger::getLogger()->info("Exiting AffinityMemberController.leaveGroup() with a result of " . $results);
+            $logger->info("Exiting AffinityMemberController.leaveGroup() with a result of " . $results);
             
             //Returns the affinity group view along with the data returned from the view data method
-            return view('groups')->with(ViewData::getAffinityData($userID));
+            return view('groups')->with(ViewData::getAffinityData($userID, $logger));
         } catch(\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in AffinityMemberController.leaveGroup(): " . $e->getMessage());
+            $logger->error("Exception occured in AffinityMemberController.leaveGroup(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

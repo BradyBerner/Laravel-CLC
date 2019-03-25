@@ -1,4 +1,3 @@
-@include('layouts.admin')
 @extends('layouts.appmaster')
 @section('title','New Job')
 

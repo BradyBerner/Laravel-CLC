@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 
 /*
  * Brady Berner & Pengyu Yin
@@ -9,21 +9,23 @@
 
 namespace App\Services\Data;
 
+use App\Services\Utility\ILoggerService;
 use PDO;
 use App\Services\Utility\DatabaseException;
-use App\Services\Utility\MyLogger;
 use App\Models\AffinityGroupModel;
 
 class AffinityGroupDAO{
     
     //Stores the connection that all methods will user for executing their queries 
     private $conn;
+    private $logger;
     
     /*
      * Non-default constructor that sets the connection field that all methods will use to execute their queries
      */
-    public function __construct(PDO $connection){
+    public function __construct(PDO $connection, ILoggerService $logger){
         $this->conn = $connection;
+        $this->logger = $logger;
     }
     
     /*
@@ -31,7 +33,7 @@ class AffinityGroupDAO{
      */
     public function create(AffinityGroupModel $group){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupDAO.create()");
+        $this->logger->info("Entering AffinityGroupDAO.create()");
         
         //Gets information from the affinity group model
         $name = $group->getName();
@@ -48,11 +50,11 @@ class AffinityGroupDAO{
             $statement->bindParam('userID', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupDAO.create()");
+        $this->logger->info("Exiting AffinityGroupDAO.create()");
         
         //Returns the result of the query as well as the insert id
         return ['result' => $statement->rowCount(), 'insertID' => $this->conn->lastInsertID()];
@@ -63,7 +65,7 @@ class AffinityGroupDAO{
      */
     public function getByID(int $id){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupDAO.getByID()");
+        $this->logger->info("Entering AffinityGroupDAO.getByID()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM AFFINITYGROUPS WHERE IDAFFINITYGROUPS = :id");
@@ -71,11 +73,11 @@ class AffinityGroupDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupDAO.getByID()");
+        $this->logger->info("Exiting AffinityGroupDAO.getByID()");
 
         return ['group' =>$statement->fetch(PDO::FETCH_ASSOC)];
     }
@@ -85,13 +87,13 @@ class AffinityGroupDAO{
      */
     public function getAll(){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupDAO.getAll()");
+        $this->logger->info("Entering AffinityGroupDAO.getAll()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM AFFINITYGROUPS");
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -102,7 +104,7 @@ class AffinityGroupDAO{
             array_push($groups, $group);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupDAO.getAll()");
+        $this->logger->info("Exiting AffinityGroupDAO.getAll()");
         
         return $groups;
     }
@@ -112,7 +114,7 @@ class AffinityGroupDAO{
      */
     public function getOwned($userID){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupDAO.getOwned()");
+        $this->logger->info("Entering AffinityGroupDAO.getOwned()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM AFFINITYGROUPS WHERE USERS_IDUSERS = :userID");
@@ -120,7 +122,7 @@ class AffinityGroupDAO{
             $statement->bindParam(':userID', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -131,7 +133,7 @@ class AffinityGroupDAO{
             array_push($groups, $group);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupDAO.getOwned()");
+        $this->logger->info("Exiting AffinityGroupDAO.getOwned()");
         
         return $groups;
     }
@@ -141,7 +143,7 @@ class AffinityGroupDAO{
      */
     public function edit(AffinityGroupModel $group){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupDAO.edit()");
+        $this->logger->info("Entering AffinityGroupDAO.edit()");
         
         try{
             //Gets all of the necessary information from the model
@@ -158,11 +160,11 @@ class AffinityGroupDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupDAO.edit()");
+        $this->logger->info("Exiting AffinityGroupDAO.edit()");
         
         return $statement->rowCount();
     }
@@ -172,7 +174,7 @@ class AffinityGroupDAO{
      */
     public function delete(int $id){
         
-        MyLogger::getLogger()->info("Entering AffinityGroupDAO.delete()");
+        $this->logger->info("Entering AffinityGroupDAO.delete()");
         
         try{
             $statement = $this->conn->prepare("DELETE FROM AFFINITYGROUPS WHERE IDAFFINITYGROUPS = :id");
@@ -180,11 +182,11 @@ class AffinityGroupDAO{
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message' => $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message' => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting AffinityGroupDAO.delete()");
+        $this->logger->info("Exiting AffinityGroupDAO.delete()");
         
         return $statement->rowCount();
     }

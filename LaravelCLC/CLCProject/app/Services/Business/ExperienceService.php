@@ -10,21 +10,21 @@
 namespace App\Services\Business;
 
 use App\Services\Utility\Connection;
-use App\Services\Utility\MyLogger;
+use App\Services\Utility\ILoggerService;
 use App\Services\Data\ExperienceDAO;
 use App\Models\ExperienceModel;
 
 class ExperienceService{
     
-    public function findByID(int $id){
+    public function findByID(int $id, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ExperienceService.findByID()");
+        $logger->info("Entering ExperienceService.findByID()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new ExperienceDAO($connection);
+        $DAO = new ExperienceDAO($connection, $logger);
         
         //Calls the appropriate dao function and stores the results
         $results = $DAO->getByID($id);
@@ -32,20 +32,20 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting ExperienceService.findByID()");
+        $logger->info("Exiting ExperienceService.findByID()");
         
         return $results;
     }
     
-    public function getAll(){
+    public function getAll(ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ExperienceService.getAll()");
+        $logger->info("Entering ExperienceService.getAll()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new ExperienceDAO($connection);
+        $DAO = new ExperienceDAO($connection, $logger);
         
         //Calls the appropriate dao function and stores the results
         $results = $DAO->getAll();
@@ -53,20 +53,20 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting ExperienceService.getAll()");
+        $logger->info("Exiting ExperienceService.getAll()");
         
         return $results;
     }
     
-    public function create(ExperienceModel $experience){
+    public function create(ExperienceModel $experience, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ExperienceService.create()");
+        $logger->info("Entering ExperienceService.create()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new ExperienceDAO($connection);
+        $DAO = new ExperienceDAO($connection, $logger);
         
         //Calls the appropriate dao function and stores the results
         $results = $DAO->create($experience);
@@ -74,20 +74,20 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting ExperienceService.create()");
+        $logger->info("Exiting ExperienceService.create()");
         
         return $results;
     }
     
-    public function update(ExperienceModel $experience){
+    public function update(ExperienceModel $experience, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ExperienceService.update()");
+        $logger->info("Entering ExperienceService.update()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new ExperienceDAO($connection);
+        $DAO = new ExperienceDAO($connection, $logger);
         
         //Calls the appropriate dao function and stores the results
         $results = $DAO->update($experience);
@@ -95,20 +95,20 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting ExperienceService.update()");
+        $logger->info("Exiting ExperienceService.update()");
         
         return $results;
     }
     
-    public function remove(int $id){
+    public function remove(int $id, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering ExperienceService.remove()");
+        $logger->info("Entering ExperienceService.remove()");
         
         //Gets a connection to the database
         $connection = new Connection();
         
         //Creates an instance of the data access object
-        $DAO = new ExperienceDAO($connection);
+        $DAO = new ExperienceDAO($connection, $logger);
         
         //Calls the appropriate dao function and stores the results
         $results = $DAO->remove($id);
@@ -116,7 +116,7 @@ class ExperienceService{
         //Destroys the connection to the database
         $connection = null;
         
-        MyLogger::getLogger()->info("Exiting ExperienceService.remove()");
+        $logger->info("Exiting ExperienceService.remove()");
         
         return $results;
     }

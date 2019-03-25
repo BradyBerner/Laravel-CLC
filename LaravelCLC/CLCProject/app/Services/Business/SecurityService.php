@@ -11,7 +11,7 @@ namespace App\Services\Business;
 
 use App\Models\UserModel;
 use App\Services\Utility\Connection;
-use App\Services\Utility\MyLogger;
+use App\Services\Utility\ILoggerService;
 use PDO;
 use App\Services\Data\UserDAO;
 use App\Services\Utility\DatabaseException;
@@ -21,16 +21,16 @@ class SecurityService
 
     // Function takes user as an argument and calls the database registration service with that user then returns
     // the result it gets
-    public function register(UserModel $user)
+    public function register(UserModel $user, ILoggerService $logger)
     {
-        MyLogger::getLogger()->info("Entering SecurityService.register()");
+        $logger->info("Entering SecurityService.register()");
 
         try{
         $connection = new Connection();
         $connection->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
         $connection->beginTransaction();
 
-        $DAO = new UserDAO($connection);
+        $DAO = new UserDAO($connection, $logger);
 
         $result = $DAO->create($user);
 
@@ -56,30 +56,30 @@ class SecurityService
         $connection = null;
         
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Database exception: ", $e->getMessage());
+            $logger->error("Database exception: ", $e->getMessage());
             $connection->rollBack();
             throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
         }
 
-        MyLogger::getLogger()->info("Exiting SecurityService.register() with result: " . $result['result']);
+        $logger->info("Exiting SecurityService.register() with result: " . $result['result']);
 
         return $result;
     }
 
     // Function takes user as an argument and calls the database login service and returns the result
-    public function login(UserModel $user)
+    public function login(UserModel $user, ILoggerService $logger)
     {
-        MyLogger::getLogger()->info("Entering SecurityService.login()");
+        $logger->info("Entering SecurityService.login()");
 
         $connection = new Connection();
 
-        $DAO = new UserDAO($connection);
+        $DAO = new UserDAO($connection, $logger);
 
         $connection = null;
 
         $result = $DAO->findByLogin($user);
 
-        MyLogger::getLogger()->info("Exiting SecurityService.login() with result: " . $result['result']);
+        $logger->info("Exiting SecurityService.login() with result: " . $result['result']);
         
         return $result;
     }

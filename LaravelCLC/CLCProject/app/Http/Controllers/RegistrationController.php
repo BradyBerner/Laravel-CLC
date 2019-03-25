@@ -9,17 +9,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use App\Models\UserModel;
 use App\Services\Business\SecurityService;
-use App\Services\Utility\MyLogger;
 
 class RegistrationController extends Controller
 {
 
     // Function recives user registration input, uses it to create a user object and then uses that object
     // to attempt to create a new database entry
-    public function index(Request $request)
+    public function index(Request $request, ILoggerService $logger)
     {
 
         // Validates the user's input against pre-defined rules
@@ -34,7 +34,7 @@ class RegistrationController extends Controller
             $securityService = new SecurityService();
 
             // Stores the result of the attempted registration
-            $result = $securityService->register($user);
+            $result = $securityService->register($user, $logger);
 
             // Stores the result of the attempted registration
             $data = [
@@ -43,7 +43,7 @@ class RegistrationController extends Controller
 
             return view('registrationResult')->with($data);
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in RegistrationController.index(): " . $e->getMessage());
+            $logger->error("Exception occurred in RegistrationController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

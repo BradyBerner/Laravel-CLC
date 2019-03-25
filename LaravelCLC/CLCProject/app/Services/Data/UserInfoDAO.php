@@ -11,24 +11,26 @@ namespace App\Services\Data;
 
 use App\Models\UserInfoModel;
 use App\Services\Utility\Connection;
+use App\Services\Utility\ILoggerService;
 use Illuminate\Support\Facades\Log;
 use PDO;
 use App\Services\Utility\DatabaseException;
-use App\Services\Utility\MyLogger;
 
 class UserInfoDAO{
     
     //Stores the connection to the database that will be used to execute the desired function
     private $connection;
+    private $logger;
     
     //Takes in a PDO connection and sets the connection attribute equal to it
-    public function __construct(Connection $conn){
+    public function __construct(Connection $conn, ILoggerService $logger){
         $this->connection = $conn;
+        $this->logger = $logger;
     }
     
     //Takes in a user ID and returns the database row for that user
     public function findByUserID(int $id){
-        MyLogger::getLogger()->info("Entering UserInfoDAO.findByUserID()");
+        $this->logger->info("Entering UserInfoDAO.findByUserID()");
         
         try{
             $statement = $this->connection->prepare("SELECT * FROM USER_INFO WHERE USERS_IDUSERS = :id");
@@ -39,7 +41,7 @@ class UserInfoDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting UserInfoDAO.findByUserID()");
+        $this->logger->info("Exiting UserInfoDAO.findByUserID()");
         /*Returns an associative array containing the result of the database query as well as the userInfo in the form
         of an associative array*/
         return ['result' => $statement->rowCount(), 'userInfo' => $statement->fetch(PDO::FETCH_ASSOC)];
@@ -48,7 +50,7 @@ class UserInfoDAO{
     /*Function takes in a user id and creates a new empty userInfo entry that only contains its own primary key and the 
     user id that was passed as a foriegn key*/
     public function createNewUserInfo(int $userID){
-        MyLogger::getLogger()->info("Entering UserInfoDAO.createNewUserInfo()");
+        $this->logger->info("Entering UserInfoDAO.createNewUserInfo()");
         
         try{
             $statement = $this->connection->prepare("INSERT INTO USER_INFO (IDUSER_INFO, DESCRIPTION, PHONE, AGE, GENDER, USERS_IDUSERS) VALUES (NULL, NULL, NULL, NULL, NULL, :userid)");
@@ -59,7 +61,7 @@ class UserInfoDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting UserInfoDAO.createNewUserInfo()");
+        $this->logger->info("Exiting UserInfoDAO.createNewUserInfo()");
         //Returns the result of the query
         return $statement->rowCount();
     }
@@ -68,7 +70,7 @@ class UserInfoDAO{
     with that information*/
     public function editUserInfo(UserInfoModel $userInfo){
         
-        MyLogger::getLogger()->info("Entering UserInfoDAO.editUserInfo()");
+        $this->logger->info("Entering UserInfoDAO.editUserInfo()");
         
         try{
             //Gets the information contained within the userInfoModel
@@ -91,7 +93,7 @@ class UserInfoDAO{
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting UserInfoDAO.editUserInfo()");
+        $this->logger->info("Exiting UserInfoDAO.editUserInfo()");
         //Returns the result of the query
         return $statement->rowCount();
     }

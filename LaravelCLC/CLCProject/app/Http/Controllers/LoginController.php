@@ -9,18 +9,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use App\Services\Business\SecurityService;
-use App\Services\Utility\MyLogger;
 use App\Models\UserModel;
 
 class LoginController extends Controller
 {
 
     // Function recieves user login input, then authenticates user input against database entries
-    public function index(Request $request)
+    public function index(Request $request, ILoggerService $logger)
     {
-        MyLogger::getLogger()->info("Entering LoginController.index()");
+        $logger->info("Entering LoginController.index()");
         
         // Validates the user's input against pre-defined rules
         $this->validateForm($request);
@@ -34,7 +34,7 @@ class LoginController extends Controller
             $securityService = new SecurityService();
 
             // Stores the results from the database query for logging in
-            $results = $securityService->login($user);
+            $results = $securityService->login($user, $logger);
                         
             // Stores all of the necessary information from the login in the session in the event of a successful login
             if ($results['result'] && $results['user']['STATUS']) {
@@ -57,11 +57,11 @@ class LoginController extends Controller
                 'status' => $results['user']['STATUS']
             ];
             
-            MyLogger::getLogger()->info("Exiting LoginController.index()", ['data' => $data]);
+            $logger->info("Exiting LoginController.index()", ['data' => $data]);
 
             return view('loginResult')->with($data);
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occurred in LoginController.index(): " . $e->getMessage());
+            $logger->error("Exception occurred in LoginController.index(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

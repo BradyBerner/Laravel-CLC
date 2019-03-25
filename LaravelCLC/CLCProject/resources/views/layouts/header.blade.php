@@ -10,11 +10,11 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 <!-- This is the form for going to the user profile put outside of the navbar so that it doesn't interfer with the 
 rest of the navbar -->
 <form action="userProfile" id="userProfile" style="margin:0px;" method="get"></form>
-<input form="userProfile" type="hidden" name="_token" value="{{csrf_token()}}"></input>
-<input form="userProfile" type="hidden" name="ID" value="{{Session('ID')}}"></input>
+<input form="userProfile" type="hidden" name="_token" value="{{csrf_token()}}">
+<input form="userProfile" type="hidden" name="ID" value="{{Session('ID')}}">
 <form action="groups" id="groups" style="margin:0px;" method="get"></form>
-<input form="groups" type="hidden" name="_token" value="{{csrf_token()}}"></input>
-<input form="groups" type="hidden" name="ID" value="{{Session('ID')}}"></input>
+<input form="groups" type="hidden" name="_token" value="{{csrf_token()}}">
+<input form="groups" type="hidden" name="ID" value="{{Session('ID')}}">
 <!-- Bootstrap navbar that will be included at the top of all pages for the purpose of navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(60, 63, 65); margin-bottom:20px;">
   <a class="navbar-brand" href="\CLC">CLC</a>

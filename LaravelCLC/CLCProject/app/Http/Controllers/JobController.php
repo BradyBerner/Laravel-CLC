@@ -9,35 +9,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\JobModel;
 use App\Services\Business\JobService;
-use App\Services\Utility\MyLogger;
 use App\Services\Business\JobApplicantService;
 
 class JobController extends Controller
 {
-    
+
     /**
      * Handles the user's viewing of a job
      * @param Request $request
+     * @param ILoggerService $logger
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index(Request $request){
+    public function index(Request $request, ILoggerService $logger){
         try{
-            MyLogger::getLogger()->info("Entering JobController.index()");
+            $logger->info("Entering JobController.index()");
             
             $jobID = $request->input('jobID');
             
             $jobService = new JobService();
             
-            $result = $jobService->getJob($jobID)['job'];
+            $result = $jobService->getJob($jobID, $logger)['job'];
             $applied = false;
             
             if(Session::has('ID')){
                 $applicantService = new JobApplicantService();
-                $applicants = $applicantService->getAllApplicants($jobID);
+                $applicants = $applicantService->getAllApplicants($jobID, $logger);
                 
                 foreach($applicants as $applicant){
                     if($applicant['USERS_IDUSERS'] == Session::get('ID')){
@@ -48,11 +49,11 @@ class JobController extends Controller
             
             $data = ['job' => $result, 'applied' => $applied];
             
-            MyLogger::getLogger()->addInfo("Exiting JobController.index()");
+            $logger->addInfo("Exiting JobController.index()");
             
             return view('viewJob')->with($data);
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occurred in JobController.inswz(): " . $e->getMessage());
+            $logger->error("Exception occurred in JobController.inswz(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -60,9 +61,9 @@ class JobController extends Controller
 
     // Function recives user registration input, uses it to create a job object and then uses that object
     // to attempt to create a new database entry
-    public function createJob(Request $request)
+    public function createJob(Request $request, ILoggerService $logger)
     {
-        MyLogger::getLogger()->info("Entering JobController.createJob()");
+        $logger->info("Entering JobController.createJob()");
         
         // Validates the user's input against pre-defined rules
         $this->validateForm($request);
@@ -76,18 +77,14 @@ class JobController extends Controller
             $jobService = new JobService();
 
             // Stores the result of the function call
-            $result = $jobService->newJob($job);
-
-            $data = [
-                'result' => $result['result']
-            ];
+            $result = $jobService->newJob($job, $logger);
             
-            MyLogger::getLogger()->info("Exiting JobController.createJob() with a result of " . $result['result']);
+            $logger->info("Exiting JobController.createJob() with a result of ", $result);
 
             //Returns the user to the job admin page
-            return view('jobAdmin')->with(['results' => $jobService->getAllJobs()]);
+            return view('jobAdmin')->with(['results' => $jobService->getAllJobs($logger)]);
         } catch (\Exception $e) {
-            MyLogger::getLogger()->error("Exception occured in JobController.createJob(): " . $e->getMessage());
+            $logger->error("Exception occured in JobController.createJob(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -107,9 +104,9 @@ class JobController extends Controller
         $this->validate($request, $rules);
     }
     
-    public function apply(Request $request){
+    public function apply(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering JobController.apply()");
+        $logger->info("Entering JobController.apply()");
         
         try{
             
@@ -118,9 +115,9 @@ class JobController extends Controller
             
             $applicantService = new JobApplicantService();
             
-            $result = $applicantService->apply($jobID, $userID);
+            $result = $applicantService->apply($jobID, $userID, $logger);
             
-            MyLogger::getLogger()->info("Exiting JobController.apply()", [$result]);
+            $logger->info("Exiting JobController.apply()", [$result]);
             
             $data = [];
             
@@ -129,15 +126,15 @@ class JobController extends Controller
             
             return view('home')->with($data);
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in JobController.apply(): " . $e->getMessage());
+            $logger->error("Exception occured in JobController.apply(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
     
-    public function cancelApplication(Request $request){
+    public function cancelApplication(Request $request, ILoggerService $logger){
         
-        MyLogger::getLogger()->info("Entering JobController.cancelApplication()");
+        $logger->info("Entering JobController.cancelApplication()");
         
         try{
             
@@ -146,9 +143,9 @@ class JobController extends Controller
             
             $applicantService = new JobApplicantService();
             
-            $result = $applicantService->cancelApplication($jobID, $userID);
+            $result = $applicantService->cancelApplication($jobID, $userID, $logger);
             
-            MyLogger::getLogger()->info("Exiting JobController.cancelApplication()", [$result]);
+            $logger->info("Exiting JobController.cancelApplication()", [$result]);
             
             $data = [];
             
@@ -157,7 +154,7 @@ class JobController extends Controller
             
             return view('home')->with($data);
         } catch (\Exception $e){
-            MyLogger::getLogger()->error("Exception occured in JobController.cancelApplication(): " . $e->getMessage());
+            $logger->error("Exception occured in JobController.cancelApplication(): " . $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

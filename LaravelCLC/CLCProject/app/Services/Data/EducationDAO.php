@@ -9,31 +9,33 @@
 
 namespace App\Services\Data;
 
+use App\Services\Utility\ILoggerService;
 use PDO;
 use App\Services\Utility\DatabaseException;
-use App\Services\Utility\MyLogger;
 use App\Models\EducationModel;
 
 class EducationDAO{
     
     //Stores the database connection used by all of the functions in this class
     private $conn;
+    private $logger;
     
     //Takes in a connection object and assigns it to the connection field
-    public function __construct(\PDO $connection){
+    public function __construct(\PDO $connection, ILoggerService $logger){
         $this->conn = $connection;
+        $this->logger = $logger;
     }
     
     //Gets all of the education records associated with the user id passed as an argument
     public function getByID(int $id){
-        MyLogger::getLogger()->info("Entering EducationDAO.getByID()");
+        $this->logger->info("Entering EducationDAO.getByID()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM EDUCATION WHERE USERS_IDUSERS = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -44,7 +46,7 @@ class EducationDAO{
             array_push($educations, $education);
         }
         
-        MyLogger::getLogger()->info("Exit EducationDAO.getByID()");
+        $this->logger->info("Exit EducationDAO.getByID()");
         
         //Returns the result of the query as well as all the database entries gotten from the query
         return ['result' => $statement->rowCount(), 'education' => $educations];
@@ -52,13 +54,13 @@ class EducationDAO{
     
     //Gets all of the education records from the database
     public function getAll(){
-        MyLogger::getLogger()->info("Entering EducationDAO.getAll()");
+        $this->logger->info("Entering EducationDAO.getAll()");
         
         try{
             $statement = $this->conn->prepare("SELECT * FROM EDUCATION");
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ["message" => $e->getMessage()]);
+            $this->logger->error("Exception: ", ["message" => $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
@@ -69,7 +71,7 @@ class EducationDAO{
             array_push($educations, $education);
         }
         
-        MyLogger::getLogger()->info("Exit EducationDAO.getAll()");
+        $this->logger->info("Exit EducationDAO.getAll()");
         
         //Returns the array of education records gotten back from the database query
         return $educations;
@@ -78,7 +80,7 @@ class EducationDAO{
     //Takes in an education model and attempts to create a new database entry with the information contained
     public function create(EducationModel $education){
         
-        MyLogger::getLogger()->info("Entering EducationDAO.create()");
+        $this->logger->info("Entering EducationDAO.create()");
         
         //Gets all of the information from the education model
         $school = $education->getSchool();
@@ -101,11 +103,11 @@ class EducationDAO{
             $statement->bindParam(':userID', $userID);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message', $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message', $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting EducationDAO.create()");
+        $this->logger->info("Exiting EducationDAO.create()");
         
         //Returns the results of the database query
         return $statement->rowCount();
@@ -114,7 +116,7 @@ class EducationDAO{
     //Takes in an education model and attempts to update the associated database entry with the information contained in the model
     public function update(EducationModel $education){
         
-        MyLogger::getLogger()->info("Entering EducationDAO.update()");
+        $this->logger->info("Entering EducationDAO.update()");
         
         //Gets the information from the education model
         $id = $education->getId();
@@ -137,11 +139,11 @@ class EducationDAO{
             $statement->bindParam(':endyear', $endyear);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message', $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message', $e->getMessage()]);
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting EducationDAO.update()");
+        $this->logger->info("Exiting EducationDAO.update()");
         
         //Returns the result of the query
         return $statement->rowCount();
@@ -150,18 +152,18 @@ class EducationDAO{
     //Takes in an education id and attempts to remove the associated database entry
     public function remove(int $id){
         
-        MyLogger::getLogger()->info("Entering EducationDAO.remove()");
+        $this->logger->info("Entering EducationDAO.remove()");
         
         try{
             $statement = $this->conn->prepare("DELETE FROM EDUCATION WHERE IDEDUCATION = :id");
             $statement->bindParam(':id', $id);
             $statement->execute();
         } catch (\PDOException $e){
-            MyLogger::getLogger()->error("Exception: ", ['message', $e->getMessage()]);
+            $this->logger->error("Exception: ", ['message', $e->getMessage()]);
             throw new DatabaseException("Database Exception: ".$e->getMessage(), 0, $e);
         }
         
-        MyLogger::getLogger()->info("Exiting EducationDAO.remove()");
+        $this->logger->info("Exiting EducationDAO.remove()");
         
         //Returns the results of the database query
         return $statement->rowCount();

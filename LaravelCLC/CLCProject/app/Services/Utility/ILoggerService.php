@@ -9,10 +9,8 @@
 
 namespace App\Services\Utility;
 
-interface ILogger{
-    
-    static function getLogger();
-    
+interface ILoggerService{
+
     public function debug($message, $data);
     
     public function info($message, $data);
