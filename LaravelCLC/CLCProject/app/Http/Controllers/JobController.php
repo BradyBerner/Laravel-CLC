@@ -49,7 +49,7 @@ class JobController extends Controller
             
             $data = ['job' => $result, 'applied' => $applied];
             
-            $logger->addInfo("Exiting JobController.index()");
+            $logger->info("Exiting JobController.index()");
             
             return view('viewJob')->with($data);
         } catch (\Exception $e){
