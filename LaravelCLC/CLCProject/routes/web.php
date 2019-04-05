@@ -132,3 +132,7 @@ Route::post('/leaveGroup', 'AffinityMemberController@leaveGroup');
 
 //Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');
+
+Route::resource('/userrest', 'UserRestController');
+
+Route::resource('/jobrest', 'JobRestController');

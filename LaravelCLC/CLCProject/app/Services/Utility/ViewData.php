@@ -30,7 +30,7 @@ class ViewData{
      * @return array [] Associative array of all the information needed to view the user's profile
      * @throws DatabaseException
      */
-    public static function getProfileData(int $userID, ILoggerService $logger){
+    public static function getProfileData($userID, ILoggerService $logger){
         
         $logger->info("Entering ViewData.getProfileData()", ['UserID' => $userID]);
         
@@ -78,7 +78,7 @@ class ViewData{
     }
     
     //Gets all of the affinity group data for a particular user when viewing the affinity group page
-    public static function getAffinityData(int $userID, ILoggerService $logger){
+    public static function getAffinityData($userID, ILoggerService $logger){
         
         $logger->info("Entering ViewData.getAffinityData()", ['UserID' => $userID]);
         
@@ -147,7 +147,7 @@ class ViewData{
      */
     private static function addMembersToGroupData($groups, ILoggerService $logger){
         
-        $logger->info("Entering ViewData.addMembersToGroupData()");
+        $logger->info("Entering ViewData.addMembersToGroupData()", []);
         
         //Creates instances of necessary business services
         $membersService = new AffinityMemberService();
@@ -164,7 +164,7 @@ class ViewData{
             $groups[$i]['members'] = $members;
         }
         
-        $logger->info("Exiting ViewData.addMembersToGroupData()");
+        $logger->info("Exiting ViewData.addMembersToGroupData()", []);
         
         return $groups;
     }

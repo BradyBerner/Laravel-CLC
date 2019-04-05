@@ -11,17 +11,22 @@ namespace App\Services\Business;
 
 use App\Models\JobModel;
 use App\Services\Utility\Connection;
+use App\Services\Utility\DatabaseException;
 use App\Services\Utility\ILoggerService;
 use App\Services\Data\JobDAO;
 
 class JobService
 {
 
-    // Function takes a job as an argument and calls the database registration service with that user then returns
-    // the result it gets
+    /**
+     * @param JobModel $job
+     * @param ILoggerService $logger
+     * @return array
+     * @throws DatabaseException
+     */
     public function newJob(JobModel $job, ILoggerService $logger)
     {
-        $logger->info("Entering JobService.newJob()");
+        $logger->info("Entering JobService.newJob()", []);
 
         //Creates connection with the database
         $connection = new Connection();
@@ -35,7 +40,7 @@ class JobService
         //Closes the connection to the database
         $connection = null;
 
-        $logger->info("Exiting JobService.newJob() with result: " . $result['result']);
+        $logger->info("Exiting JobService.newJob() with result: ", [$result['result']]);
 
         return $result;
     }
@@ -44,11 +49,11 @@ class JobService
      * Gets a specific job based off its ID
      * @param int $id The ID of the job to be retrieved
      * @return array Associative array representing the job returned from the database
-     * @throws \App\Services\Utility\DatabaseException
+     * @throws DatabaseException
      */
     public function getJob($id, ILoggerService $logger){
         
-        $logger->info("Entering JobService.getJob()");
+        $logger->info("Entering JobService.getJob()", []);
         
         //Creates connection with the database
         $connection = new Connection();
@@ -62,7 +67,7 @@ class JobService
         //Closes the connection to the database
         $connection = null;
         
-        $logger->info("Exiting JobService.getJob()");
+        $logger->info("Exiting JobService.getJob()", []);
         
         return $results;
     }
@@ -70,11 +75,11 @@ class JobService
     /**
      * Gets all of the jobs form the database
      * @return array An array containing all the jobs in the database
-     * @throws \App\Services\Utility\DatabaseException
+     * @throws DatabaseException
      */
     public function getAllJobs(ILoggerService $logger){
         
-        $logger->info("Entering JobService.getAllUsers()");
+        $logger->info("Entering JobService.getAllUsers()", []);
         
         //Creates connection with the database
         $connection = new Connection();
@@ -88,7 +93,7 @@ class JobService
         //Closes the connection to the databse
         $connection = null;
         
-        $logger->info("Exiting JobService.getAllUsers()");
+        $logger->info("Exiting JobService.getAllUsers()", []);
         
         //Returns the results obtained from the data access object
         return $results;
@@ -96,7 +101,7 @@ class JobService
     
     public function editJob(JobModel $job, ILoggerService $logger){
         
-        $logger->info("Entering JobService.editJob");
+        $logger->info("Entering JobService.editJob", []);
         
         //Creates connection with the database
         $connection = new Connection();
@@ -110,7 +115,7 @@ class JobService
         //Closes the connection to the database
         $connection = null;
         
-        $logger->info("Exiting JobService.editJob()");
+        $logger->info("Exiting JobService.editJob()", []);
         
         //Returns the results obtained from the data access object
         return $results;
@@ -120,11 +125,11 @@ class JobService
      * Removes a job posting from the database
      * @param int $id The ID of the job to be removed from the database
      * @return boolean The result of whether or not the job was removed from the database
-     * @throws \App\Services\Utility\DatabaseException
+     * @throws DatabaseException
      */
     public function removeJob($id, ILoggerService $logger){
         
-        $logger->info("Entering JobService.removeJob()");
+        $logger->info("Entering JobService.removeJob()", []);
         
         //Creates connection with the database
         $connection = new Connection();
@@ -138,7 +143,7 @@ class JobService
         //Closes the connection to the database
         $connection = null;
         
-        $logger->info("Exiting UserService.removeUser()");
+        $logger->info("Exiting UserService.removeUser()", []);
         
         //Returns the results obtained from the data access object
         return $results;
