@@ -2,24 +2,24 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Session;
 use Closure;
+use Illuminate\Http\Request;
 
-class LoggedIn
+class SecurityMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if(!Session::has('ID')){
-            return redirect('/');    
+        if(!$request->session()->has('ID')){
+            abort(403, "Forbidden");
         }
-        
+
         return $next($request);
     }
 }

@@ -3,21 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\DTO;
+use App\Services\Business\JobService;
 use App\Services\Utility\ILoggerService;
-use App\Services\Utility\ViewData;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class UserProfileRestController extends Controller
+class JobRestController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index()
+    public function index(ILoggerService $logger)
     {
-        return json_encode(new DTO(501, "Not Implemented", null));
+        $logger->info("Entering JobRestController.index()", []);
+
+        try{
+            $service = new JobService();
+
+            $job = $service->getAllJobs($logger);
+
+            if($job != null){
+                $dto = new DTO(200, "OK", $job);
+            } else {
+                $dto = new DTO(204, "No Content", null);
+            }
+
+            $logger->info("Exiting JobRestController.index()", []);
+
+            return json_encode($dto);
+        } catch (Exception $e){
+            $logger->error("Error in JobRestController.index()", [$e]);
+            return json_encode(new DTO(500, "Internal Server Error", null));
+        }
     }
 
     /**
@@ -49,29 +69,24 @@ class UserProfileRestController extends Controller
      */
     public function show($id, ILoggerService $logger)
     {
-        $logger->info("Entering UserProfileRestController.show()", []);
+        $logger->info("Entering JobRestController.show()", []);
 
         try{
-            $profile = ViewData::getProfileData($id, $logger);
+            $service = new JobService();
 
-            if($profile['user'] != false){
-                $dto = new DTO(200, "OK", [
-                    'user' => $profile['user'],
-                    'info' => $profile['info'],
-                    'address' => $profile['address'],
-                    'education' => $profile['educations'],
-                    'experiences' => $profile['experiences'],
-                    'skills' => $profile['skills']
-                ]);
+            $job = $service->getJob($id, $logger)['job'];
+
+            if($job != null){
+                $dto = new DTO(200, "OK", $job);
             } else {
                 $dto = new DTO(204, "No Content", null);
             }
 
-            $logger->info("Exiting UserProfileRestController.show()", [$dto]);
+            $logger->info("Exiting JobRestController.show()", []);
 
             return json_encode($dto);
-        } catch (\Exception $e){
-            $logger->error("Error in UserProfileRestController.show()", [$e->getMessage()]);
+        } catch (Exception $e){
+            $logger->error("Error in JobRestController.show()", null);
             return json_encode(new DTO(500, "Internal Server Error", null));
         }
     }
