@@ -14,6 +14,7 @@ class JobRestController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param ILoggerService $logger
      * @return Response
      */
     public function index(ILoggerService $logger)
@@ -26,7 +27,12 @@ class JobRestController extends Controller
             $job = $service->getAllJobs($logger);
 
             if($job != null){
-                $dto = new DTO(200, "OK", $job);
+                if(count($job) <= 100) {
+                    $dto = new DTO(200, "OK", $job);
+                } else{
+                    $dto = new DTO(206, "There were too many results so only the first 100 have been returned",
+                        array_slice($job, 0, 100));
+                }
             } else {
                 $dto = new DTO(204, "No Content", null);
             }
@@ -64,7 +70,8 @@ class JobRestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     * @param ILoggerService $logger
      * @return Response
      */
     public function show($id, ILoggerService $logger)
