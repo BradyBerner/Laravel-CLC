@@ -44,7 +44,8 @@ class UserProfileRestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     * @param ILoggerService $logger
      * @return Response
      */
     public function show($id, ILoggerService $logger)
