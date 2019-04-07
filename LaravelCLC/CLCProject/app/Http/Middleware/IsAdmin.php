@@ -19,12 +19,12 @@ class IsAdmin
         if(Session::has('ROLE')){
             
             if(!session('ROLE')){
-                return redirect('/');
+                abort(403, "Forbidden");
             }
         
             return $next($request);
         }
-        
-        return redirect('/');
+
+        abort(403, "Forbidden");
     }
 }
