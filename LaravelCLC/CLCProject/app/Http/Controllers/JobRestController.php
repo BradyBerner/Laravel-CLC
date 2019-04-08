@@ -29,7 +29,7 @@ class JobRestController extends Controller
             if($job != null){
                 if(count($job) <= 100) {
                     $dto = new DTO(200, "OK", $job);
-                } else{
+                } else {
                     $dto = new DTO(206, "There were too many results so only the first 100 have been returned",
                         array_slice($job, 0, 100));
                 }

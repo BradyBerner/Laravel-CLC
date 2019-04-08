@@ -38,8 +38,20 @@ Route::get('/Register', function () {
     return view('register');
 });
 
+//Takes search form input and sends it to the job search controller
+Route::get('/jobSearch', 'JobSearchController@index');
+
+//Uses arguments from the form used to take the user here to display the information of the relevant job
+Route::post('/viewJob', 'JobController@index');
+
 // Submits form data from registration form to registration controller
 Route::post('/registrationHandler', 'RegistrationController@index');
+
+// Url for access to all API calls having to do with a user profile
+Route::resource('/userrest', 'UserProfileRestController');
+
+// Url for access to all API calls having to do with a job
+Route::resource('/jobrest', 'JobRestController');
 
 Route::group(['middleware' => 'secure'], function(){
     //Displays a user's affinity groups and suggested affinity groups as long as they're loggedin
@@ -128,15 +140,5 @@ Route::group(['middleware' => 'admin'], function(){
     Route::post('/userRemoveHandler', 'UserAdminController@removeUser');
 });
 
-//Takes search form input and sends it to the job search controller
-Route::get('/jobSearch', 'JobSearchController@index');
-
-//Uses arguments from the form used to take the user here to display the information of the relevant job
-Route::post('/viewJob', 'JobController@index');
-
 //Goes to the signout controller method to flush the current session data so that the user is signed out
 Route::get('/SignOut', 'SignOutController@index');
-
-Route::resource('/userrest', 'UserProfileRestController');
-
-Route::resource('/jobrest', 'JobRestController');
