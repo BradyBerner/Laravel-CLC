@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Closure;
 
@@ -10,13 +11,13 @@ class IsAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if(Session::has('ROLE')){
+        if($request->session()->has('ROLE') && $request->session() != null){
             
             if(!session('ROLE')){
                 abort(403, "Forbidden");
