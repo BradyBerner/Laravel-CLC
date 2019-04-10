@@ -16,7 +16,7 @@ class SecurityMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(!$request->session()->has('ID')){
+        if(!$request->session()->has('ID') || $request->session() == null){
             abort(403, "Please login before viewing this page");
         }
 
