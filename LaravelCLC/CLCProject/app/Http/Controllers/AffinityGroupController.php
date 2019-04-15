@@ -10,33 +10,46 @@
 namespace App\Http\Controllers;
 
 use App\Services\Utility\ILoggerService;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use App\Services\Utility\ViewData;
 use App\Models\AffinityGroupModel;
 use App\Services\Business\AffinityGroupService;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
+/**
+ * Class AffinityGroupController
+ * @package App\Http\Controllers
+ */
 class AffinityGroupController extends Controller
 {
     
     /*
      * Returns the group view with the affinity group data for the user trying to view the page
      */
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     */
     public function index(Request $request, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupController.index()");
+        $logger->info("Entering AffinityGroupController.index()", []);
         
         try{
             //Gets the user's id from the request
             $userID = $request->input('ID');
             
-            $logger->info("Exiting AffinityGroupController.index()");
+            $logger->info("Exiting AffinityGroupController.index()", []);
             
             //Returns the groups view with the data for the user retrieved from the view data method
             return view('groups')->with(ViewData::getAffinityData($userID, $logger));
-        } catch (\Exception $e){
-            $logger->error("Exception occured in AffinityGroupController.index(): " . $e->getMessage());
+        } catch (Exception $e){
+            $logger->error("Exception occurred in AffinityGroupController.index(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -45,9 +58,15 @@ class AffinityGroupController extends Controller
     /*
      * Handles a request for a user to make a new method
      */
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     * @throws ValidationException
+     */
     public function newGroup(Request $request, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupController.newGroup()");
+        $logger->info("Entering AffinityGroupController.newGroup()", []);
         
         //Validates user input
         $this->validateGroupInput($request);
@@ -62,12 +81,12 @@ class AffinityGroupController extends Controller
             //Stores the results of the service method call
             $results = $service->createGroup($group, $logger);
             
-            $logger->info("Exiting AffinityGroupController.newGroup() with a result of " . $results);
+            $logger->info("Exiting AffinityGroupController.newGroup() with a result of ", [$results]);
             
             //Returns the groups view the proper viewdata for the user
             return view('groups')->with(ViewData::getAffinityData($group->getUserID(), $logger));
-        } catch (\Exception $e){
-            $logger->error("Exception occured in AffinityGroupController.newGroup(): " . $e->getMessage());
+        } catch (Exception $e){
+            $logger->error("Exception occured in AffinityGroupController.newGroup(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -76,17 +95,20 @@ class AffinityGroupController extends Controller
     /*
      * Handles a user request to edit an affinity group
      */
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     * @throws ValidationException
+     */
     public function editGroup(Request $request, ILoggerService $logger){
 
-        $logger->info("Entering AffinityGroupController.editGroup()");
+        $logger->info("Entering AffinityGroupController.editGroup()", []);
 
         //Validates the user's input against pre-defined rules
         //TODO:: ask Reha about the proper way for passing back validation errors to a view when catching them
-        try {
-            $this->validateGroupEditInput($request);
-        } catch (\Exception $e){
-            return view('groups')->with(ViewData::getAffinityData($request->session()->get('ID'), $logger))->withErrors($e->getMessage());
-        }
+        $this->validateGroupEditInput($request);
+
 
         try{
             //Creates an affinity group model using the information from the request
@@ -98,21 +120,25 @@ class AffinityGroupController extends Controller
             //Stores the results of the service method call
             $results = $service->editGroup($group, $logger);
             
-            $logger->info("Exiting AffinityGroupController.editGroup() with a result of " . $results);
+            $logger->info("Exiting AffinityGroupController.editGroup() with a result of ", [$results]);
             
             //Returns the affinity groups view with the viewdata for the user
             return view('groups')->with(ViewData::getAffinityData($request->session()->get('ID'), $logger));
-        } catch (\Exception $e){
-            $logger->error("Exception occured in AffinityGroupController.newGroup(): " . $e->getMessage());
+        } catch (Exception $e){
+            $logger->error("Exception occured in AffinityGroupController.newGroup(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @throws ValidationException
+     */
     private function validateGroupInput(Request $request){
         $rules = [
             'name' => ['Required', 'Between:3,45', Rule::unique('AFFINITYGROUPS', 'NAME')->where(function ($query){
-            return $query->where('USERS_IDUSERS', Session::get('ID'));
+                return $query->where('USERS_IDUSERS', Session::get('ID'));
             })],
             'description' => 'Required | Between:1,65535',
             'focus' => 'Required'
@@ -120,7 +146,11 @@ class AffinityGroupController extends Controller
         
         $this->validate($request, $rules);
     }
-    
+
+    /**
+     * @param Request $request
+     * @throws ValidationException
+     */
     private function validateGroupEditInput(Request $request){
         $rules = [
             'name' => 'Required | Between:3,45',
@@ -134,9 +164,14 @@ class AffinityGroupController extends Controller
     /*
      * Handles a user request to delete an afinity group
      */
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     */
     public function deleteGroup(Request $request, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupController.deleteGroup()");
+        $logger->info("Entering AffinityGroupController.deleteGroup()", []);
         
         try{
             //Get the group id from the request
@@ -148,12 +183,12 @@ class AffinityGroupController extends Controller
             //Stores the results of the service method call
             $results = $service->deleteGroup($id, $logger);
             
-            $logger->info("Exiting AffinityGroupController.deleteGroup() with a result of " . $results);
+            $logger->info("Exiting AffinityGroupController.deleteGroup() with a result of ", [$results]);
             
             //Returns the affinity group view with the viewdata for the user
             return view('groups')->with(ViewData::getAffinityData($request->session()->get('ID'), $logger));
-        } catch (\Exception $e){
-            $logger->error("Exception occured in AffinityGroupController.newGroup(): " . $e->getMessage());
+        } catch (Exception $e){
+            $logger->error("Exception occurred in AffinityGroupController.newGroup(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

@@ -10,20 +10,31 @@
 namespace App\Services\Business;
 
 use App\Services\Utility\ILoggerService;
+use Exception;
 use PDO;
 use App\Services\Utility\Connection;
 use App\Services\Data\AffinityGroupDAO;
 use App\Models\AffinityGroupModel;
 use App\Services\Utility\DatabaseException;
 
+/**
+ * Class AffinityGroupService
+ * @package App\Services\Business
+ */
 class AffinityGroupService{
     
     /*
      * Gets an affinity group with a particular id
      */
-    public function getByID(int $id, ILoggerService $logger){
+    /**
+     * @param int $id
+     * @param ILoggerService $logger
+     * @return array
+     * @throws DatabaseException
+     */
+    public function getByID($id, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupService.getByID()");
+        $logger->info("Entering AffinityGroupService.getByID()", []);
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -36,7 +47,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        $logger->info("Exiting AffinityGroupService.getByID()");
+        $logger->info("Exiting AffinityGroupService.getByID()", []);
         
         return $results;
     }
@@ -44,9 +55,15 @@ class AffinityGroupService{
     /*
      * Gets all of the affinity groups that a particular user owns
      */
+    /**
+     * @param $userID
+     * @param ILoggerService $logger
+     * @return array
+     * @throws DatabaseException
+     */
     public function getAllOwned($userID, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupService.getAllOwned()");
+        $logger->info("Entering AffinityGroupService.getAllOwned()", []);
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -59,7 +76,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        $logger->info("Exiting AffinityGroupService.getAllOwned()");
+        $logger->info("Exiting AffinityGroupService.getAllOwned()", []);
         
         return $results;
     }
@@ -67,9 +84,14 @@ class AffinityGroupService{
     /*
      * Gets all of the affinity groups in the database
      */
+    /**
+     * @param ILoggerService $logger
+     * @return array
+     * @throws DatabaseException
+     */
     public function getAll(ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupService.getAll()");
+        $logger->info("Entering AffinityGroupService.getAll()", []);
         
         //Creates a connection to the database
         $connection = new Connection();
@@ -82,7 +104,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        $logger->info("Exiting AffinityGroupService.getAll()");
+        $logger->info("Exiting AffinityGroupService.getAll()", []);
         
         return $results;
     }
@@ -90,9 +112,15 @@ class AffinityGroupService{
     /*
      * Creates a new group entry in the database
      */
+    /**
+     * @param AffinityGroupModel $group
+     * @param ILoggerService $logger
+     * @return mixed
+     * @throws DatabaseException
+     */
     public function createGroup(AffinityGroupModel $group, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupService.createGroup()");
+        $logger->info("Entering AffinityGroupService.createGroup()", []);
         
         try{
         //Creates a connection to the database
@@ -114,7 +142,7 @@ class AffinityGroupService{
             $memberService = new AffinityMemberService();
             
             //Stores the results of the member service method call using the non-auto-commit connection
-            $joinResults = $memberService->joinOnCreation($connection, $group->getUserID(), $results['insertID']);
+            $joinResults = $memberService->joinOnCreation($connection, $group->getUserID(), $results['insertID'], $logger);
             
             //Checks to make sure that the member service method succeded
             if($joinResults){
@@ -128,13 +156,13 @@ class AffinityGroupService{
         
         $connection = null;
         
-        } catch (\Exception $e){
+        } catch (Exception $e){
             $logger->error("Database exception: ", $e->getMessage());
             $connection->rollBack();
-            throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
+            throw new DatabaseException("Exception: " . $e->getMessage(), 0, $e);
         }
         
-        $logger->info("Exiting AffinityGroupService.createGroup()");
+        $logger->info("Exiting AffinityGroupService.createGroup()", []);
         
         return $results['result'];
     }
@@ -142,9 +170,15 @@ class AffinityGroupService{
     /*
      * Method for editing an existing group in the database
      */
+    /**
+     * @param AffinityGroupModel $group
+     * @param ILoggerService $logger
+     * @return int
+     * @throws DatabaseException
+     */
     public function editGroup(AffinityGroupModel $group, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupService.editGroup()");
+        $logger->info("Entering AffinityGroupService.editGroup()", []);
 
         //Get a connection to the database
         $connection = new Connection();
@@ -157,7 +191,7 @@ class AffinityGroupService{
         
         $connection = null;
             
-        $logger->info("Exiting AffinityGroupService.editGroup()");
+        $logger->info("Exiting AffinityGroupService.editGroup()", []);
             
         return $results;
     }
@@ -165,9 +199,15 @@ class AffinityGroupService{
     /*
      * Method for deleting an existing group in the database
      */
-    public function deleteGroup(int $id, ILoggerService $logger){
+    /**
+     * @param $id
+     * @param ILoggerService $logger
+     * @return int
+     * @throws DatabaseException
+     */
+    public function deleteGroup($id, ILoggerService $logger){
         
-        $logger->info("Entering AffinityGroupService.deleteGroup()");
+        $logger->info("Entering AffinityGroupService.deleteGroup()", []);
         
         //Get a connection to the database
         $connection = new Connection();
@@ -180,7 +220,7 @@ class AffinityGroupService{
         
         $connection = null;
         
-        $logger->info("Exiting AffinityGroupService.deleteGroup()");
+        $logger->info("Exiting AffinityGroupService.deleteGroup()", []);
         
         return $results;
     }

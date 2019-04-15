@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 /*
  * Brady Berner & Pengyu Yin
@@ -14,14 +14,29 @@ use PDO;
 use App\Services\Utility\DatabaseException;
 use App\Models\AffinityGroupModel;
 
+/**
+ * Class AffinityGroupDAO
+ * @package App\Services\Data
+ */
 class AffinityGroupDAO{
     
     //Stores the connection that all methods will user for executing their queries 
+    /**
+     * @var PDO
+     */
     private $conn;
+    /**
+     * @var ILoggerService
+     */
     private $logger;
     
     /*
      * Non-default constructor that sets the connection field that all methods will use to execute their queries
+     */
+    /**
+     * AffinityGroupDAO constructor.
+     * @param PDO $connection
+     * @param ILoggerService $logger
      */
     public function __construct(PDO $connection, ILoggerService $logger){
         $this->conn = $connection;
@@ -31,9 +46,14 @@ class AffinityGroupDAO{
     /*
      * Method for creating a new affinity group
      */
+    /**
+     * @param AffinityGroupModel $group
+     * @return array
+     * @throws DatabaseException
+     */
     public function create(AffinityGroupModel $group){
         
-        $this->logger->info("Entering AffinityGroupDAO.create()");
+        $this->logger->info("Entering AffinityGroupDAO.create()", []);
         
         //Gets information from the affinity group model
         $name = $group->getName();
@@ -63,7 +83,12 @@ class AffinityGroupDAO{
     /*
      * Method gets an affinity group from it's id
      */
-    public function getByID(int $id){
+    /**
+     * @param $id
+     * @return array
+     * @throws DatabaseException
+     */
+    public function getByID($id){
         
         $this->logger->info("Entering AffinityGroupDAO.getByID()");
         
@@ -84,6 +109,10 @@ class AffinityGroupDAO{
     
     /*
      * Gets all the affinity groups from the database and returns them in an array
+     */
+    /**
+     * @return array
+     * @throws DatabaseException
      */
     public function getAll(){
         
@@ -111,6 +140,11 @@ class AffinityGroupDAO{
     
     /*
      * Gets all of the affinity groups that a user owns
+     */
+    /**
+     * @param $userID
+     * @return array
+     * @throws DatabaseException
      */
     public function getOwned($userID){
         
@@ -140,6 +174,11 @@ class AffinityGroupDAO{
     
     /*
      * Edits an existing affinity group
+     */
+    /**
+     * @param AffinityGroupModel $group
+     * @return int
+     * @throws DatabaseException
      */
     public function edit(AffinityGroupModel $group){
         
@@ -171,6 +210,11 @@ class AffinityGroupDAO{
     
     /*
      * Deletes an affinity group from the database
+     */
+    /**
+     * @param int $id
+     * @return int
+     * @throws DatabaseException
      */
     public function delete(int $id){
         
