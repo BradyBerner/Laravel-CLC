@@ -62,14 +62,19 @@ class AffinityGroupController extends Controller
      * @param Request $request
      * @param ILoggerService $logger
      * @return Factory|View
-     * @throws ValidationException
      */
     public function newGroup(Request $request, ILoggerService $logger){
         
         $logger->info("Entering AffinityGroupController.newGroup()", []);
         
         //Validates user input
-        $this->validateGroupInput($request);
+        try {
+            $this->validateGroupInput($request);
+        } catch(ValidationException $e){
+            $viewdata = ViewData::getAffinityData($request->session()->get('ID'), $logger);
+            $viewdata['errors'] = $e->errors();
+            return view('groups')->with($viewdata);
+        }
         
         try{
             //Creates a affinity group model using the user's input
@@ -99,15 +104,19 @@ class AffinityGroupController extends Controller
      * @param Request $request
      * @param ILoggerService $logger
      * @return Factory|View
-     * @throws ValidationException
      */
     public function editGroup(Request $request, ILoggerService $logger){
 
         $logger->info("Entering AffinityGroupController.editGroup()", []);
 
         //Validates the user's input against pre-defined rules
-        //TODO:: ask Reha about the proper way for passing back validation errors to a view when catching them
-        $this->validateGroupEditInput($request);
+        try {
+            $this->validateGroupEditInput($request);
+        } catch(ValidationException $e){
+            $viewdata = ViewData::getAffinityData($request->session()->get('ID'), $logger);
+            $viewdata['errors'] = $e->errors();
+            return view('groups')->with($viewdata);
+        }
 
 
         try{

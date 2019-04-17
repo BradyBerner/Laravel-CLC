@@ -18,10 +18,6 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 	background-color: rgb(60, 63, 65) !important;
 }
 
-.table .text-center {
-    text-align:center;
-}  
-
 .form-control{
     display:inline-block;
 }
@@ -30,10 +26,11 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 
 @section('content')
 
-<!-- Echos out any validation errors -->
-@if($errors->count() != 0)
-	@foreach($errors->all() as $error)
-		<div class="alert alert-danger" role="alert" style="width:30%;">{{$error}}</div>
+@if(!$errors instanceof \Illuminate\Support\ViewErrorBag)
+	@foreach($errors as $errorGroup)
+		@foreach($errorGroup as $error)
+			<div class="alert alert-danger" role="alert" style="width:30%;">{{$error}}</div>
+		@endforeach
 	@endforeach
 @endif
 

@@ -10,9 +10,11 @@
 namespace App\Http\Controllers;
 
 use App\Services\Utility\ILoggerService;
+use Exception;
 use Illuminate\Http\Request;
 use App\Services\Business\UserService;
 use App\Models\UserModel;
+use Illuminate\Validation\ValidationException;
 
 class UserAdminController extends Controller
 {
@@ -21,7 +23,7 @@ class UserAdminController extends Controller
     public function index(ILoggerService $logger)
     {
         try {
-            $logger->info("Entering UserAdminController.index()");
+            $logger->info("Entering UserAdminController.index()", []);
 
             // Creates new instance of the appropriate service
             $service = new UserService();
@@ -34,11 +36,11 @@ class UserAdminController extends Controller
                 'results' => $results
             ];
 
-            $logger->info("Exiting UserAdminController.index()");
+            $logger->info("Exiting UserAdminController.index()", []);
 
             return view('userAdmin')->with($data);
-        } catch (\Exception $e) {
-            $logger->error("Exception occurred in UserAdminController.index(): " . $e->getMessage());
+        } catch (Exception $e) {
+            $logger->error("Exception occurred in UserAdminController.index(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -47,11 +49,11 @@ class UserAdminController extends Controller
     // Method takes form input from the previous form and attempts to update the database entry for the corresponding user
     public function editUser(Request $request, ILoggerService $logger)
     {
-        $logger->info("Entering UserAdminController.editUser()");
+        $logger->info("Entering UserAdminController.editUser()", []);
 
         // Validates form input against pre-defined rules
         $this->validateEdit($request);
-        
+
         try {
 
             // Creates a new user Model using the information gotten from the form input
@@ -63,13 +65,13 @@ class UserAdminController extends Controller
             // Stores the results of the appropriate query
             $results = $service->editUser($user, $logger);
 
-            $logger->info("Exiting UserAdminController.editUser()");
+            $logger->info("Exiting UserAdminController.editUser()", []);
 
             if ($results) {
                 return view('userAdmin')->with(['results' => $service->getAllUsers($logger)]);
             }
-        } catch (\Exception $e) {
-            $logger->error("Exception occurred in UserAdminController.editUser(): " . $e->getMessage());
+        } catch (Exception $e) {
+            $logger->error("Exception occurred in UserAdminController.editUser(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
@@ -92,7 +94,7 @@ class UserAdminController extends Controller
     // Method takes an ID from the form that submitted the request and attempts to delete the user of the corresponding ID
     public function removeUser(Request $request, ILoggerService $logger)
     {
-        $logger->info("Entering UserAdminController.removeUser()");
+        $logger->info("Entering UserAdminController.removeUser()", []);
 
         try {
 
@@ -105,13 +107,13 @@ class UserAdminController extends Controller
             // Stores the result of the attempted removal of the user
             $results = $service->removeUser($id, $logger);
 
-            $logger->info("Exiting UserAdminController.removeUser()");
+            $logger->info("Exiting UserAdminController.removeUser()", []);
 
             if ($results) {
                 return view('userAdmin')->with(['results' => $service->getAllUsers($logger)]);
             }
-        } catch (\Exception $e) {
-            $logger->error("Exception occurred in UserAdminController.removeUser(): " . $e->getMessage());
+        } catch (Exception $e) {
+            $logger->error("Exception occurred in UserAdminController.removeUser(): ", [$e->getMessage()]);
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }

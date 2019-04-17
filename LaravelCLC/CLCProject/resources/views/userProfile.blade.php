@@ -154,7 +154,7 @@ input {
 	<div class="card-body" id="darkStyle">
 		<div class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="education" role="tabpanel" aria-labelledby="home-tab">
-				<div class="card-deck"">
+				<div class="card-deck">
 				@if(count($educations) > 0)
 					@foreach($educations as $education)
 						<div class="card" id="darkerStyle">
