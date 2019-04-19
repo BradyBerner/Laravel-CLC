@@ -10,21 +10,21 @@ This assignment was completed in collaboration with Brady Berner, Pengyu Yin
 
 @section('style')
 <style>
-#card-item {
-	background-color: rgb(60, 63, 65) !important;
-}
+	#card-item {
+		background-color: rgb(60, 63, 65) !important;
+	}
 
-#darkerStyle {
-	background-color: rgb(43, 43, 43) !important;
-}
+	#darkerStyle {
+		background-color: rgb(43, 43, 43) !important;
+	}
 
-#darkStyle {
-	background-color: rgb(60, 63, 65) !important;
-}
+	#darkStyle {
+		background-color: rgb(60, 63, 65) !important;
+	}
 
-input {
-	width: 70% !important;
-}
+	input {
+		width: 70% !important;
+	}
 </style>
 @endsection 
 
