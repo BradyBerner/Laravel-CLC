@@ -12,10 +12,18 @@ namespace App\Http\Controllers;
 use App\Services\Utility\ILoggerService;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Class SignOutController
+ * @package App\Http\Controllers
+ */
 class SignOutController extends Controller
 {
 
     // Doesn't take any information from a previous form or anything simply logs actions flushes the session and returns to home
+    /**
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(ILoggerService $logger)
     {
         try {

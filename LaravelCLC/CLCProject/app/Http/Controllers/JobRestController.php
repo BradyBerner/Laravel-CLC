@@ -9,6 +9,10 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Class JobRestController
+ * @package App\Http\Controllers
+ */
 class JobRestController extends Controller
 {
     /**

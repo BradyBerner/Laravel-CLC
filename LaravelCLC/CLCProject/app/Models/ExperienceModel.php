@@ -9,17 +9,56 @@
 
 namespace App\Models;
 
+/**
+ * Class ExperienceModel
+ * @package App\Models
+ */
 class ExperienceModel{
-    
+
+    /**
+     * @var
+     */
     private $id;
+    /**
+     * @var
+     */
     private $title;
+    /**
+     * @var
+     */
     private $company;
+    /**
+     * @var
+     */
     private $current;
+    /**
+     * @var
+     */
     private $startyear;
+    /**
+     * @var
+     */
     private $endyear;
+    /**
+     * @var
+     */
     private $description;
+    /**
+     * @var
+     */
     private $userID;
-    
+
+    /**
+     * ExperienceModel constructor.
+     * @param $id
+     * @param $title
+     * @param $company
+     * @param $current
+     * @param $startyear
+     * @param $endyear
+     * @param $description
+     * @param $userID
+     */
     public function __construct($id, $title, $company, $current, $startyear, $endyear, $description, $userID){
         $this->id = $id;
         $this->title = $title;

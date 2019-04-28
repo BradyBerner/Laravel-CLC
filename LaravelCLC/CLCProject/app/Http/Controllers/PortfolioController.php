@@ -21,8 +21,17 @@ use App\Services\Business\SkillService;
 use App\Models\SkillModel;
 use App\Services\Utility\ViewData;
 
+/**
+ * Class PortfolioController
+ * @package App\Http\Controllers
+ */
 class PortfolioController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function removeEducation(Request $request, ILoggerService $logger){
         
         $logger->info("Entering UserEditController.removeEducation()");
@@ -46,7 +55,12 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addEducation(Request $request, ILoggerService $logger){
         $logger->info("Entering UserEditController.addEducation()");
         
@@ -73,7 +87,12 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editEducation(Request $request, ILoggerService $logger){
         $logger->info("Entering UserEditController.editEducation()");
         
@@ -100,7 +119,11 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateEducationInput(Request $request){
         $rules = [
             'school' => 'Required | Between:4,50',
@@ -113,7 +136,12 @@ class PortfolioController extends Controller
         
         $this->validate($request, $rules);
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function removeExperience(Request $request, ILoggerService $logger){
         
         $logger->info("Entering UserEditController.removeExperience()");
@@ -137,7 +165,12 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addExperience(Request $request, ILoggerService $logger){
         
         $logger->info("Entering UserEditController.addExperience()");
@@ -165,7 +198,12 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editExperience (Request $request, ILoggerService $logger){
         
         $logger->info("Entering UserEditController.editExperience()");
@@ -180,7 +218,7 @@ class PortfolioController extends Controller
             //Creates instance of the appropriate service
             $service = new ExperienceService();
             
-            //Calls teh associated function and stores the results of the function call
+            //Calls the associated function and stores the results of the function call
             $results = $service->update($experience, $logger);
             
             $logger->info("Exiting UserEditController.editExperience() with a result of ", [$results]);
@@ -193,7 +231,11 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateExperienceInput(Request $request){
         $rules = [
             'title' => 'Required | Between:4,45',
@@ -206,7 +248,12 @@ class PortfolioController extends Controller
         
         $this->validate($request, $rules);
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addSkill(Request $request, ILoggerService $logger){
         
         $logger->info("Entering UserEditController.addSkill()");
@@ -234,7 +281,11 @@ class PortfolioController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateSkillInput(Request $request){
         $rules = [
             'skill' => ['Required', 'Between:2,45', Rule::unique('SKILLS', 'SKILL')->where(function ($query){
@@ -245,7 +296,12 @@ class PortfolioController extends Controller
         
         $this->validate($request, $rules);
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function removeSkill(Request $request, ILoggerService $logger){
         
         $logger->info("Entering UserEditController.removeSkill()");

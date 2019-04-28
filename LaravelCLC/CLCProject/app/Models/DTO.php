@@ -2,11 +2,24 @@
 
 namespace App\Models;
 
+/**
+ * Class DTO
+ * @package App\Models
+ */
 class DTO implements \JsonSerializable
 {
 
+    /**
+     * @var
+     */
     private $errorCode;
+    /**
+     * @var
+     */
     private $errorMessage;
+    /**
+     * @var
+     */
     private $data;
 
     /**

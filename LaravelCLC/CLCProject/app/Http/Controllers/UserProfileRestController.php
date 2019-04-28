@@ -8,6 +8,10 @@ use App\Services\Utility\ViewData;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Class UserProfileRestController
+ * @package App\Http\Controllers
+ */
 class UserProfileRestController extends Controller
 {
     /**

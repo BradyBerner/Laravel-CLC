@@ -16,10 +16,18 @@ use App\Services\Business\UserService;
 use App\Models\UserModel;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Class UserAdminController
+ * @package App\Http\Controllers
+ */
 class UserAdminController extends Controller
 {
 
     // Method gets the all the user data in the database and returns it to the admin page so administrators can manage users
+    /**
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(ILoggerService $logger)
     {
         try {
@@ -47,6 +55,12 @@ class UserAdminController extends Controller
     }
 
     // Method takes form input from the previous form and attempts to update the database entry for the corresponding user
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editUser(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering UserAdminController.editUser()", []);
@@ -78,6 +92,11 @@ class UserAdminController extends Controller
     }
 
     // Contains the rules for validating form input for editing users
+
+    /**
+     * @param Request $request
+     * @throws ValidationException
+     */
     private function validateEdit(Request $request)
     {
         $rules = [
@@ -92,6 +111,12 @@ class UserAdminController extends Controller
     }
 
     // Method takes an ID from the form that submitted the request and attempts to delete the user of the corresponding ID
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function removeUser(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering UserAdminController.removeUser()", []);

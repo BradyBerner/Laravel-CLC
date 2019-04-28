@@ -10,12 +10,18 @@
 namespace App\Http\Controllers;
 
 use App\Services\Utility\ILoggerService;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\JobModel;
 use App\Services\Business\JobService;
 use App\Services\Business\JobApplicantService;
+use Illuminate\View\View;
 
+/**
+ * Class JobController
+ * @package App\Http\Controllers
+ */
 class JobController extends Controller
 {
 
@@ -23,7 +29,7 @@ class JobController extends Controller
      * Handles the user's viewing of a job
      * @param Request $request
      * @param ILoggerService $logger
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return View|Factory
      */
     public function index(Request $request, ILoggerService $logger){
         try{
@@ -61,6 +67,11 @@ class JobController extends Controller
 
     // Function recives user registration input, uses it to create a job object and then uses that object
     // to attempt to create a new database entry
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     */
     public function createJob(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering JobController.createJob()");
@@ -91,6 +102,11 @@ class JobController extends Controller
     }
 
     // Contains the rules for validating the job creation
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateForm(Request $request)
     {
         $rules = [
@@ -103,7 +119,12 @@ class JobController extends Controller
         
         $this->validate($request, $rules);
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     */
     public function apply(Request $request, ILoggerService $logger){
         
         $logger->info("Entering JobController.apply()");
@@ -131,7 +152,12 @@ class JobController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     */
     public function cancelApplication(Request $request, ILoggerService $logger){
         
         $logger->info("Entering JobController.cancelApplication()");

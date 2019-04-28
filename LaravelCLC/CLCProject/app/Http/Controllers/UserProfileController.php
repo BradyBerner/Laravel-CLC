@@ -13,10 +13,19 @@ use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use App\Services\Utility\ViewData;
 
+/**
+ * Class UserProfileController
+ * @package App\Http\Controllers
+ */
 class UserProfileController extends Controller
 {
 
     // Takes the request that contains the ID for the user's profile that it's suposed to display
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request, ILoggerService $logger)
     {
         try {

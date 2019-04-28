@@ -9,18 +9,50 @@
 
 namespace App\Models;
 
+/**
+ * Class JobModel
+ * @package App\Models
+ */
 class JobModel
 {
     //Attributes corresponding to the data stored in the database for all entries of the corresponding table
+    /**
+     * @var
+     */
     private $id;
+    /**
+     * @var
+     */
     private $title;
+    /**
+     * @var
+     */
     private $company;
+    /**
+     * @var
+     */
     private $state;
+    /**
+     * @var
+     */
     private $city;
+    /**
+     * @var
+     */
     private $description;
     
     //Sets all attributes equal to the corresponding value passed to the constructor
-    function __construct($id,$title,$company,$state,$city,$description)
+
+    /**
+     * JobModel constructor.
+     * @param $id
+     * @param $title
+     * @param $company
+     * @param $state
+     * @param $city
+     * @param $description
+     */
+    function __construct($id, $title, $company, $state, $city, $description)
     {
         $this->id = $id;
         $this->title = $title;

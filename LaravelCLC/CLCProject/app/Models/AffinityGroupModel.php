@@ -9,14 +9,41 @@
 
 namespace App\Models;
 
+/**
+ * Class AffinityGroupModel
+ * @package App\Models
+ */
 class AffinityGroupModel{
-    
+
+    /**
+     * @var
+     */
     private $id;
+    /**
+     * @var
+     */
     private $name;
+    /**
+     * @var
+     */
     private $description;
+    /**
+     * @var
+     */
     private $focus;
+    /**
+     * @var
+     */
     private $userID;
-    
+
+    /**
+     * AffinityGroupModel constructor.
+     * @param $id
+     * @param $name
+     * @param $description
+     * @param $focus
+     * @param $userID
+     */
     public function __construct($id, $name, $description, $focus, $userID){
         $this->id = $id;
         $this->name = $name;

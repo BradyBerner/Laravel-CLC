@@ -14,10 +14,19 @@ use Illuminate\Http\Request;
 use App\Services\Business\AffinityMemberService;
 use App\Services\Utility\ViewData;
 
+/**
+ * Class AffinityMemberController
+ * @package App\Http\Controllers
+ */
 class AffinityMemberController extends Controller
 {
     /*
      * Method for handling a user request to join a group
+     */
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function joinGroup(Request $request, ILoggerService $logger){
         
@@ -47,6 +56,11 @@ class AffinityMemberController extends Controller
     
     /*
      * Method for handling a user request to leave a group
+     */
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function leaveGroup(Request $request, ILoggerService $logger){
         

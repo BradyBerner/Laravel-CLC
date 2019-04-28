@@ -17,9 +17,18 @@ use App\Models\UserInfoModel;
 use App\Models\AddressModel;
 use App\Services\Utility\ViewData;
 
+/**
+ * Class UserEditController
+ * @package App\Http\Controllers
+ */
 class UserEditController extends Controller
 {
     // Takes user input from the previous form and passes it along so that a user can edit their info in the database
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editUserInfo(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering UserEditController.editUserInfo()");
@@ -49,6 +58,11 @@ class UserEditController extends Controller
     }
 
     // Method contains rules for validating user info input before submitting it to the database
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateInfoInput(Request $request)
     {
         $rules = [
@@ -61,6 +75,12 @@ class UserEditController extends Controller
     }
 
     // Takes user input from the previous form and passes it along so that a user can edit their address in the database
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editAddress(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering UserEditController.editAddress()");
@@ -90,6 +110,11 @@ class UserEditController extends Controller
     }
 
     // Method contains rules for validating address input before submitting it to the database
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateAddressInput(Request $request)
     {
         $rules = [

@@ -5,6 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
+/**
+ * Class SecurityMiddleware
+ * @package App\Http\Middleware
+ */
 class SecurityMiddleware
 {
     /**

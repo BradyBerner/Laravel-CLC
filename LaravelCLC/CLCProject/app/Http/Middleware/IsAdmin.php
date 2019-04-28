@@ -5,6 +5,10 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Closure;
 
+/**
+ * Class IsAdmin
+ * @package App\Http\Middleware
+ */
 class IsAdmin
 {
     /**

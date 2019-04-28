@@ -14,10 +14,18 @@ use Illuminate\Http\Request;
 use App\Services\Business\JobService;
 use App\Models\JobModel;
 
+/**
+ * Class JobAdminController
+ * @package App\Http\Controllers
+ */
 class JobAdminController extends Controller
 {
 
     // Method gets the all the job data in the database and returns it to the admin page so administrators can manage jobs
+    /**
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(ILoggerService $logger)
     {
         try {
@@ -45,6 +53,12 @@ class JobAdminController extends Controller
     }
 
     // Method takes form input from the previous form and attempts to update the database entry for the corresponding job
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editJob(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering JobAdminController.editJob()");
@@ -76,6 +90,11 @@ class JobAdminController extends Controller
     }
 
     // Contains the rules for validating form input for editing jobs
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateEdit(Request $request)
     {
         $rules = [
@@ -90,6 +109,12 @@ class JobAdminController extends Controller
     }
 
     // Method takes an ID from the form that submitted the request and attempts to delete the job of the corresponding ID
+
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function removeJob(Request $request, ILoggerService $logger)
     {
         try {

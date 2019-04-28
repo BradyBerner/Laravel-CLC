@@ -10,15 +10,28 @@
 namespace App\Http\Controllers;
 
 use App\Services\Utility\ILoggerService;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Models\UserModel;
 use App\Services\Business\SecurityService;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
+/**
+ * Class RegistrationController
+ * @package App\Http\Controllers
+ */
 class RegistrationController extends Controller
 {
 
     // Function recives user registration input, uses it to create a user object and then uses that object
     // to attempt to create a new database entry
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return Factory|View
+     * @throws ValidationException
+     */
     public function index(Request $request, ILoggerService $logger)
     {
 
@@ -43,13 +56,18 @@ class RegistrationController extends Controller
 
             return view('registrationResult')->with($data);
         } catch (\Exception $e) {
-            $logger->error("Exception occurred in RegistrationController.index(): " . $e->getMessage());
+            $logger->error("Exception occurred in RegistrationController.index(): ", $e->getMessage());
             $data = ['error_message' => $e->getMessage()];
             return view('error')->with($data);
         }
     }
 
     // Contains the rules for validating the user's registration information
+
+    /**
+     * @param Request $request
+     * @throws ValidationException
+     */
     private function validateForm(Request $request)
     {
         $rules = [

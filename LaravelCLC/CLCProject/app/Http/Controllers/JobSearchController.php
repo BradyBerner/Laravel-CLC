@@ -13,6 +13,10 @@ use App\Services\Utility\ILoggerService;
 use Illuminate\Http\Request;
 use App\Services\Business\SearchService;
 
+/**
+ * Class JobSearchController
+ * @package App\Http\Controllers
+ */
 class JobSearchController extends Controller
 {
     /**
@@ -48,7 +52,11 @@ class JobSearchController extends Controller
             return view('error')->with($data);
         }
     }
-    
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateSearch(Request $request){
         $rules = [
             'searchString' => 'Required | Between:4,30'

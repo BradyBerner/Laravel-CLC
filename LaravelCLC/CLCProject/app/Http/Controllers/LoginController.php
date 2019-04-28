@@ -14,10 +14,19 @@ use Illuminate\Http\Request;
 use App\Services\Business\SecurityService;
 use App\Models\UserModel;
 
+/**
+ * Class LoginController
+ * @package App\Http\Controllers
+ */
 class LoginController extends Controller
 {
 
     // Function recieves user login input, then authenticates user input against database entries
+    /**
+     * @param Request $request
+     * @param ILoggerService $logger
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request, ILoggerService $logger)
     {
         $logger->info("Entering LoginController.index()");
@@ -68,6 +77,11 @@ class LoginController extends Controller
     }
 
     // Contains the validation rules for the user's login input
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function validateForm(Request $request)
     {
         $rules = [

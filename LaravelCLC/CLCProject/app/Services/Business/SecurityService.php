@@ -23,7 +23,7 @@ class SecurityService
     // the result it gets
     public function register(UserModel $user, ILoggerService $logger)
     {
-        $logger->info("Entering SecurityService.register()");
+        $logger->info("Entering SecurityService.register()", []);
 
         try{
         $connection = new Connection();
@@ -43,8 +43,8 @@ class SecurityService
             $addressService = new AddressService();
 
             // Creates new entries in information tables corresponding to the user with the new user's ID
-            $infoResult = $infoService->createUserInfo($userID, $connection);
-            $addressResult = $addressService->createAddress($userID, $connection);
+            $infoResult = $infoService->createUserInfo($userID, $connection, $logger);
+            $addressResult = $addressService->createAddress($userID, $connection, $logger);
             
             if($infoResult && $addressResult){
                 $connection->commit();
@@ -61,7 +61,7 @@ class SecurityService
             throw new DatabaseException("Exception: " . $e->getMessage(), $e, 0);
         }
 
-        $logger->info("Exiting SecurityService.register() with result: " . $result['result']);
+        $logger->info("Exiting SecurityService.register() with result: ", $result['result']);
 
         return $result;
     }
@@ -69,7 +69,7 @@ class SecurityService
     // Function takes user as an argument and calls the database login service and returns the result
     public function login(UserModel $user, ILoggerService $logger)
     {
-        $logger->info("Entering SecurityService.login()");
+        $logger->info("Entering SecurityService.login()", []);
 
         $connection = new Connection();
 
@@ -79,7 +79,7 @@ class SecurityService
 
         $result = $DAO->findByLogin($user);
 
-        $logger->info("Exiting SecurityService.login() with result: " . $result['result']);
+        $logger->info("Exiting SecurityService.login() with result: ", $result['result']);
         
         return $result;
     }
